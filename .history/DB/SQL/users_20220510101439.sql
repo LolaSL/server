@@ -1,0 +1,1 @@
+INSERT INTO users (id, email, password,  first_name, last_name, address, postcode, city, country, date_joined, active, user_role) VALUES (1, 'pavlusha_brekota@gmail.com',  '123456789023445', 'Pavel', 'Brekota', 'Mitin 5/4', 12345690, 'Moscow', 'Russia', '04.22.2022', 'yes', 'customer');  
