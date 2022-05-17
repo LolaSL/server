@@ -24,7 +24,7 @@ userRouter.get('/', checkAuthentication, async (req, res) => {
     }
 });
 
-userRouter.put('/', checkAuthentication, async (req, res) => {
+userRouter.post('/', checkAuthentication, async (req, res) => {
     const data = req.body;
 
     for (const key in data) {
@@ -41,7 +41,14 @@ userRouter.put('/', checkAuthentication, async (req, res) => {
     }
     res.send('Update successful');
 });
-
+//login
+userRouter.post('/', checkAuthentication, async (req, res) => {
+    try {
+        res.send(req.user);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+});
 userRouter.delete('/', checkAuthentication, async (req, res) => {
     try {
         await userInstance.deleteByEmail(req.user.email);

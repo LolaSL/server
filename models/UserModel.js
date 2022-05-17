@@ -1,7 +1,6 @@
 const pool = require('../DB/db');
 const format = require('pg-format');
 
-
 module.exports = class Usermodel {
     async create(data) {
         let text = `INSERT INTO users(email, password, first_name, last_name, address, postcode, city, country)
@@ -11,8 +10,8 @@ module.exports = class Usermodel {
         console.log(inputs)
 
         try {
-            if (data.password.length < 8) {
-                return res.status(401).json("Password should be at least 8 characters");
+            if (data.password.length < 6) {
+                return res.status(401).json("Password should be at least 6 characters");
             }
             return await pool.query(text, inputs);
         } catch (err) {

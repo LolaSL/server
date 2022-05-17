@@ -5,16 +5,16 @@ const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
 
 const storeItems = new Map([
     [1, {
-        priceInCents: 25799, name: "Brooch",
+        priceInCents: 99999, name: "Floor Lamp Crystal",
 
     },],
 
     [2, {
-        priceInCents: 35467, name: "Figurine Statue",
+        priceInCents: 109999, name: "Floor Lamp Titania",
 
     },],
     [3, {
-        priceInCents: 8750, name: "Alarm Clock",
+        priceInCents: 8750, name: "First Finch",
 
     },],
 ]);

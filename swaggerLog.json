@@ -1,0 +1,1241 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Ecommerce API",
+    "version": "1.0.0",
+    "description": "A mock e-commerce api made for user, cart, and order transactions for a art products store."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000",
+      "description": "Main server"
+    }
+  ],
+  "paths": {
+    "/api/products": {
+      "get": {
+        "summary": "Returns all products.",
+        "description": "Gets all products from store database and returns them in order of id.",
+        "operationId": "get_products",
+        "tags": ["Products"],
+        "responses": {
+          "200": {
+            "description": "All product objects returned in an array.",
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "id": 1,
+                    "name": "Abstract cityscape",
+                    "author": "Andrej Ostapchuk",
+                    "price": "475.00",
+                    "description": "The picture with a volume and a depth of space.",
+                    "category": "Abstract",
+                    "image_url": "https://d3rf6j5nx5r04a.cloudfront.net/g_4p_c2fVqEA5wws-B8J3xRJsHs=/1120x0/product/6/7/9478e49807e04831a0fff551fe464314_opt.jpg",
+                    "status": "Active"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Poires et Raisins",
+                    "author": "Pascal Giroud",
+                    "price": "270.21",
+                    "description": "Nature is my greatest source of inspiration.",
+                    "category": "Impressionistic",
+                    "image_url": "https://d3rf6j5nx5r04a.cloudfront.net/m-1L9HX9Ok69cgTlozcISIJ6efo=/1120x0/product/c/5/f0d3668ec9dc46c3b9f0078195522fcd_opt.jpg",
+                    "status": "Active"
+                  },
+                  "..."
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/products/{productId}": {
+      "get": {
+        "summary": "Get product object by product id.",
+        "description": "Using id parameter, product object is fetched from database.",
+        "operationId": "get_product_id",
+        "tags": ["Products"],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "The id of the product.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns product with id matching the id parameter.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 2,
+                  "name": "Poires et Raisins",
+                  "author": "Pascal Giroud",
+                  "price": "270.21",
+                  "description": "Nature is my greatest source of inspiration.",
+                  "category": "Impressionistic",
+                  "image_url": "https://d3rf6j5nx5r04a.cloudfront.net/m-1L9HX9Ok69cgTlozcISIJ6efo=/1120x0/product/c/5/f0d3668ec9dc46c3b9f0078195522fcd_opt.jpg",
+                  "status": "Active"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error for inavlid product id.",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Invalid product number"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/products/categories/{category}": {
+      "get": {
+        "summary": "Get products in specified category.",
+        "description": "fetches all products in a category using the category parameter.",
+        "operationId": "get_products_categories",
+        "tags": ["Products"],
+        "parameters": [
+          {
+            "name": "category",
+            "in": "path",
+            "description": "category of products",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns all product objects in the selected category, in an array.",
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "id": 14,
+                    "name": "Kinko Sennin on a Koi",
+                    "author": "Netsuke",
+                    "price": "1364.03",
+                    "description": "Kinko Sennin on a Koi. Ivory, Meiji-Period (1868 - 1912)",
+                    "category": "Netsuke",
+                    "image_url": "https://woodblock-print.eu/images/stories/virtuemart/product/CF_N67_Unsterblicher%20mit%20Koi7.jpg",
+                    "status": "Sold"
+                  },
+                  {
+                    "id": 15,
+                    "name": "Dragon",
+                    "author": "Netsuke",
+                    "price": "764.99",
+                    "description": "Dragon. Ivory, Meiji-Period (1868 - 1912)",
+                    "category": "Netsuke",
+                    "image_url": "https://springfieldmuseums.org/wp-content/uploads/2021/01/GWVS_75_23_127_3_sm.jpg",
+                    "status": "Active"
+                  },
+                  {
+                    "id": 16,
+                    "name": "Raiden, the god of wind, thunder and lightning",
+                    "author": "Netsuke",
+                    "price": "10634.03",
+                    "description": "Netsuke depicting Raiden, the god of wind, thunder and lightning, Japan, 19th century, carved ivory",
+                    "category": "Netsuke",
+                    "image_url": "http://www.vam.ac.uk/__data/assets/image/0017/236222/2006AL0460_netsuke_main.jpg",
+                    "status": "Sold"
+                  },
+                  "..."
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "Error for inavlid product category.",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Invalid category"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/register": {
+      "summary": "Input user data to register.",
+      "description": "This path is for creating an account to add items to your cart and make purchases.",
+      "post": {
+        "summary": "Creates an account for a new user.",
+        "description": "Creates an account for a new user.",
+        "operationId": "post_register",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "description": "Object for creating new user. Password must be at least 6 characters long. Email must match email syntax.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Registration"
+              },
+              "example": {
+                "email": "test_for_test@example.com",
+                "password": "test123456",
+                "first_name": "Test",
+                "last_name": "Testtest",
+                "address": "Test, 00/11",
+                "postcode": "010101",
+                "city": "Test",
+                "country": "Test"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created",
+            "content": {
+              "text/plain": {
+                "example": "User created"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid entries in request body",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Email already in use"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/login": {
+      "summary": "Login to your account.",
+      "description": "This path is for loging in to your account to access account functions.",
+      "post": {
+        "summary": "Login to your account.",
+        "description": "Enter your email and password to login with Passport and access your user info, cart, and orders. Passport starts a session and keeps you logged in until you send a GET request to /api/logout.",
+        "operationId": "post_login",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "description": "Object for logging into account. Password must be at least 6 characters long. Email must match email syntax.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
+              },
+              "example": {
+                "email": "exampl@email.com",
+                "password": "secret_password"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User is logged in.",
+            "content": {
+              "text/plain": {
+                "example": "Login successful"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid entries in request body.",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Email/Password not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/logout": {
+      "summary": "Logs user out.",
+      "description": "This path is for logging a user out and ending the session.",
+      "get": {
+        "summary": "Logs user out",
+        "description": "This path is for logging a user out and ending the session.",
+        "operationId": "get_logout",
+        "tags": ["Authentication"],
+        "responses": {
+          "200": {
+            "description": "User is logged out, ending the session.",
+            "content": {
+              "text/plain": {
+                "example": "Logout Successful"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user": {
+      "summary": "Access user account.",
+      "description": "Path for accessing and updating user account information.",
+      "get": {
+        "summary": "Get user account information.",
+        "description": "Fetches user account information if logged in with Passport. Password not shown with info.",
+        "operationId": "get_user",
+        "tags": ["User"],
+        "responses": {
+          "200": {
+            "description": "Object containing user info.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "example": {
+                  "email": "test_for_test@example.com",
+                  "password": "test123456",
+                  "first_name": "Test",
+                  "last_name": "Testtest",
+                  "address": "Test, 00/11",
+                  "postcode": "010101",
+                  "city": "Test",
+                  "country": "Test"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update account information.",
+        "description": "Update account information if logged in with Passport.",
+        "operationId": "put_user",
+        "tags": ["User"],
+        "requestBody": {
+          "description": "Update user data by sending data you want changed in key value pairs.\nYou can send one or many updates in the same request body.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Registration"
+              },
+              "examples": {
+                "name change": {
+                  "value": {
+                    "first_name": "Avivush",
+                    "last_name": "Stavi"
+                  }
+                },
+                "email change": {
+                  "value": {
+                    "email": "seasons-forever@hotmail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful update response",
+            "content": {
+              "text/plain": {
+                "example": "Update successful"
+              }
+            }
+          },
+          "400": {
+            "description": "Information entered does not fit schema.",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Invalid entries"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletes user account",
+        "description": "Deletes your account from the database. Make sure you want to delete because there is no recovery proccess.",
+        "operationId": "delete_user",
+        "tags": ["User"],
+        "responses": {
+          "204": {
+            "description": "No content - Delete successful"
+          }
+        }
+      }
+    },
+    "/api/carts": {
+      "description": "Access users carts",
+      "get": {
+        "summary": "Get user cart information.",
+        "description": "Fetches user cart information. Fetches multiple carts if user has multiple carts. Uses user id from passport Loggin.",
+        "operationId": "get_carts",
+        "tags": ["Cart"],
+        "responses": {
+          "200": {
+            "description": "Returns array of user's cart objects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Carts"
+                },
+                "example": [
+                  {
+                    "id": 1,
+                    "user_id": 1,
+                    "created": "2022-4-22",
+                    "modified": null
+                  },
+                  {
+                    "id": 2,
+                    "user_id": 2,
+                    "created": "2022-04-30",
+                    "modified": null
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "No carts under your user id",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "No carts found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Creates a new cart.",
+        "description": "Creates a new cart using the user id provided by your Passport loggin.",
+        "operationId": "post_carts",
+        "tags": ["Cart"],
+        "responses": {
+          "201": {
+            "description": "Cart created",
+            "content": {
+              "text/plain": {
+                "example": "User created"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/carts/{cartId}": {
+      "description": "Preform CRUD operations on a cart based on cart id from parameters and user id provided by your Passport loggin.",
+      "get": {
+        "summary": "Get cart by cart id.",
+        "description": "Fetches user cart information based on cart id and the user id provided by your Passport loggin.",
+        "operationId": "get_carts_id",
+        "tags": ["Cart"],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "Cart id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns cart object matching cart id provided.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cart"
+                },
+                "example": {
+                  "id": 3,
+                  "user_id": 3,
+                  "created": "2022-04-30",
+                  "modified": null
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid cart id.",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Invalid cart id"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete cart by cart id.",
+        "description": "Delete cart based on cart id from the parameters and user id provided by your Passport loggin.",
+        "operationId": "delete_carts_id",
+        "tags": ["Cart"],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "Cart id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content - cart deleted"
+          }
+        }
+      }
+    },
+    "/api/carts/{cartId}/checkout": {
+      "get": {
+        "summary": "Submit cart for checkout",
+        "description": "Creates a new order using all products in the selected cart (parameters) and the user id provided by your Passport loggin.",
+        "operationId": "get_carts_checkout",
+        "tags": ["Cart/Checkout"],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "Cart id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns id of the new order that was created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Checkout"
+                },
+                "example": {
+                  "order_id": 1
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No items in cart",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Cart empty. No order created"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/carts/{cartId}/items": {
+      "get": {
+        "summary": "Gets all items in cart",
+        "description": "Fetches all items in the selected cart (cart id from parameter and user id provided by your Passport loggin).",
+        "operationId": "get_cart_items",
+        "tags": ["Cart/Items"],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "Cart id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All product objects in cart returned in an array.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductAllCart"
+                },
+                "example": [
+                  {
+                    "id": 1,
+                    "name": "Abstract cityscape",
+                    "author": "Andrej Ostapchuk",
+                    "price": "475.00",
+                    "description": "The picture with a volume and a depth of space.",
+                    "category": "Abstract",
+                    "status": "Active",
+                    "quantity": 1
+                  },
+                  {
+                    "id": 15,
+                    "name": "Dragon",
+                    "author": "Netsuke",
+                    "price": "764.99",
+                    "description": "Dragon. Ivory, Meiji-Period (1868 - 1912)",
+                    "category": "Netsuke",
+                    "status": "Active",
+                    "quantity": 1
+                  },
+                  "..."
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "No items in cart",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Cart Empty"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add item to cart",
+        "description": "Add item to the selected cart (cart id from parameter and user id provided by your Passport loggin).",
+        "operationId": "post_cart_items",
+        "tags": ["Cart/Items"],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "Cart id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Submit product id and quantity in request body.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductAdd"
+              },
+              "example": {
+                "product_id": 1,
+                "quantity": 2
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item added to cart",
+            "content": {
+              "text/plain": {
+                "example": "Product added"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid product id",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Invalid product Id"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/carts/{cartId}/items/{itemId}": {
+      "get": {
+        "summary": "Get item in cart by item id",
+        "description": "Fetch item from the selected cart (cart id from parameter and user id provided by your Passport loggin) by item id.",
+        "operationId": "get_cart_item_id",
+        "tags": ["Cart/Items"],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "Cart id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "itemId",
+            "in": "path",
+            "description": "Product id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns product object that matched input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductSingleCart"
+                },
+                "example": {
+                  "id": 15,
+                  "name": "Dragon",
+                  "author": "Netsuke",
+                  "price": "764.99",
+                  "description": "Dragon. Ivory, Meiji-Period (1868 - 1912)",
+                  "category": "Netsuke",
+                  "status": "Active",
+                  "quantity": 1
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Product with selected id not in cart",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Product not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update item quantity in cart",
+        "description": "Update item quantity in selected cart (cart id from parameter and user id provided by your Passport loggin.) by item id.",
+        "operationId": "put_cart_item_id",
+        "tags": ["Cart/Items"],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "Cart id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "itemId",
+            "in": "path",
+            "description": "Product id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Submit updated quantity in request body.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateQty"
+              },
+              "example": {
+                "quantity": 5
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Quantity updated successfully",
+            "content": {
+              "text/plain": {
+                "example": "Quantity updated"
+              }
+            }
+          },
+          "400": {
+            "description": "Product with selected id not in cart",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Product not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Removes item from cart",
+        "description": "Removes item from selected cart (cart id from parameter and user id provided by your Passport loggin) by item id.",
+        "operationId": "delete_cart_item_id",
+        "tags": ["Cart/Items"],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "Cart id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "itemId",
+            "in": "path",
+            "description": "Product id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content - Delete successful"
+          }
+        }
+      }
+    },
+    "/api/orders": {
+      "get": {
+        "summary": "Get all orders.",
+        "description": "Fetches all orders for your account. User id for fetching accounts is provided by your Passport loggin.",
+        "operationId": "get_orders",
+        "tags": ["Orders"],
+        "responses": {
+          "200": {
+            "description": "All order objects sent in an array.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrdersAll"
+                },
+                "example": [
+                  {
+                    "id": 12,
+                    "user_id": 67,
+                    "order_price": "$41.00",
+                    "status": "SHIPPED",
+                    "created": "2022-04-22",
+                    "modified": "2022-04-28"
+                  },
+                  {
+                    "id": 13,
+                    "user_id": 13,
+                    "order_price": "$100.00",
+                    "status": "PENDING",
+                    "created": "2022-05-02",
+                    "modified": "2022-05-06"
+                  },
+                  "..."
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "No orders found.",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "No orders found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/orders/{orderId}": {
+      "get": {
+        "summary": "Get order by order id.",
+        "description": "Fetches an order from your account (user id provided by your Passport loggin) that matches the order id provided (parameters).\nProducts in order are attached in an array to the order object.",
+        "operationId": "get_orders_id",
+        "tags": ["Orders"],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "Order id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns order object with id matching the parameters. Products in order are attatched in array.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                },
+                "example": {
+                  "id": 13,
+                  "user_id": 13,
+                  "order_price": "$764.99",
+                  "status": "PENDING",
+                  "created": "2022-04-30",
+                  "modified": "2022-05-06",
+                  "products": [
+                    {
+                      "id": 15,
+                      "name": "Dragon",
+                      "author": "Netsuke",
+                      "price": "764.99",
+                      "description": "Dragon. Ivory, Meiji-Period (1868 - 1912)",
+                      "category": "Netsuke",
+                      "status": "Active",
+                      "quantity": 1
+                    },
+                    "..."
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Order with that id not found",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Order not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Registration": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "postcode": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          }
+        }
+      },
+      "Login": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "postcode": {
+            "type": "integer"
+          },
+          "city": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "date_joined": {
+            "type": "date"
+          },
+          "active": {
+            "type": "string"
+          },
+          "user_role": {
+            "type": "string"
+          }
+        }
+      },
+      "Carts": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "user_id": {
+              "type": "integer"
+            },
+            "created": {
+              "type": "string"
+            },
+            "modified": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Cart": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "user_id": {
+            "type": "integer"
+          },
+          "created": {
+            "type": "string"
+          },
+          "modified": {
+            "type": "string"
+          }
+        }
+      },
+      "Checkout": {
+        "type": "object",
+        "properties": {
+          "order_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "ProductAllCart": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "author": {
+              "type": "string"
+            },
+            "price": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "quantity": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "ProductAdd": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "integer"
+          },
+          "quantity": {
+            "type": "integer"
+          }
+        }
+      },
+      "ProductSingleCart": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          },
+          "price": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer"
+          }
+        }
+      },
+      "UpdateQty": {
+        "type": "object",
+        "properties": {
+          "quantity": {
+            "type": "integer"
+          }
+        }
+      },
+      "OrdersAll": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "user_id": {
+              "type": "integer"
+            },
+            "order_price": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            },
+            "created": {
+              "type": "string"
+            },
+            "modified": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Order": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "user_id": {
+            "type": "integer"
+          },
+          "order_price": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string"
+          },
+          "modified": {
+            "type": "string"
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "author": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "quantity": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
