@@ -7,7 +7,7 @@ const orderInstance = new Ordermodel();
 module.exports = class Cartmodel {
 
     async create(data) {
-        const text = 'INSERT INTO cart (user_id, created) VALUES ($1, current_timestamp);';
+        const text = 'INSERT INTO carts (user_id, created_at) VALUES ($1, current_timestamp);';
         const inputs = [data];
         try {
             return await pool.query(text, inputs);

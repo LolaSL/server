@@ -6,10 +6,10 @@ const orderInstance = new Ordermodel();
 //Check order id
 orderRouter.use('/:id', checkAuthentication, async (req, res, next) => {
     try {
-        const orders = await orderInstance.getOrderById(req.params.id);
-        if (!orders) return res.status(400).send('No order found');
-        if (orders.user_id !== req.user.id) return res.status(400).send('No order found');
-        req.orders = orders;
+        const order = await orderInstance.getOrderById(req.params.id);
+        if (!order) return res.status(400).send('No order found');
+        if (order.user_id !== req.user.id) return res.status(400).send('No order found');
+        req.orders = order;
         next();
     } catch (err) {
         res.status(400).send(err);

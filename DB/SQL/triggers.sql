@@ -37,12 +37,12 @@ $$
   BEGIN
     IF (TG_OP = 'INSERT') THEN
       UPDATE orders
-      SET order_price = order_price + (NEW.price * NEW.quantity)
+      SET total_price = total_price + (NEW.price * NEW.quantity)
       WHERE id = NEW.order_id;
       RETURN NEW;
     ELSIF (TG_OP = 'DELETE') THEN
       UPDATE orders
-      SET order_price = order_price - (OLD.price * OLD.quantity)
+      SET total_price = total_price - (OLD.price * OLD.quantity)
       WHERE id = OLD.order_id;
       RETURN OLD;
     END IF;
@@ -69,7 +69,7 @@ EXECUTE PROCEDURE modify_timestamp();
 
 
 CREATE TRIGGER update_timestamp_cart
-BEFORE INSERT OR DELETE ON cart_product
+BEFORE INSERT OR DELETE ON cart_items
 FOR EACH ROW
 EXECUTE PROCEDURE modify_cart_timestamp();
 
@@ -77,7 +77,7 @@ EXECUTE PROCEDURE modify_cart_timestamp();
 
 
 CREATE TRIGGER update_order_total
-BEFORE INSERT OR DELETE ON order_product
+BEFORE INSERT OR DELETE ON order_items
 FOR EACH ROW
 EXECUTE PROCEDURE update_total();
 

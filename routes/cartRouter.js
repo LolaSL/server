@@ -3,7 +3,10 @@ const Cartmodel = require('../models/CartModel');
 const productCartRouter = require('./productCartRouter');
 const { checkAuthentication } = require('../config/passportConfig');
 
+
 const cartInstance = new Cartmodel();
+
+
 
 //Id check middleware
 cartRouter.use('/:id', checkAuthentication, async (req, res, next) => {
@@ -70,5 +73,7 @@ cartRouter.get('/:id/checkout', async (req, res) => {
         res.status(400).send(err);
     }
 })
+
+
 
 module.exports = cartRouter;

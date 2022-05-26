@@ -20,7 +20,7 @@ CREATE TABLE "order_items" (
   "order_id" INTEGER,
   "product_id" iNTEGER,
   "quantity" INTEGER DEFAULT 1,
-  "price" decimal(10, 2)
+  "price" money
 );
 
 CREATE TABLE "orders" (
@@ -28,19 +28,19 @@ CREATE TABLE "orders" (
   "user_id" INTEGER,
   "status" varchar(100),
   "created_at" timestamp DEFAULT (now()),
-  "order_price" decimal(10,2),
-  "modified" timestamp
+  "modified" timestamp,
+  "total_price" money,
 );
 
 CREATE TABLE "products" (
   "id" SERIAL PRIMARY KEY,
   "name" varchar(255) NOT NULL,
   "author" varchar(255),
-  "price" decimal(10,2) NOT NULL, 
-  "description" varchar(255),
+   "description" varchar(255),
   "category" varchar(255),
   "image_url" varchar(255),
-  "status" varchar(255)
+  "status" varchar(255),
+  "price" money, 
 );
 
 CREATE TABLE "carts" (

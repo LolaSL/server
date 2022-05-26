@@ -4,7 +4,7 @@ const pool = require('../DB/db');
 module.exports = class Ordermodel {
 
     async create(data) {
-        const text = 'INSERT INTO orders (user_id, status, created) VALUES ($1, $2, current_timestamp) RETURNING id;';
+        const text = 'INSERT INTO orders (user_id, status, created_at) VALUES ($1, $2, current_timestamp) RETURNING *;';
         const inputs = [data, 'PENDING'];
         try {
             return await pool.query(text, inputs);
@@ -14,8 +14,8 @@ module.exports = class Ordermodel {
     }
 
     async addProduct(data) {
-        const text = 'INSERT INTO orders_items (order_id, product_id,  quantity, price) VALUES ($1, $2, (SELECT price FROM products WHERE id = $2), $3, $4) RETURNING id;';
-        const inputs = [data.order_id, data.product_id, data.quantity, data.price];
+        const text = 'INSERT INTO order_items (order_id, product_id,   quantity, price, ) VALUES ($1, $2, $3,(SELECT price FROM products WHERE id = $2),  $4) RETURNING id;';
+        const inputs = [data.order_id, data.product_id, data.quantity, data.price, data.id];
         try {
             return await pool.query(text, inputs);
         } catch (err) {
@@ -24,7 +24,7 @@ module.exports = class Ordermodel {
     }
 
     async getOrderProducts(data) {
-        const text = 'SELECT product.*, quantity FROM products JOIN order_items ON id = product_id WHERE order_id = $1';
+        const text = 'SELECT quantity FROM products JOIN order_items ON id = product_id WHERE order_id = $1;';
         const inputs = [data];
         try {
             const products = await pool.query(text, inputs);
@@ -63,7 +63,7 @@ module.exports = class Ordermodel {
         // Get price from carts in db but not from items (for now)
         const cart = await (data)
         const totalPrice = cart.reduce((acc, item) =>
-            acc + parseFloat(item.product.price) * parseInt(item.quantity, 10), 0)
+            acc + parseFloat(item.products.price) * parseInt(item.quantity, 10), 0)
         return totalPrice * 100 //Return price in cents
     }
 

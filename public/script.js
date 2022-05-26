@@ -24,7 +24,7 @@ button.addEventListener("click", () => {
         .then(({ url }) => {
             window.location = url
         })
-        .catch(e => {
-            console.error(e.error)
+        .catch((e) => {
+            console.error(e.message)
         })
 })

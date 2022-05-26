@@ -3,7 +3,7 @@
   "info": {
     "title": "Ecommerce API",
     "version": "1.0.0",
-    "description": "A mock e-commerce api made for user, cart, and order transactions for a art products store."
+    "description": "The Demo ecommerce api made for user, cart, and order transactions for an art products store."
   },
   "servers": [
     {
@@ -15,12 +15,12 @@
     "/api/products": {
       "get": {
         "summary": "Returns all products.",
-        "description": "Gets all products from store database and returns them in order of id.",
+        "description": "This path gets all products from the database store and returns them in order of id.",
         "operationId": "get_products",
         "tags": ["Products"],
         "responses": {
           "200": {
-            "description": "All product objects returned in an array.",
+            "description": "All product objects returned to an array.",
             "content": {
               "application/json": {
                 "example": [
@@ -54,8 +54,8 @@
     },
     "/api/products/{productId}": {
       "get": {
-        "summary": "Get product object by product id.",
-        "description": "Using id parameter, product object is fetched from database.",
+        "summary": "Get the product object by product id.",
+        "description": "This path is using id parameter. Product object is fetched from database.",
         "operationId": "get_product_id",
         "tags": ["Products"],
         "parameters": [
@@ -71,7 +71,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Returns product with id matching the id parameter.",
+            "description": "Returns product with id matched to the id parameter.",
             "content": {
               "application/json": {
                 "example": {
@@ -105,14 +105,14 @@
     "/api/products/categories/{category}": {
       "get": {
         "summary": "Get products in specified category.",
-        "description": "fetches all products in a category using the category parameter.",
+        "description": "This path fetches all products in a category using the category parameter.",
         "operationId": "get_products_categories",
         "tags": ["Products"],
         "parameters": [
           {
             "name": "category",
             "in": "path",
-            "description": "category of products",
+            "description": "Category of products",
             "required": true,
             "schema": {
               "type": "string"
@@ -121,7 +121,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Returns all product objects in the selected category, in an array.",
+            "description": "Returns all product objects in the selected category, to an array.",
             "content": {
               "application/json": {
                 "example": [
@@ -177,14 +177,14 @@
     },
     "/api/register": {
       "summary": "Input user data to register.",
-      "description": "This path is for creating an account to add items to your cart and make purchases.",
+      "description": "This path is for creating an account to add items to user cart for further purchases.",
       "post": {
         "summary": "Creates an account for a new user.",
         "description": "Creates an account for a new user.",
         "operationId": "post_register",
         "tags": ["Authentication"],
         "requestBody": {
-          "description": "Object for creating new user. Password must be at least 6 characters long. Email must match email syntax.",
+          "description": "Object for creating new user. Password must be at least 6 characters long. Email must match to email syntax.",
           "content": {
             "application/json": {
               "schema": {
@@ -218,7 +218,7 @@
               "text/plain": {
                 "examples": {
                   "Error": {
-                    "value": "Email already in use"
+                    "value": "Email is already in use"
                   }
                 }
               }
@@ -236,7 +236,7 @@
         "operationId": "post_login",
         "tags": ["Authentication"],
         "requestBody": {
-          "description": "Object for logging into account. Password must be at least 6 characters long. Email must match email syntax.",
+          "description": "Object for logging into account. Password must be at least 6 characters long. Email must match to email syntax.",
           "content": {
             "application/json": {
               "schema": {
@@ -254,7 +254,7 @@
             "description": "User is logged in.",
             "content": {
               "text/plain": {
-                "example": "Login successful"
+                "example": "Login is successful"
               }
             }
           },
@@ -264,7 +264,7 @@
               "text/plain": {
                 "examples": {
                   "Error": {
-                    "value": "Email/Password not found"
+                    "value": "Email/Password is not found"
                   }
                 }
               }
@@ -283,10 +283,10 @@
         "tags": ["Authentication"],
         "responses": {
           "200": {
-            "description": "User is logged out, ending the session.",
+            "description": "User is logged out and ending the session.",
             "content": {
               "text/plain": {
-                "example": "Logout Successful"
+                "example": "Logout is Successful"
               }
             }
           }
@@ -298,12 +298,12 @@
       "description": "Path for accessing and updating user account information.",
       "get": {
         "summary": "Get user account information.",
-        "description": "Fetches user account information if logged in with Passport. Password not shown with info.",
+        "description": "This path fetches user account information if logged in with Passport. Password not shown with info.",
         "operationId": "get_user",
         "tags": ["User"],
         "responses": {
           "200": {
-            "description": "Object containing user info.",
+            "description": "Object is containing user info.",
             "content": {
               "application/json": {
                 "schema": {
@@ -330,7 +330,7 @@
         "operationId": "put_user",
         "tags": ["User"],
         "requestBody": {
-          "description": "Update user data by sending data you want changed in key value pairs.\nYou can send one or many updates in the same request body.",
+          "description": "Update user data by sending data you want, changed in key value pairs.\nYou can send one or many updates in the same request body.",
           "content": {
             "application/json": {
               "schema": {
@@ -357,7 +357,7 @@
             "description": "Successful update response",
             "content": {
               "text/plain": {
-                "example": "Update successful"
+                "example": "Update is successful"
               }
             }
           },
@@ -377,12 +377,12 @@
       },
       "delete": {
         "summary": "Deletes user account",
-        "description": "Deletes your account from the database. Make sure you want to delete because there is no recovery proccess.",
+        "description": "This path deletes your account from the database. Make sure you want to delete because there is no any recovery proccess.",
         "operationId": "delete_user",
         "tags": ["User"],
         "responses": {
           "204": {
-            "description": "No content - Delete successful"
+            "description": "No content - Delete is successful."
           }
         }
       }
@@ -391,7 +391,7 @@
       "description": "Access users carts",
       "get": {
         "summary": "Get user cart information.",
-        "description": "Fetches user cart information. Fetches multiple carts if user has multiple carts. Uses user id from passport Loggin.",
+        "description": "This path fetches user cart information; also fetches multiple carts if user has multiple carts. Uses user id from passport Loggin.",
         "operationId": "get_carts",
         "tags": ["Cart"],
         "responses": {
@@ -406,13 +406,13 @@
                   {
                     "id": 1,
                     "user_id": 1,
-                    "created": "2022-4-22",
+                    "created": "2022-5-18",
                     "modified": null
                   },
                   {
                     "id": 2,
                     "user_id": 2,
-                    "created": "2022-04-30",
+                    "created": "2022-05-18",
                     "modified": null
                   }
                 ]
@@ -420,12 +420,12 @@
             }
           },
           "400": {
-            "description": "No carts under your user id",
+            "description": "No any carts under your user id",
             "content": {
               "text/plain": {
                 "examples": {
                   "Error": {
-                    "value": "No carts found"
+                    "value": "No any carts found"
                   }
                 }
               }
@@ -440,10 +440,10 @@
         "tags": ["Cart"],
         "responses": {
           "201": {
-            "description": "Cart created",
+            "description": "Cart is created",
             "content": {
               "text/plain": {
-                "example": "User created"
+                "example": "Cart is created"
               }
             }
           }
@@ -454,7 +454,7 @@
       "description": "Preform CRUD operations on a cart based on cart id from parameters and user id provided by your Passport loggin.",
       "get": {
         "summary": "Get cart by cart id.",
-        "description": "Fetches user cart information based on cart id and the user id provided by your Passport loggin.",
+        "description": "This path fetches user cart information based on cart id and the user id provided by your Passport loggin.",
         "operationId": "get_carts_id",
         "tags": ["Cart"],
         "parameters": [
@@ -470,7 +470,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Returns cart object matching cart id provided.",
+            "description": "Returns cart object matching to provided cart id.",
             "content": {
               "application/json": {
                 "schema": {
@@ -479,7 +479,7 @@
                 "example": {
                   "id": 3,
                   "user_id": 3,
-                  "created": "2022-04-30",
+                  "created": "2022-05-18",
                   "modified": null
                 }
               }
@@ -501,7 +501,7 @@
       },
       "delete": {
         "summary": "Delete cart by cart id.",
-        "description": "Delete cart based on cart id from the parameters and user id provided by your Passport loggin.",
+        "description": "This path delete cart based on cart id from the parameters and user id provided by your Passport loggin.",
         "operationId": "delete_carts_id",
         "tags": ["Cart"],
         "parameters": [
@@ -517,7 +517,7 @@
         ],
         "responses": {
           "204": {
-            "description": "No content - cart deleted"
+            "description": "No content - cart is deleted"
           }
         }
       }
@@ -571,7 +571,7 @@
     "/api/carts/{cartId}/items": {
       "get": {
         "summary": "Gets all items in cart",
-        "description": "Fetches all items in the selected cart (cart id from parameter and user id provided by your Passport loggin).",
+        "description": "This path fetches all items in the selected cart (cart id from parameter and user id provided by your Passport loggin).",
         "operationId": "get_cart_items",
         "tags": ["Cart/Items"],
         "parameters": [
@@ -691,7 +691,7 @@
     "/api/carts/{cartId}/items/{itemId}": {
       "get": {
         "summary": "Get item in cart by item id",
-        "description": "Fetch item from the selected cart (cart id from parameter and user id provided by your Passport loggin) by item id.",
+        "description": "This path fetch item from the selected cart (cart id from parameter and user id provided by your Passport loggin) by item id.",
         "operationId": "get_cart_item_id",
         "tags": ["Cart/Items"],
         "parameters": [
@@ -790,20 +790,20 @@
         },
         "responses": {
           "200": {
-            "description": "Quantity updated successfully",
+            "description": "Quantity is updated successfully",
             "content": {
               "text/plain": {
-                "example": "Quantity updated"
+                "example": "Quantity is updated"
               }
             }
           },
           "400": {
-            "description": "Product with selected id not in cart",
+            "description": "Product with selected id is not in the cart",
             "content": {
               "text/plain": {
                 "examples": {
                   "Error": {
-                    "value": "Product not found"
+                    "value": "Product is not found"
                   }
                 }
               }
@@ -838,7 +838,7 @@
         ],
         "responses": {
           "204": {
-            "description": "No content - Delete successful"
+            "description": "No content - Delete is successful"
           }
         }
       }
@@ -846,7 +846,7 @@
     "/api/orders": {
       "get": {
         "summary": "Get all orders.",
-        "description": "Fetches all orders for your account. User id for fetching accounts is provided by your Passport loggin.",
+        "description": "This path fetches all orders for your account. User id for fetching accounts is provided by your Passport loggin.",
         "operationId": "get_orders",
         "tags": ["Orders"],
         "responses": {
@@ -861,18 +861,18 @@
                   {
                     "id": 12,
                     "user_id": 67,
-                    "order_price": "$41.00",
                     "status": "SHIPPED",
-                    "created": "2022-04-22",
-                    "modified": "2022-04-28"
+                    "created": "2022-05-17",
+                    "order_price": "$41.00",
+                    "modified": "2022-05-18"
                   },
                   {
                     "id": 13,
                     "user_id": 13,
-                    "order_price": "$100.00",
                     "status": "PENDING",
-                    "created": "2022-05-02",
-                    "modified": "2022-05-06"
+                    "created": "2022-05-17",
+                    "order_price": "$100.00",
+                    "modified": "2022-05-18"
                   },
                   "..."
                 ]
@@ -897,7 +897,7 @@
     "/api/orders/{orderId}": {
       "get": {
         "summary": "Get order by order id.",
-        "description": "Fetches an order from your account (user id provided by your Passport loggin) that matches the order id provided (parameters).\nProducts in order are attached in an array to the order object.",
+        "description": "This path fetches an order from your account (user id provided by your Passport loggin) that matches the order id provided (parameters).\nProducts in order are attached in an array to the order object.",
         "operationId": "get_orders_id",
         "tags": ["Orders"],
         "parameters": [
@@ -924,8 +924,8 @@
                   "user_id": 13,
                   "order_price": "$764.99",
                   "status": "PENDING",
-                  "created": "2022-04-30",
-                  "modified": "2022-05-06",
+                  "created": "2022-05-17",
+                  "modified": "2022-05-18",
                   "products": [
                     {
                       "id": 15,
@@ -944,12 +944,12 @@
             }
           },
           "400": {
-            "description": "Order with that id not found",
+            "description": "Order with that id is not found",
             "content": {
               "text/plain": {
                 "examples": {
                   "Error": {
-                    "value": "Order not found"
+                    "value": "Order is not found"
                   }
                 }
               }

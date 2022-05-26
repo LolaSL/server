@@ -23,7 +23,7 @@ userRouter.get('/', checkAuthentication, async (req, res) => {
         res.status(400).send(err);
     }
 });
-
+//New user instance
 userRouter.post('/', checkAuthentication, async (req, res) => {
     const data = req.body;
 
@@ -42,7 +42,7 @@ userRouter.post('/', checkAuthentication, async (req, res) => {
     res.send('Update successful');
 });
 //login
-userRouter.post('/', checkAuthentication, async (req, res) => {
+userRouter.put('/', checkAuthentication, async (req, res) => {
     try {
         res.send(req.user);
     } catch (err) {
