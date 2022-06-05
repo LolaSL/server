@@ -1,6 +1,7 @@
 const pool = require('../DB/db');
 const format = require('pg-format');
 
+
 module.exports = class Usermodel {
     async create(data) {
         let text = `INSERT INTO users(email, password, first_name, last_name, address, postcode, city, country)
@@ -41,7 +42,7 @@ module.exports = class Usermodel {
         }
     }
 
-    async updateByEmail(data) {
+    async updateUser(data) {
         let text = format('UPDATE users SET %I = $1 WHERE email = $2;', data.column);
         let inputs = [data.value, data.email];
         try {

@@ -5,7 +5,6 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-// const path = require('path');
 const swaggerUi = require('swagger-ui-express');
 const swaggerLog = require('./swaggerLog.json');
 const cookieParser = require('cookie-parser');
@@ -18,17 +17,18 @@ const productRouter = require('./routes/productRouter');
 const cartRouter = require('./routes/cartRouter');
 const orderRouter = require('./routes/orderRouter');
 const { loadPassport } = require('./config/passportConfig');
-const processPayment = require('./func_schemas/paymentFunction');
+const stripe = require('./routes/stripe');
 const logger = require('morgan');
 
 const port = process.env.port || 8080;
 
 const app = express();
 // This will set express to render views folder, then to render the files as normal html
-app.set('view engine', 'ejs');
-app.engine('html', require('ejs').renderFile);
-app.use(express.static('public'));
+// app.set('view engine', 'ejs');
+// app.engine('html', require('ejs').renderFile);
+// app.use(express.static('public'));
 app.use(flash());
+app.use(express.json({verify: (req,res,buf) => { req.rawBody = buf }}));
 app.use(bodyParser.json());
 app.use(cors({
     credentials: true,
@@ -57,21 +57,22 @@ app.use(passport.initialize());
 app.use(passport.session());
 loadPassport(passport);
 //Routes
-app.get('/', processPayment, (req, res) => {
-    res.render('index')
-})
-// app.get('/', (req, res) => {
-//     res.redirect('/api-docs');
+// app.get('/', stripe, (req, res) => {
+//     res.render('index')
 // })
+
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerLog));
 app.use('/api', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
 app.use('/api/orders', orderRouter);
-app.post('/api/create-checkout-session', processPayment)//Stripe payment
+app.use('/api/stripe', stripe)//Stripe payment
 
-
+app.get('/', (req, res) => {
+    res.redirect('/api-docs');
+})
 app.use((error, req, res, next) => {
     res.status(error.status || 500).send({
         error: {

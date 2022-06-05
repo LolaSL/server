@@ -1,6 +1,5 @@
 const userRouter = require('express').Router();
 const { validate, ValidationError } = require('express-validation');
-
 const UserModel = require('../models/UserModel');
 const { updateSchema } = require('../func_schemas/validateSchemas');
 const { hashPassword } = require('../func_schemas/validateFunction');
@@ -34,21 +33,23 @@ userRouter.post('/', checkAuthentication, async (req, res) => {
                 let hashedPassword = await hashPassword(input.value);
                 input.value = hashedPassword;
             }
-            await userInstance.updateByEmail(input);
+            await userInstance.updateUser(input);
         } catch (err) {
             res.status(400).send(err);
         }
     }
     res.send('Update successful');
 });
-//login
+//update user
 userRouter.put('/', checkAuthentication, async (req, res) => {
     try {
-        res.send(req.user);
+
+        res.status(200).json(req.body)
     } catch (err) {
         res.status(400).send(err);
     }
 });
+
 userRouter.delete('/', checkAuthentication, async (req, res) => {
     try {
         await userInstance.deleteByEmail(req.user.email);

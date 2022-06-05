@@ -55,6 +55,19 @@ CREATE TABLE "cart_items" (
   "product_id" INTEGER,
   "quantity" INTEGER DEFAULT 1
 );
+CREATE TABLE paid_orders (
+id SERIAL PRIMARY KEY, 
+user_id INTEGER,
+order_id INTEGER,  
+created_at  timestamp DEFAULT (now()),
+modified  timestamp DEFAULT (now()),
+customerId varchar(120), 
+products varchar(255), 
+subtotal INTEGER, 
+total INTEGER,
+shipping varchar(255), 
+delivery_status varchar DEFAULT 'PENDING', 
+payment_status varchar(20));
 
 ALTER TABLE "order_items" ADD FOREIGN KEY ("order_id") REFERENCES "orders" ("id");
 
@@ -71,3 +84,7 @@ ALTER TABLE "cart_items" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("
 ALTER TABLE "cart_items" ADD PRIMARY KEY (cart_id, product_id);
 
 ALTER TABLE "order_items" ADD PRIMARY KEY (order_id, product_id);
+ 
+ALTER TABLE paid_orders ADD FOREIGN KEY ( order_id) REFERENCES orders(id);
+
+ALTER TABLE paid_orders ADD FOREIGN KEY ( user_id) REFERENCES users(id);

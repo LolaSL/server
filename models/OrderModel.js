@@ -1,11 +1,11 @@
-const pool = require('../DB/db');
+const { query } = require('../DB/db');
 
 
 module.exports = class Ordermodel {
 
     async create(data) {
-        const text = 'INSERT INTO orders (user_id, status, created_at) VALUES ($1, $2, current_timestamp) RETURNING *;';
-        const inputs = [data, 'PENDING'];
+        const text = 'INSERT INTO orders (user_id, status, created_at, modified, total_price ) VALUES ($1, $2, current_timestamp, current_timestamp, $3) RETURNING id;';
+        const inputs = [data.user_id, data.status, data.created_at, data.modified, data.total_price];;
         try {
             return await pool.query(text, inputs);
         } catch (err) {
@@ -14,20 +14,20 @@ module.exports = class Ordermodel {
     }
 
     async addProduct(data) {
-        const text = 'INSERT INTO order_items (order_id, product_id,   quantity, price, ) VALUES ($1, $2, $3,(SELECT price FROM products WHERE id = $2),  $4) RETURNING id;';
-        const inputs = [data.order_id, data.product_id, data.quantity, data.price, data.id];
+        const text = 'INSERT INTO order_items (order_id, product_id, quantity, price ) VALUES ($1, $2, $3, (SELECT price FROM products WHERE id = $2));';
+        const inputs = [data.order_id, data.product_id, data.price, data.quantity, data.id];
         try {
-            return await pool.query(text, inputs);
+            return await query(text, inputs);
         } catch (err) {
             throw err.stack;
         }
     }
 
     async getOrderProducts(data) {
-        const text = 'SELECT quantity FROM products JOIN order_items ON id = product_id WHERE order_id = $1;';
+        const text = 'SELECT order_items.product_id , quantity FROM products JOIN order_items ON id = product_id WHERE order_id = $1;';
         const inputs = [data];
         try {
-            const products = await pool.query(text, inputs);
+            const products = await query(text, inputs);
             return products.rows;
         } catch (err) {
             throw err.stack;
@@ -38,33 +38,25 @@ module.exports = class Ordermodel {
         const text = 'SELECT * FROM orders WHERE user_id = $1';
         const inputs = [data];
         try {
-            const orders = await pool.query(text, inputs);
+            const orders = await query(text, inputs);
             return orders.rows;
         } catch (err) {
             throw err.stack;
         }
     }
-
+  
     async getOrderById(data) {
         const text = 'SELECT * FROM orders WHERE id = $1';
         const inputs = [data];
         try {
             const products = await this.getOrderProducts(data);
-            const order = await pool.query(text, inputs);
+            const order = await query(text, inputs);
             if (!order.rows[0]) return order.rows[0];
             order.rows[0].products = products;
             return order.rows[0];
         } catch (err) {
             throw err.stack;
         }
-    }
-
-    async calculateOrderAmount(data) {
-        // Get price from carts in db but not from items (for now)
-        const cart = await (data)
-        const totalPrice = cart.reduce((acc, item) =>
-            acc + parseFloat(item.products.price) * parseInt(item.quantity, 10), 0)
-        return totalPrice * 100 //Return price in cents
     }
 
 }

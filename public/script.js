@@ -1,19 +1,16 @@
 const button = document.querySelector("button")
 button.addEventListener("click", () => {
     console.log("Checkout")
-    fetch("/api/create-checkout-session", {
+    fetch("/api/stripe/create-checkout-session", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            items: [
-                { id: 1, quantity: 3 },
-                { id: 2, quantity: 1 },
-                {
-                    id: 3, quantity: 2
-                },
-            ],
+       
+                product_data: {
+                    name: 'T-shirt', unit_amount: 2000, quantity: 1
+            },
         }),
     })
         .then(async res => {
@@ -24,7 +21,7 @@ button.addEventListener("click", () => {
         .then(({ url }) => {
             window.location = url
         })
-        .catch((e) => {
-            console.error(e.message)
+        .catch((err) => {
+            console.error(err.message)
         })
 })

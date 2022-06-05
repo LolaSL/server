@@ -1,9 +1,6 @@
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 const Usermodel = require('../models/UserModel');
-const JWTstrategy = require('passport-jwt').Strategy;
-const ExtractJWT = require('passport-jwt').ExtractJwt;
-const passport = require('passport');
 
 const userInstance = new Usermodel();
 
@@ -35,55 +32,5 @@ const checkAuthentication = (req, res, next) => {
     if (req.isAuthenticated()) return next();
     res.status(400).json({ message: 'Please login' });
 }
-//Checks the A_JWT cookie
-// passport.use(
-//     'jwt-customer',
-//     new JWTstrategy(
-//         {
-//             secretOrKey: process.env.JWT_SECRET,
-//             jwtFromRequest: ExtractJWT.fromExtractors([
-//                 (req) => {
-//                     let token = null;
-//                     if (req && req.cookies) {
-//                         token = req.cookies['A_JWT']
-//                     }
-//                     return token;
-//                 }])
-//         },
-//         async (token, done) => {
-//             try {
-//                 return done(null, token.user);
-//             } catch (error) {
-//                 done(error);
-//             }
-//         }
-//     )
-// );
-// //Checks the A_JWT cookie and if a user has user_role = admin
-// passport.use(
-//     'jwt-admin',
-//     new JWTstrategy(
-//         {
-//             secretOrKey: process.env.JWT_SECRET,
-//             jwtFromRequest: ExtractJWT.fromExtractors([
-//                 (req) => {
-//                     let token = null;
-//                     if (req && req.cookies) {
-//                         token = req.cookies['A_JWT']
-//                     }
-//                     return token;
-//                 }])
-//         },
-//         async (token, done) => {
-//             if (token.user.role !== 'admin') { //Reject if not admin
-//                 return done(null, false)
-//             }
-//             try {
-//                 return done(null, token.user);
-//             } catch (error) {
-//                 done(error);
-//             }
-//         }
-//     )
-// );
+
 module.exports = { loadPassport, checkAuthentication };

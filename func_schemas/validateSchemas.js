@@ -12,7 +12,7 @@ module.exports = {
             postcode: Joi.string().required(),
             city: Joi.string().required(),
             country: Joi.string().trim().alphanum().required(),
-            date_joined: Joi.date().format('YYYY-MM-DD').utc(),
+            date_joined: Joi.date().format('DD-MM-YYYY').utc(),
             active: Joi.boolean(),
             user_role: Joi.string()
         })
