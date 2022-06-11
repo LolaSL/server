@@ -24,11 +24,11 @@ const port = process.env.port || 8080;
 
 const app = express();
 // This will set express to render views folder, then to render the files as normal html
-// app.set('view engine', 'ejs');
-// app.engine('html', require('ejs').renderFile);
-// app.use(express.static('public'));
+app.set('view engine', 'ejs');
+app.engine('html', require('ejs').renderFile);
+app.use(express.static('views'));
 app.use(flash());
-app.use(express.json({verify: (req,res,buf) => { req.rawBody = buf }}));
+app.use(express.json({ verify: (req, res, buf) => { req.rawBody = buf } }));
 app.use(bodyParser.json());
 app.use(cors({
     credentials: true,
@@ -57,9 +57,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 loadPassport(passport);
 //Routes
-// app.get('/', stripe, (req, res) => {
-//     res.render('index')
-// })
+app.get('/', stripe, (req, res) => {
+    res.render('index')
+})
 
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerLog));
@@ -70,9 +70,9 @@ app.use('/api/carts', cartRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/stripe', stripe)//Stripe payment
 
-app.get('/', (req, res) => {
-    res.redirect('/api-docs');
-})
+// app.get('/', (req, res) => {
+//     res.redirect('/api-docs');
+// })
 app.use((error, req, res, next) => {
     res.status(error.status || 500).send({
         error: {

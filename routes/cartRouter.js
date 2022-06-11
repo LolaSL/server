@@ -65,9 +65,9 @@ cartRouter.delete('/:id', async (req, res) => {
 //Checkout
 cartRouter.get('/:id/checkout', async (req, res) => {
     try {
-        const result = await cartInstance.checkout({ user_id: req.user.id, cart_id: req.carts.id });
+        const result = await cartInstance.checkout({ user_id: req.user.id, cart_id: req.cart.id });
         if (result === 'empty') return res.status(400).send('Cart empty. No order created');
-        if (result === 'payment') return res.status(400).send('Payment not processed');
+        if (result === 'payment') return res.status(400).send('Payment processed');
         res.json({ "order_id": result });
     } catch (err) {
         res.status(400).send(err);

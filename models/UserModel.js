@@ -5,7 +5,7 @@ const format = require('pg-format');
 module.exports = class Usermodel {
     async create(data) {
         let text = `INSERT INTO users(email, password, first_name, last_name, address, postcode, city, country)
-        VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
+        VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING*`;
 
         let inputs = [data.email, data.password, data.first_name, data.last_name, data.address, data.postcode, data.city, data.country,];
         console.log(inputs)

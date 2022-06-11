@@ -12,8 +12,7 @@ CREATE TABLE "users" (
   "city" varchar(100),
   "country" varchar(100),
   "date_joined" timestamp DEFAULT (now()),
-  "active" boolean DEFAULT true,
-  "user_role" varchar(100)
+  "active" boolean DEFAULT true
 );
 
 CREATE TABLE "order_items" (

@@ -7,9 +7,9 @@ button.addEventListener("click", () => {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-       
-                product_data: {
-                    name: 'T-shirt', unit_amount: 2000, quantity: 1
+
+            product_data: {
+                name: 'T-shirt', unit_amount: 2000, quantity: 1
             },
         }),
     })
@@ -22,6 +22,6 @@ button.addEventListener("click", () => {
             window.location = url
         })
         .catch((err) => {
-            console.error(err.message)
+            console.log(err.message)
         })
 })

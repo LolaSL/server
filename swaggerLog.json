@@ -318,8 +318,7 @@
                   "postcode": "010101",
                   "city": "Test",
                   "country": "Test",
-                  "active": true,
-                  "user_role": "customer"
+                  "active": true
                 }
               }
             }
@@ -953,7 +952,7 @@
       }
     }
   },
-  
+
   "components": {
     "schemas": {
       "Registration": {
@@ -1027,9 +1026,6 @@
             "type": "date"
           },
           "active": {
-            "type": "string"
-          },
-          "user_role": {
             "type": "string"
           }
         }
@@ -1202,41 +1198,37 @@
             "type": "string"
           },
 
-             "products": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "author": {
-                      "type": "string"
-                    },
-                    "price": {
-                      "type": "string"
-                    },
-                    "category": {
-                      "type": "string"
-                    },
-                    "description": {
-                      "type": "string"
-                    },
-                    "quantity": {
-                      "type": "integer"
-                    }
-                  }
+          "products": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "author": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "quantity": {
+                  "type": "integer"
                 }
               }
-    
-
             }
           }
         }
       }
     }
-  
-
+  }
+}

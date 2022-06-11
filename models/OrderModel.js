@@ -7,7 +7,7 @@ module.exports = class Ordermodel {
         const text = 'INSERT INTO orders (user_id, status, created_at, modified, total_price ) VALUES ($1, $2, current_timestamp, current_timestamp, $3) RETURNING id;';
         const inputs = [data.user_id, data.status, data.created_at, data.modified, data.total_price];;
         try {
-            return await pool.query(text, inputs);
+            return await query(text, inputs);
         } catch (err) {
             throw err.stack;
         }

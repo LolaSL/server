@@ -43,7 +43,7 @@ userRouter.post('/', checkAuthentication, async (req, res) => {
 //update user
 userRouter.put('/', checkAuthentication, async (req, res) => {
     try {
-
+       
         res.status(200).json(req.body)
     } catch (err) {
         res.status(400).send(err);
