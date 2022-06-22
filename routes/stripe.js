@@ -1,9 +1,4 @@
 
-// if (typeof localStorage === "undefined" || localStorage === null) {
-//   var LocalStorage = require('node-localstorage').LocalStorage;
-//   localStorage = new LocalStorage('./scratch');
-// }
-
 const express = require('express');
 const Stripe = require("stripe")
 require('dotenv').config()
@@ -69,6 +64,7 @@ router.post('/create-checkout-session', async (req, res) => {
       },
     ],
     customer: customer.id,
+
     line_items: [
 
       {
@@ -79,7 +75,7 @@ router.post('/create-checkout-session', async (req, res) => {
           },
           unit_amount: 47500,
         },
-        quantity: 5,
+        quantity: 1,
 
 
       },
@@ -105,7 +101,7 @@ router.post('/create-checkout-session', async (req, res) => {
           unit_amount: 35100,
 
         },
-        quantity: 5,
+        quantity: 1,
 
       },
     ],
@@ -125,7 +121,7 @@ router.post('/create-checkout-session', async (req, res) => {
 const createOrder = async (customer, data) => {
   const Items = JSON.stringify(customer.metadata.user);
   const newOrder = new Ordermodel({
-    userId: customer.metadata.user_id,
+    userId: customer.metadata.userId,
     customerId: data.customer,
     paymentIntentId: data.payment_intent,
     products: Items,

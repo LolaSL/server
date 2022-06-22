@@ -16,6 +16,8 @@ userRouter.use('/', validate(updateSchema), (err, req, res, next) => {
 
 // Routes
 userRouter.get('/', checkAuthentication, async (req, res) => {
+    const { userId } = req.session
+    console.log(userId)
     try {
         res.send(req.user);
     } catch (err) {
@@ -44,7 +46,7 @@ userRouter.post('/', checkAuthentication, async (req, res) => {
 userRouter.put('/', checkAuthentication, async (req, res) => {
     try {
        
-        res.status(200).json(req.body)
+        res.status(200).json(req.body.first_name || req.body.email)
     } catch (err) {
         res.status(400).send(err);
     }

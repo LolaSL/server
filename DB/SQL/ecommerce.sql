@@ -12,7 +12,8 @@ CREATE TABLE "users" (
   "city" varchar(100),
   "country" varchar(100),
   "date_joined" timestamp DEFAULT (now()),
-  "active" boolean DEFAULT true
+  "active" boolean DEFAULT true,
+  payment_id INTEGER
 );
 
 CREATE TABLE "order_items" (
@@ -54,19 +55,15 @@ CREATE TABLE "cart_items" (
   "product_id" INTEGER,
   "quantity" INTEGER DEFAULT 1
 );
-CREATE TABLE paid_orders (
-id SERIAL PRIMARY KEY, 
-user_id INTEGER,
-order_id INTEGER,  
-created_at  timestamp DEFAULT (now()),
-modified  timestamp DEFAULT (now()),
-customerId varchar(120), 
-products varchar(255), 
-subtotal INTEGER, 
-total INTEGER,
-shipping varchar(255), 
-delivery_status varchar DEFAULT 'PENDING', 
-payment_status varchar(20));
+
+CREATE TABLE "payment_details" (
+	id SERIAL PRIMARY KEY,
+	card_type VARCHAR(50),
+	card_number CHAR(16),
+	expiry_date VARCHAR(10),
+	name_on_card VARCHAR(100),
+  security_code VARCHAR(3),
+);
 
 ALTER TABLE "order_items" ADD FOREIGN KEY ("order_id") REFERENCES "orders" ("id");
 
