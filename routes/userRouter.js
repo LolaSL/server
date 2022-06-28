@@ -1,10 +1,13 @@
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+dotenv.config();
+require('crypto').randomBytes(64).toString('hex');
 const userRouter = require('express').Router();
 const { validate, ValidationError } = require('express-validation');
 const UserModel = require('../models/UserModel');
 const { updateSchema } = require('../func_schemas/validateSchemas');
 const { hashPassword } = require('../func_schemas/validateFunction');
 const { checkAuthentication } = require('../config/passportConfig');
-
 const userInstance = new UserModel();
 
 // Input validation
@@ -13,21 +16,37 @@ userRouter.use('/', validate(updateSchema), (err, req, res, next) => {
     next();
 })
 
+// User Routes
+userRouter.get('/', checkAuthentication, ensureToken, async (req, res) => {
+        jwt.verify(req.token, process.env.TOKEN_SECRET, function (err, data) {
+        if (err) {
+            res.sendStatus(403);
+        } else {
+            res.json({
+                data: data,
 
-// Routes
-userRouter.get('/', checkAuthentication, async (req, res) => {
-    const { userId } = req.session
-    console.log(userId)
-    try {
-        res.send(req.user);
-    } catch (err) {
-        res.status(400).send(err);
+            })
+        }
     }
+    )
+  
 });
+function ensureToken(req, res, next) {
+
+    const bearerHeader = req.headers['authorization']
+
+    if (typeof bearerHeader !== 'undefined') {
+        const bearer = bearerHeader.split(" ");
+        const bearerToken = bearer[1];
+        req.token = bearerToken;
+        next();
+    } else {
+        res.sendStatus(403);
+    }
+}
 //New user instance
 userRouter.post('/', checkAuthentication, async (req, res) => {
     const data = req.body;
-
     for (const key in data) {
         try {
             let input = { column: key, value: data[key], email: req.user.email };
@@ -36,25 +55,29 @@ userRouter.post('/', checkAuthentication, async (req, res) => {
                 input.value = hashedPassword;
             }
             await userInstance.updateUser(input);
+
         } catch (err) {
             res.status(400).send(err);
         }
     }
-    res.send('Update successful');
+    res.send('Update is successful');
 });
-//update user
+//Update user
 userRouter.put('/', checkAuthentication, async (req, res) => {
     try {
-       
+
         res.status(200).json(req.body.first_name || req.body.email)
     } catch (err) {
         res.status(400).send(err);
     }
 });
 
+
+//Delete user
 userRouter.delete('/', checkAuthentication, async (req, res) => {
     try {
         await userInstance.deleteByEmail(req.user.email);
+
     } catch (err) {
         res.status(400).send(err)
     }

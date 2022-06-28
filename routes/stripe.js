@@ -121,7 +121,7 @@ router.post('/create-checkout-session', async (req, res) => {
 const createOrder = async (customer, data) => {
   const Items = JSON.stringify(customer.metadata.user);
   const newOrder = new Ordermodel({
-    userId: customer.metadata.userId,
+    user_id: customer.metadata.user_id,
     customerId: data.customer,
     paymentIntentId: data.payment_intent,
     products: Items,

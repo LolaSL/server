@@ -1,7 +1,6 @@
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 const Usermodel = require('../models/UserModel');
-
 const userInstance = new Usermodel();
 
 const loadPassport = (passport) => {
@@ -10,7 +9,6 @@ const loadPassport = (passport) => {
 
             const user_role = "customer";
             const user = await userInstance.getByEmail(email, user_role);
-
             if (!user) return done(null, false);
             if (! await bcrypt.compare(password, user.password)) return done(null, false);
             user.password = '******';
@@ -32,6 +30,7 @@ const checkAuthentication = (req, res, next) => {
     if (req.isAuthenticated()) {
         return next();
     }
+
     res.status(400).json({ message: 'Please login' });
 
 }

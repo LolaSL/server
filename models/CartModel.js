@@ -1,8 +1,6 @@
 const { query } = require('../DB/db');
 const Ordermodel = require('../models/OrderModel');
-const Stripe = require("stripe")
 require('dotenv').config()
-const stripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
 
 
 const orderInstance = new Ordermodel();
@@ -106,11 +104,11 @@ module.exports = class Cartmodel {
     async checkout(data) {
         try {
             const products = await this.getAllProducts(data.cart_id);
-            if(products.length === 0) return 'empty';
-            const paid = stripe.data;
-            if(!paid) return 'payment';
+            if(products.length === 0) return 'empty';        
             const newOrder = await orderInstance.create(data.user_id);
             const orderId = newOrder.rows[0].id;
+            const paid = orderInstance.data.order_id;
+            if(!paid) return 'payment';
             for(const item of products){
                 let data = {
                     order_id: orderId,
@@ -120,6 +118,7 @@ module.exports = class Cartmodel {
                 await orderInstance.addProduct(data);
             }
             return orderId;
+        
         } catch (err) {
             throw err;
         }

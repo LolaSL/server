@@ -7,7 +7,6 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const swaggerLog = require('./swaggerLog.json');
-// const SwaggerExpress = require('swagger-express-mw');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const passport = require('passport');
@@ -23,6 +22,7 @@ const paymentRouter = require('./routes/paymentRouter');
 const logger = require('morgan');
 const TWO_HOURS = 60 * 60 * 1000 * 2;
 const port = process.env.port || 8080;
+
 
 const app = express();
 // This will set express to render views folder, then to render the files as normal html
@@ -79,10 +79,13 @@ loadPassport(passport);
     app.use('/api/orders', orderRouter);
     app.use('/api/stripe', stripe)//Stripe payment
     app.use('/api/payments', paymentRouter, stripe);
+    
     app.get('/', (req, res) => {
    
         res.redirect('/api-docs');
     })
+    
+      
     app.use((error, req, res, next) => {
         res.status(error.status || 500).send({
             error: {
@@ -92,7 +95,10 @@ loadPassport(passport);
         });
         next();
     })
-    app.listen(port, () => {
-        console.log(`Server is listening on http://localhost:${port}`);
-    })
+
+
+app.listen(port, () => {
+    console.log(`Server is listening on http://localhost:${port}`)
+});
+
 

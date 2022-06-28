@@ -254,7 +254,7 @@
             "description": "User is logged in.",
             "content": {
               "text/plain": {
-                "example": "Login is successful"
+                "example": "Token. Message: Test is logged in"
               }
             }
           },
@@ -318,6 +318,7 @@
                   "postcode": "010101",
                   "city": "Test",
                   "country": "Test",
+                  "date_joined": "2022-05-18T13:33:52.412Z",
                   "active": true
                 }
               }
@@ -553,7 +554,7 @@
               "text/plain": {
                 "examples": {
                   "Error": {
-                    "value": "Cart empty. No order created"
+                    "value": "Cart empty. No payment processed"
                   }
                 }
               }
@@ -952,185 +953,7 @@
       }
     }
   },
-  "/api/payments/data/{customerId}": {
-    "get": {
-      "summary": "To get a customer payment data by customerId",
-      "tags": ["Payments"],
-      "description": "To geta customer payment data by customerId",
-      "produces": ["application/json"],
-      "parameters": [
-        {
-          "name": "customerId",
-          "in": "path",
-          "required": true
-        }
-      ],
-      "responses": {
-        "200": {
-          "description": "200 Success",
-          "schema": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "integer"
-              },
-              "card_type": {
-                "type": "string"
-              },
-              "card_number": {
-                "type": "string"
-              },
-              "expiry_date": {
-                "type": "string"
-              },
-              "name_on_card": {
-                "type": "string"
-              },
-              "security_code": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "404": {
-          "description": "404 Not Found",
-          "schema": {
-            "type": "object",
-            "items": null
-          }
-        },
-        "500": {
-          "description": "500 Internal Server Error",
-          "schema": {
-            "type": "object",
-            "items": null
-          }
-        }
-      }
-    }
-  },
-  "/api/payments/data/new/{customerId}": {
-    "post": {
-      "summary": "To add new payment data for customer by customerId",
-      "tags": ["Payments"],
-      "description": "To add new payment data for customer by customerId",
-      "produces": ["application/json"],
-      "parameters": [
-        {
-          "name": "customerId",
-          "in": "path",
-          "required": true
-        }
-      ],
-      "requestBody": {
-        "required": true,
-        "content": {
-          "application/json": {
-            "schema": {
-              "properties": {
-                "card_type": {
-                  "type": "string"
-                },
-                "card_number": {
-                  "type": "string"
-                },
-                "expiry_date": {
-                  "type": "string"
-                },
-                "name_on_card": {
-                  "type": "string"
-                },
-                "security_code": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      },
-      "responses": {
-        "200": {
-          "description": "200 Success",
-          "schema": {
-            "type": "object"
-          }
-        },
-        "404": {
-          "description": "404 Not Found",
-          "schema": {
-            "type": "object",
-            "items": null
-          }
-        },
-        "500": {
-          "description": "500 Internal Server Error",
-          "schema": {
-            "type": "object",
-            "items": null
-          }
-        }
-      }
-    }
-  },
-  "/api/payments/data/amend/{customerId}": {
-    "put": {
-      "summary": "To amend payment data for customer by customerId",
-      "tags": ["Payments"],
-      "description": "To amend payment data for customer by customerId",
-      "produces": ["application/json"],
-      "parameters": [
-        {
-          "name": "customerId",
-          "in": "path",
-          "required": true
-        }
-      ],
-      "requestBody": {
-        "required": true,
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "anyOf": [
-                {
-                  "$ref": "#/components/schemas/Payment_details"
-                }
-              ],
-              "example": {
-                "card_number": "4242424242424242",
-                "expiry_date": "2023-02-01",
-                "security_code": "543"
-              }
-            }
-          }
-        }
-      },
-      "responses": {
-        "200": {
-          "description": "200 Success",
-          "schema": {
-            "type": "object"
-          }
-        },
-        "404": {
-          "description": "404 Not Found",
-          "schema": {
-            "type": "object",
-            "items": null
-          }
-        },
-        "500": {
-          "description": "500 Internal Server Error",
-          "schema": {
-            "type": "object",
-            "items": null
-          }
-        }
-      }
-    }
-  },
-
-  "components": {
+    "components": {
     "schemas": {
       "Registration": {
         "type": "object",
@@ -1403,27 +1226,7 @@
                 }
               }
             }
-          },
-          "Payment_details": {
-            "type": "object",
-            "properties": {
-              "card_type": {
-                "type": "string"
-              },
-              "card_number": {
-                "type": "string"
-              },
-              "expiry_date": {
-                "type": "string"
-              },
-              "name_on_card": {
-                "type": "string"
-              },
-              "security_code": {
-                "type": "string"
-              }
-            }
-          }
+          }    
         }
       }
     }

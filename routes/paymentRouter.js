@@ -1,5 +1,4 @@
 const express = require('express');
-// const stripe = require('../routes/stripe');
 const { paymentSchema } = require('../func_schemas/paymentSchema')
 const { validate, ValidationError } = require('express-validation');
 const PaymentService = require('../service/paymentService');
@@ -8,8 +7,7 @@ const PaymentServiceInstance = new PaymentService;
 const paymentRouter = express.Router();
 
 //get payment data by customer id 
-paymentRouter.get('/data/:customerId', validate(paymentSchema),
-    async (req, res, next) => {
+paymentRouter.get('/data/:customerId', validate(paymentSchema), async (req, res, next) => {
     try {
         const response = await PaymentServiceInstance.getPaymentDetails(req.params.customerId);
         res.json(response);
@@ -22,7 +20,7 @@ paymentRouter.get('/data/:customerId', validate(paymentSchema),
 
 paymentRouter.post('/data/new/:customerId', validate(paymentSchema), async (req, res, next) => {
     try {
-        const response = await PaymentServiceInstance.createPaymentDetails( req.params.customerId, body);
+        const response = await PaymentServiceInstance.createPaymentDetails(req.params.customerId, body);
         res.json(response);
     } catch (err) {
         next(err);

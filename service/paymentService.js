@@ -6,29 +6,29 @@ const PaymentModelInstance = new PaymentModel;
 
 class PaymentService {
      
-    async getPaymentDetails(user_id) {
+    async getPaymentDetails(userId) {
         try {
-            const data = await PaymentModelInstance.getPaymentDetails(user_id);
+            const data = await PaymentModelInstance.getPaymentDetails(userId);
             return data;
         } catch (err) {
             throw(err);
         }
     };
 
-    async createPaymentDetails(user_id, data) {
+    async createPaymentDetails(userId, data) {
         try {
             const payData = await PaymentModelInstance.createPaymentDetails(data);
-            await PaymentModelInstance.setPaymentId(user_id, payData.id);
+            await PaymentModelInstance.setPaymentId(userId, payData.id);
             return payData;
         } catch (err) {
             throw(err);
         }
     };
 
-    async amendPaymentDetails(user_id, body) {
+    async amendPaymentDetails(userId, body) {
         try {
-            await PaymentModelInstance.amendPaymentDetails(user_id, body);
-            const data = await PaymentModelInstance.getPaymentDetails(user_id);
+            await PaymentModelInstance.amendPaymentDetails(userId, body);
+            const data = await PaymentModelInstance.getPaymentDetails(userId);
             return data;
             
         } catch (err) {
