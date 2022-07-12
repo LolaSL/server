@@ -1,9 +1,6 @@
-const dotenv = require('dotenv');
-dotenv.config();
+require('dotenv').config()
 
 module.exports = {
-
-
     dbLogin: {
         user: process.env.DB_USER,
         host: process.env.DB_HOST,
@@ -15,4 +12,5 @@ module.exports = {
 
     node_env: process.env.NODE_ENV,
     database_url: process.env.DATABASE_URL
+    
 }

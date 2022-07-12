@@ -1,9 +1,6 @@
 const { query } = require('../DB/db');
-const Ordermodel = require('../models/OrderModel');
-require('dotenv').config()
-
-
-const orderInstance = new Ordermodel();
+const Order = require('../models/OrderModel');
+const orderInstance = new Order();
 
 module.exports = class Cartmodel {
 
@@ -111,6 +108,8 @@ module.exports = class Cartmodel {
             if(!paid) return 'payment';
             for(const item of products){
                 let data = {
+                    user_id: userId,
+                    cart_id: cartId,
                     order_id: orderId,
                     product_id: item.id,
                     quantity: products.quantity

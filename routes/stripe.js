@@ -4,20 +4,22 @@ const Stripe = require("stripe")
 require('dotenv').config()
 const stripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
 const router = express.Router();
-const Ordermodel = require('../models/OrderModel');
-
+const  Order  = require("../models/OrderModel");
 
 router.post('/create-checkout-session', async (req, res) => {
+
   const customer = await stripe.customers.create({
     metadata: {
-      user: req.body.user,
-      cart: JSON.stringify(req.body.cart)
+      userId: req.body.userId,
+      cart: JSON.stringify(req.body.cart_items),
     }
-  })
+  }); 
+  
+
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
     shipping_address_collection: {
-      allowed_countries: ['US', 'CA', 'GR', 'DK', 'SE'],
+      allowed_countries: ['US', 'CA', 'GR', 'DK', 'SE','KE'],
     },
     shipping_options: [
       {
@@ -63,8 +65,6 @@ router.post('/create-checkout-session', async (req, res) => {
         }
       },
     ],
-    customer: customer.id,
-
     line_items: [
 
       {
@@ -81,19 +81,6 @@ router.post('/create-checkout-session', async (req, res) => {
       },
       {
         price_data: {
-
-          currency: 'usd',
-          product_data: {
-            name: 'Vintage Clock',
-          },
-          unit_amount: 59877,
-
-        },
-        quantity: 2,
-
-      },
-      {
-        price_data: {
           currency: 'usd',
           product_data: {
             name: 'Sunburstwall clock',
@@ -106,25 +93,26 @@ router.post('/create-checkout-session', async (req, res) => {
       },
     ],
     phone_number_collection: { enabled: true },
+   
     mode: 'payment',
+    customer: customer.id,
     success_url: `${process.env.CLIENT_URL}/success.html`,
     cancel_url: `${process.env.CLIENT_URL}/cancel.html`,
     automatic_tax: { enabled: false },
   });
 
   res.send({ url: session.url });
-  console.log(customer)
-  console.log(session)
-});
+ });
 //Create order object
 
 const createOrder = async (customer, data) => {
-  const Items = JSON.stringify(customer.metadata.user);
-  const newOrder = new Ordermodel({
-    user_id: customer.metadata.user_id,
+
+ Items = JSON.stringify(customer.metadata.cart);
+
+  const orderInstance =  new Order({
+    userId: customer.metadata.userId,
     customerId: data.customer,
     paymentIntentId: data.payment_intent,
-    products: Items,
     subtotal: data.amount_subtotal,
     total: data.amount_total,
     shipping: data.customer_details,
@@ -132,9 +120,9 @@ const createOrder = async (customer, data) => {
   });
 
   try {
-    const savedOrder = await newOrder.create();
+    const savedOrder = await orderInstance.create(data)
     //send email
-    console.log("Processed Order: " + JSON.parse(savedOrder))
+    console.log("Processed Order: " + savedOrder)
   }
   catch (err) { console.log(err) }
 };

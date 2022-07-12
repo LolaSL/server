@@ -18,7 +18,6 @@ const cartRouter = require('./routes/cartRouter');
 const orderRouter = require('./routes/orderRouter');
 const { loadPassport } = require('./config/passportConfig');
 const stripe = require('./routes/stripe');
-const paymentRouter = require('./routes/paymentRouter');
 const logger = require('morgan');
 const TWO_HOURS = 60 * 60 * 1000 * 2;
 const port = process.env.port || 8080;
@@ -35,7 +34,7 @@ app.use(express.json({ verify: (req, res, buf) => { req.rawBody = buf } }));
 app.use(bodyParser.json());
 app.use(cors({
     credentials: true,
-    origin: process.env.URL || '*',
+    origin: true,
 }));
 
 app.use(session({
@@ -47,8 +46,9 @@ app.use(session({
     cookie: {
         secure: process.env.NODE_ENV === 'production' ? "true" : "auto",
         sameSite: process.env.NODE_ENV === 'production' ? "none" : "lax",
-        maxAge: TWO_HOURS
-    },
+        maxAge: TWO_HOURS,
+      
+              },
 
 }));
 console.log(session)
@@ -77,8 +77,8 @@ loadPassport(passport);
     app.use('/api/products', productRouter);
     app.use('/api/carts', cartRouter);
     app.use('/api/orders', orderRouter);
-    app.use('/api/stripe', stripe)//Stripe payment
-    app.use('/api/payments', paymentRouter, stripe);
+    // app.use('/api/stripe', stripe)//Stripe payment
+
     
     app.get('/', (req, res) => {
    

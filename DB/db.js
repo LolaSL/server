@@ -1,7 +1,6 @@
 const Pool = require('pg').Pool;
 const { dbLogin, database_url, node_env } = require('../config/config');
 
-
 const localConfig = {
     user: dbLogin.user,
     host: dbLogin.host,
@@ -17,13 +16,10 @@ const herokuConfig = {
     }
 }
 
-
 const pool = new Pool(node_env === 'production' ? herokuConfig : localConfig);
-
 
 module.exports = {
     query: (text, params) => {
         return pool.query(text, params);
     }
-
 }

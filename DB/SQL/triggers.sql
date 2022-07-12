@@ -3,12 +3,10 @@ RETURNS TRIGGER AS
 $$ 
   BEGIN
   	NEW.modified = NOW();
-    RETURN NEW;
+    RETURN NEW.modified;
   END;
 $$ 
 LANGUAGE PLPGSQL;
-
-
 
 CREATE OR REPLACE FUNCTION modify_cart_timestamp()
 RETURNS TRIGGER AS 
@@ -29,8 +27,6 @@ $$
 $$ 
 LANGUAGE PLPGSQL;
 
-
-
 CREATE OR REPLACE FUNCTION update_total()
 RETURNS TRIGGER AS
 $$
@@ -50,36 +46,26 @@ $$
 $$
 LANGUAGE PLPGSQL;
 
-
-
 CREATE TRIGGER update_timestamp_order
 BEFORE UPDATE ON orders
 FOR EACH ROW
 EXECUTE PROCEDURE modify_timestamp();
-
-
-
 
 CREATE TRIGGER update_timestamp_user
 BEFORE UPDATE ON users
 FOR EACH ROW
 EXECUTE PROCEDURE modify_timestamp();
 
-
-
-
 CREATE TRIGGER update_timestamp_cart
 BEFORE INSERT OR DELETE ON cart_items
 FOR EACH ROW
 EXECUTE PROCEDURE modify_cart_timestamp();
 
-
-
-
-
 CREATE TRIGGER update_order_total
 BEFORE INSERT OR DELETE ON order_items
 FOR EACH ROW
 EXECUTE PROCEDURE update_total();
+
+
 
 

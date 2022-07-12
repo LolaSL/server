@@ -2,11 +2,7 @@ const cartRouter = require('express').Router();
 const Cartmodel = require('../models/CartModel');
 const productCartRouter = require('./productCartRouter');
 const { checkAuthentication } = require('../config/passportConfig');
-
-
 const cartInstance = new Cartmodel();
-
-
 
 //Id check middleware
 cartRouter.use('/:id', checkAuthentication, async (req, res, next) => {
@@ -37,7 +33,7 @@ cartRouter.get('/', checkAuthentication, async (req, res) => {
 })
 
 // Get cart by cart id
-cartRouter.get('/:id', (req, res) => {
+cartRouter.get('/:id', checkAuthentication, (req, res) => {
     res.json(req.cart);
 })
 
@@ -53,7 +49,7 @@ cartRouter.post('/', checkAuthentication, async (req, res) => {
 })
 
 //Delete cart
-cartRouter.delete('/:id', async (req, res) => {
+cartRouter.delete('/:id', checkAuthentication,async (req, res) => {
     try {
         await cartInstance.deleteCart(req.cart.id);
         res.status(204).send();

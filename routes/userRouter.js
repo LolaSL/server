@@ -1,6 +1,5 @@
+require('dotenv').config()
 const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
-dotenv.config();
 require('crypto').randomBytes(64).toString('hex');
 const userRouter = require('express').Router();
 const { validate, ValidationError } = require('express-validation');
@@ -8,8 +7,9 @@ const UserModel = require('../models/UserModel');
 const { updateSchema } = require('../func_schemas/validateSchemas');
 const { hashPassword } = require('../func_schemas/validateFunction');
 const { checkAuthentication } = require('../config/passportConfig');
+const { ensureToken } = require('../utils/ensureToken')
 const userInstance = new UserModel();
-
+const secretKey = process.env.JWT_SECRET;
 // Input validation
 userRouter.use('/', validate(updateSchema), (err, req, res, next) => {
     if (err instanceof ValidationError) return res.status(err.statusCode).json(err);
@@ -17,8 +17,10 @@ userRouter.use('/', validate(updateSchema), (err, req, res, next) => {
 })
 
 // User Routes
-userRouter.get('/', checkAuthentication, ensureToken, async (req, res) => {
-        jwt.verify(req.token, process.env.TOKEN_SECRET, function (err, data) {
+userRouter.get('/', ensureToken, checkAuthentication, (req, res) => {
+
+   
+  jwt.verify(req.token, secretKey, function (err, data) {
         if (err) {
             res.sendStatus(403);
         } else {
@@ -29,21 +31,10 @@ userRouter.get('/', checkAuthentication, ensureToken, async (req, res) => {
         }
     }
     )
+})
   
-});
-function ensureToken(req, res, next) {
+    
 
-    const bearerHeader = req.headers['authorization']
-
-    if (typeof bearerHeader !== 'undefined') {
-        const bearer = bearerHeader.split(" ");
-        const bearerToken = bearer[1];
-        req.token = bearerToken;
-        next();
-    } else {
-        res.sendStatus(403);
-    }
-}
 //New user instance
 userRouter.post('/', checkAuthentication, async (req, res) => {
     const data = req.body;
@@ -55,7 +46,7 @@ userRouter.post('/', checkAuthentication, async (req, res) => {
                 input.value = hashedPassword;
             }
             await userInstance.updateUser(input);
-
+        
         } catch (err) {
             res.status(400).send(err);
         }

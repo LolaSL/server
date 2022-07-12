@@ -1,6 +1,8 @@
 
 CREATE DATABASE ecommerce;
 
+-- CREATE ROLE isAdmin WITH SUPERUSER CREATEDB CREATEROLE LOGIN ENCRYPTED PASSWORD 'my_admin_password';
+
 CREATE TABLE "users" (
   "id" SERIAL PRIMARY KEY,
   "email" varchar(120) NOT NULL,
@@ -13,7 +15,8 @@ CREATE TABLE "users" (
   "country" varchar(100),
   "date_joined" timestamp DEFAULT (now()),
   "active" boolean DEFAULT true,
-  payment_id INTEGER
+   "user_role" VARCHAR,
+   "modified" DATE,
 );
 
 CREATE TABLE "order_items" (
@@ -84,3 +87,6 @@ ALTER TABLE "order_items" ADD PRIMARY KEY (order_id, product_id);
 ALTER TABLE paid_orders ADD FOREIGN KEY ( order_id) REFERENCES orders(id);
 
 ALTER TABLE paid_orders ADD FOREIGN KEY ( user_id) REFERENCES users(id);
+
+ALTER TABLE "tokens" ADD FOREIGN KEY (user_id) REFERENCES users (id);
+

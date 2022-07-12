@@ -2,44 +2,33 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout order</title>
-    <script src="script.js" defer></script>
-    <script src="https://js.stripe.com/v3/" defer></script>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout order</title>
+  <script src="script.js" defer></script>
+  <script src="https://js.stripe.com/v3/" defer></script>
 
 </head>
 
 <body>
-    <section>
-        <div class="product">
-          <img src="https://ocdn.eu/pulscms-transforms/1/QFuktkqTURBXy9hNmExOWI0ZGZhZWZkOGNmNjc5YWFhMjRlYWMyMjNhZi5qcGVnkpUDAEfNAczNAQOTBc0CgM0BQA"
-          alt="Art products" />
-          <div class="description">
-            <h3>Art Products</h3>
-            <h5>$532754</h5>
-          </div>
-        </div>
-        <form action="/create-checkout-session" method="POST">
-          <button type="button" id="checkout-button"style="margin-top: 0; color: white; background-color: blue; border-radius: 7px;">Checkout</button>
-        </form>
-      </section>
-    <!-- <header><h1>Checkout order</h1></header>
-    <form action="/create-checkout-session" method="POST"></form>
-    <div>
-        <h2 class="text-white">Order</h2>
-        <input type="text" name="name" placeholder="Name">
-        <input type="number" name="email" placeholder="Quantity">
-        <input type="number" name="amount" placeholder="Amount">
-        <div id="card-element" class="bg-transparent text-white p-2 h-10 mb-4"></div>
-        <div id="card-errors" role="alert"></div>
-        <button type="button" style="margin-top: 0; color: white; background-color: blue; border-radius: 7px;">
-            Checkout</button>
-
+  <section>
+    <div class="product">
+      <img
+        src="https://ocdn.eu/pulscms-transforms/1/QFuktkqTURBXy9hNmExOWI0ZGZhZWZkOGNmNjc5YWFhMjRlYWMyMjNhZi5qcGVnkpUDAEfNAczNAQOTBc0CgM0BQA"
+        alt="Art products" />
+      <div class="description">
+        <h3>Art Products</h3>
+        <h5>$826.00</h5>
+      </div>
     </div>
-    </form> -->
+    <form action="/create-checkout-session" method="POST">
+      <button type="button" id="checkout-button"
+        style="margin-top: 0; color: white; background-color: blue; border-radius: 7px;">Checkout</button>
+    </form>
+  </section>
+
 </body>
 
 </html>

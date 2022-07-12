@@ -7,7 +7,7 @@ module.exports = class Usermodel {
         let text = `INSERT INTO users(email, password, first_name, last_name, address, postcode, city, country)
         VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING*`;
 
-        let inputs = [data.email, data.password, data.first_name, data.last_name, data.address, data.postcode, data.city, data.country,];
+        let inputs = [data.email, data.password, data.first_name, data.last_name, data.address, data.postcode, data.city, data.country];
         console.log(inputs)
 
         try {
@@ -15,6 +15,15 @@ module.exports = class Usermodel {
                 return res.status(401).json("Password should be at least 6 characters");
             }
             return await pool.query(text, inputs);
+        } catch (err) {
+            throw err.stack;
+        }
+    }
+    async getAllUsers() {
+        try {
+            const result = await pool.query('SELECT * FROM users', []);
+            console.log(result);
+            return result.rows;
         } catch (err) {
             throw err.stack;
         }
@@ -61,7 +70,5 @@ module.exports = class Usermodel {
             throw err.stack;
         }
     }
-
-
 
 }

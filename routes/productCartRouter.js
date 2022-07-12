@@ -2,7 +2,6 @@ const productCartRouter = require('express').Router({ mergeParams: true });
 const { validate, ValidationError } = require('express-validation');
 const { productInputSchema, productQtySchema } = require('../func_schemas/productSchema');
 const CartModel = require('../models/CartModel');
-
 const cartInstance = new CartModel();
 
 //Add product to cart

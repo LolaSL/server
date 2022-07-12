@@ -1,7 +1,6 @@
 const { query } = require('../DB/db');
 
-
-module.exports = class Ordermodel {
+module.exports = class Order {
 
     async create(data) {
         const text = 'INSERT INTO orders (user_id, status, created_at, modified, total_price ) VALUES ($1, $2, current_timestamp, current_timestamp, $3) RETURNING id;';
@@ -24,7 +23,7 @@ module.exports = class Ordermodel {
     }
 
     async getOrderProducts(data) {
-        const text = 'SELECT order_items.product_id , quantity FROM products JOIN order_items ON id = product_id WHERE order_id = $1;';
+        const text = 'SELECT order_items, product_id , quantity FROM products JOIN order_items ON id = product_id WHERE order_id = $1;';
         const inputs = [data];
         try {
             const products = await query(text, inputs);
