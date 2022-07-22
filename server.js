@@ -17,17 +17,17 @@ const productRouter = require('./routes/productRouter');
 const cartRouter = require('./routes/cartRouter');
 const orderRouter = require('./routes/orderRouter');
 const { loadPassport } = require('./config/passportConfig');
-const stripe = require('./routes/stripe');
+// const stripe = require('./routes/stripe');
 const logger = require('morgan');
-const TWO_HOURS = 60 * 60 * 1000 * 2;
+const TWO_HOURS = 60 * 60 * 1000 * 13;
 const port = process.env.port || 8080;
 
 
 const app = express();
 // This will set express to render views folder, then to render the files as normal html
-// app.set('view engine', 'ejs');
-// app.engine('html', require('ejs').renderFile);
 // app.use(express.static('views'));
+// app.set('views', __dirname + '/views');
+// app.set('view engine', 'ejs');
 app.use(helmet());
 app.use(flash());
 app.use(express.json({ verify: (req, res, buf) => { req.rawBody = buf } }));
@@ -47,8 +47,8 @@ app.use(session({
         secure: process.env.NODE_ENV === 'production' ? "true" : "auto",
         sameSite: process.env.NODE_ENV === 'production' ? "none" : "lax",
         maxAge: TWO_HOURS,
-      
-              },
+
+    },
 
 }));
 console.log(session)
@@ -67,34 +67,34 @@ loadPassport(passport);
 // app.get('/', stripe, (req, res) => {
 //     let username = req.cookies.username;
 //     res.render('index', {
-//    username,
-// })
+//         username
+//     })
 // })
 
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerLog));
-    app.use('/api', authRouter);
-    app.use('/api/user', userRouter);
-    app.use('/api/products', productRouter);
-    app.use('/api/carts', cartRouter);
-    app.use('/api/orders', orderRouter);
-    // app.use('/api/stripe', stripe)//Stripe payment
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerLog));
+app.use('/api', authRouter);
+app.use('/api/user', userRouter);
+app.use('/api/products', productRouter);
+app.use('/api/carts', cartRouter);
+app.use('/api/orders', orderRouter);
+// app.use('/api/stripe', stripe)//Stripe payment
 
-    
-    app.get('/', (req, res) => {
-   
-        res.redirect('/api-docs');
-    })
-    
-      
-    app.use((error, req, res, next) => {
-        res.status(error.status || 500).send({
-            error: {
-                status: error.status || 500,
-                message: error.message || 'Internal Server Error',
-            },
-        });
-        next();
-    })
+
+app.get('/', (req, res) => {
+
+    res.redirect('/api-docs');
+})
+
+
+app.use((error, req, res, next) => {
+    res.status(error.status || 500).send({
+        error: {
+            status: error.status || 500,
+            message: error.message || 'Internal Server Error',
+        },
+    });
+    next();
+})
 
 
 app.listen(port, () => {

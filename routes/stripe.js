@@ -1,25 +1,48 @@
 
+require('dotenv').config()
 const express = require('express');
 const Stripe = require("stripe")
-require('dotenv').config()
-const stripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
+const stripePrivateKey = process.env.STRIPE_PRIVATE_KEY;
+const stripe = Stripe(stripePrivateKey);
 const router = express.Router();
-const  Order  = require("../models/OrderModel");
+const Order = require("../models/OrderModel");
 
 router.post('/create-checkout-session', async (req, res) => {
 
   const customer = await stripe.customers.create({
     metadata: {
-      userId: req.body.userId,
+      userId: req.body.user_id,
       cart: JSON.stringify(req.body.cart_items),
     }
-  }); 
-  
+  })
+
+  // const line_items = req.body.cart_items
+  //   .map(product => {
+  //     return {
+  //       price_data: {
+  //         currency: 'usd',
+  //         product_data: {
+  //           name: product.name,
+  //           images: [product.image_url],
+  //           desctiprion: product.description,
+  //           metadata: {
+  //             id: product.id,
+  //           },
+  //         },
+  //         unit_amount: product.price * 100,
+  //       },
+  //       quantity: product.cart_items.quantity,
+
+
+  //     }
+  //   }
+  // );
+
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
     shipping_address_collection: {
-      allowed_countries: ['US', 'CA', 'GR', 'DK', 'SE','KE'],
+      allowed_countries: ['US', 'CA', 'GR', 'DK', 'SE', 'KE'],
     },
     shipping_options: [
       {
@@ -76,8 +99,6 @@ router.post('/create-checkout-session', async (req, res) => {
           unit_amount: 47500,
         },
         quantity: 1,
-
-
       },
       {
         price_data: {
@@ -93,7 +114,8 @@ router.post('/create-checkout-session', async (req, res) => {
       },
     ],
     phone_number_collection: { enabled: true },
-   
+    customer: customer.id,
+    // line_items,
     mode: 'payment',
     customer: customer.id,
     success_url: `${process.env.CLIENT_URL}/success.html`,
@@ -102,17 +124,19 @@ router.post('/create-checkout-session', async (req, res) => {
   });
 
   res.send({ url: session.url });
- });
+  console.log(session)
+});
 //Create order object
 
 const createOrder = async (customer, data) => {
 
- Items = JSON.stringify(customer.metadata.cart);
+  Items = JSON.stringify(customer.metadata.cart);
 
-  const orderInstance =  new Order({
-    userId: customer.metadata.userId,
+  const orderInstance = new Order({
+    userId: customer.metadata.user_id,
     customerId: data.customer,
     paymentIntentId: data.payment_intent,
+    products: data.product_data,
     subtotal: data.amount_subtotal,
     total: data.amount_total,
     shipping: data.customer_details,
@@ -120,14 +144,14 @@ const createOrder = async (customer, data) => {
   });
 
   try {
-    const savedOrder = await orderInstance.create(data)
+    const savedOrder = await orderInstance.create()
     //send email
     console.log("Processed Order: " + savedOrder)
   }
   catch (err) { console.log(err) }
 };
 //Stripe webhookEndpoint
-// This is your Stripe CLI webhook secret for testing your endpoint locally.
+// This is  Stripe CLI webhook secret for testing  endpoint locally.
 let endpointSecret;
 endpointSecret = process.env.END_POINT_SECRET;
 
@@ -165,7 +189,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }),
         }).catch(err => console.error(err.message));
     // Return a 200 response to acknowledge receipt of the event
     res.send().end();
-
+    console.log(eventType)
   });
 
 

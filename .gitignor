@@ -1,2 +1,6 @@
 .env
+
 node_modules
+
+users.sql
+products.sql

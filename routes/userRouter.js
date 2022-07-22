@@ -10,6 +10,8 @@ const { checkAuthentication } = require('../config/passportConfig');
 const { ensureToken } = require('../utils/ensureToken')
 const userInstance = new UserModel();
 const secretKey = process.env.JWT_SECRET;
+
+
 // Input validation
 userRouter.use('/', validate(updateSchema), (err, req, res, next) => {
     if (err instanceof ValidationError) return res.status(err.statusCode).json(err);
@@ -32,8 +34,7 @@ userRouter.get('/', ensureToken, checkAuthentication, (req, res) => {
     }
     )
 })
-  
-    
+      
 
 //New user instance
 userRouter.post('/', checkAuthentication, async (req, res) => {
@@ -53,11 +54,12 @@ userRouter.post('/', checkAuthentication, async (req, res) => {
     }
     res.send('Update is successful');
 });
+
 //Update user
 userRouter.put('/', checkAuthentication, async (req, res) => {
     try {
-
-        res.status(200).json(req.body.first_name || req.body.email)
+        data = req.body
+        res.status(200).json(data.first_name || data.email )
     } catch (err) {
         res.status(400).send(err);
     }

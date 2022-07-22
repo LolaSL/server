@@ -70,6 +70,18 @@ cartRouter.get('/:id/checkout', async (req, res) => {
     }
 })
 
+// cartRouter.post('/id/checkout', async (req, res, next) => {
+//     try {
+//       const { id } = req.user;
+//       const { cart_id, paymentInfo } = req.body; 
+
+//       const response = await cartInstance.checkout(cart_id, id, paymentInfo);
+
+//       res.status(200).send(response);
+//     } catch(err) {
+//       next(err);
+//     }
+//   });
 
 
 module.exports = cartRouter;

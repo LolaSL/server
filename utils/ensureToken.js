@@ -1,3 +1,5 @@
+
+
 const ensureToken = (req, res, next) => {
 
   const authHeader = req.headers['authorization']
@@ -12,5 +14,5 @@ const ensureToken = (req, res, next) => {
   }
 }
 
-module.exports = {ensureToken };
+module.exports = { ensureToken };
 

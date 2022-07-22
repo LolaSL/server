@@ -3,7 +3,8 @@ const productRouter = require('express').Router();
 const pool = require('../DB/db')
 const productInstance = new Productmodel();
 
-productRouter.post('/', async (req, res) => {
+
+productRouter.post('/',  async (req, res) => {
     console.log(req.body);
     try {
         const results = await pool.query("INSERT INTO products (id,  name, author, price, description, category, image_url, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) returning *",

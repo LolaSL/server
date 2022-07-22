@@ -1,7 +1,7 @@
 const { query } = require('../DB/db');
 const Order = require('../models/OrderModel');
 const orderInstance = new Order();
-
+const stripePrivateKey = process.env.STRIPE_PRIVATE_KEY;
 module.exports = class Cartmodel {
 
     async create(data) {
@@ -100,18 +100,29 @@ module.exports = class Cartmodel {
 
     async checkout(data) {
         try {
+            
+            const stripe = require('stripe')(stripePrivateKey);
             const products = await this.getAllProducts(data.cart_id);
+            
             if(products.length === 0) return 'empty';        
             const newOrder = await orderInstance.create(data.user_id);
             const orderId = newOrder.rows[0].id;
             const paid = orderInstance.data.order_id;
+                // Make charge to payment method
+            await stripe.charges.create({
+                amount: total,
+                currency: 'usd',
+                source: paymentInfo.id,
+                description: 'Product Charge'
+            
+            })
             if(!paid) return 'payment';
-            for(const item of products){
+            for(const product of products){
                 let data = {
                     user_id: userId,
                     cart_id: cartId,
                     order_id: orderId,
-                    product_id: item.id,
+                    product_id: product.id,
                     quantity: products.quantity
                 }
                 await orderInstance.addProduct(data);
@@ -123,4 +134,40 @@ module.exports = class Cartmodel {
         }
 
     }
+//     async checkout(cart_id, user_id, paymentInfo) {
+//         try {
+//             // Init Stripe with secret key
+//             const stripe = require('stripe')(stripePrivateKey);
+    
+//             // Load cart items
+//             const cartItems = await orderInstance.getCartById(cart_id);
+    
+//             // Generate total price from cart items
+//             const total = cartItems.reduce((total, item) => {
+//                 return total += Number(item.price);
+//             }, 0);
+    
+//             // Generate initial order
+//             const Order = new OrderModel({ total, user_id });
+//             Order.addItems(cartItems);
+//             await Order.create();
+          
+//             // Make charge to payment method
+//             await stripe.charges.create({
+//                 amount: total,
+//                 currency: 'usd',
+//                 source: paymentInfo.id,
+//                 description: 'Product Charge'
+            
+//             })
+            
+//             // On successful charge to payment method, update order status to COMPLETE
+//             const order = Order.update({ status: 'COMPLETE' });
+
+//             return order;
+
+//         } catch (err) {
+//             throw err;
+//         }
+//     }
 }

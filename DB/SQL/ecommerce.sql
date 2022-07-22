@@ -16,7 +16,7 @@ CREATE TABLE "users" (
   "date_joined" timestamp DEFAULT (now()),
   "active" boolean DEFAULT true,
    "user_role" VARCHAR,
-   "modified" DATE,
+   "modified" DATE
 );
 
 CREATE TABLE "order_items" (
@@ -88,5 +88,5 @@ ALTER TABLE paid_orders ADD FOREIGN KEY ( order_id) REFERENCES orders(id);
 
 ALTER TABLE paid_orders ADD FOREIGN KEY ( user_id) REFERENCES users(id);
 
-ALTER TABLE "tokens" ADD FOREIGN KEY (user_id) REFERENCES users (id);
+
 
