@@ -16,7 +16,8 @@ CREATE TABLE "users" (
   "date_joined" timestamp DEFAULT (now()),
   "active" boolean DEFAULT true,
    "user_role" VARCHAR,
-   "modified" DATE
+   "modified" DATE,
+   "is_Admin" boolean DEFAULT false
 );
 
 CREATE TABLE "order_items" (

@@ -32,5 +32,25 @@ module.exports = class Productmodel {
             throw err.stack;
         }
     }
+    async getProductsByStatus(data) {
+        try {
+            const text = 'SELECT * FROM products WHERE status= $1;';
+            const inputs = [data];
+            const result = await pool.query(text, inputs);
+            return result.rows;
+        } catch (err) {
+            throw err.stack;
+        }
+    }
+    async getProductsByPrice(data) {
+        try {
+            const text = 'SELECT * FROM products WHERE price= $1;';
+            const inputs = [data];
+            const result = await pool.query(text, inputs);
+            return result.rows;
+        } catch (err) {
+            throw err.stack;
+        }
+    }
 
 }

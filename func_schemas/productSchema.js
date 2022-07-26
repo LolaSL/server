@@ -4,7 +4,8 @@ module.exports = {
     productInputSchema: {
         body: Joi.object({
             product_id: Joi.number().max(100),
-            quantity: Joi.number().min(1)
+            quantity: Joi.number().min(1),
+         
         })
     },
 
