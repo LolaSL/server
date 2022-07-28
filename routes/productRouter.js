@@ -2,7 +2,9 @@ const Productmodel = require('../models/ProductModel');
 const productRouter = require('express').Router();
 const pool = require('../DB/db')
 const productInstance = new Productmodel();
-
+// const pg = require('pg-promise');
+// const pgdb = require('pg');
+// const pool = new pgdb.Pool(config);
 
 productRouter.post('/',  async (req, res) => {
     console.log(req.body);
