@@ -8,20 +8,20 @@ const passport = require('passport');
 const userInstance = new Usermodel();
 const authRouter = require('express').Router();
 const { generateAuthToken } = require("../utils/generateAuthToken");
-const { checkAuthentication } = require('../config/passportConfig');
-const { ensureToken } = require('../utils/ensureToken');
+// const { checkAuthentication } = require('../config/passportConfig');
+// const { ensureToken } = require('../utils/ensureToken');
 
+// authRouter.get('/users', checkAuthentication, async (req, res) => {
 
-authRouter.get('/users', ensureToken, checkAuthentication, async (req, res) => {
-  try {
-    const users = await userInstance.getAllUsers()
+//   try {
+//     const users = await userInstance.getAllUsers()
 
-    res.json({ users });
+//     res.json({ users });
 
-  } catch (err) {
-    res.status(400).send(err);
-  }
-})
+//   } catch (err) {
+//     res.status(400).send(err);
+//   }
+// })
 //Autherization Routes
 authRouter.post('/register', validate(registerSchema), async (req, res) => {
   if (req.user) return res.status(400).json({ message: 'Please log out to create a new user.' });
@@ -53,9 +53,6 @@ authRouter.post('/login', validate(loginSchema), passport.authenticate('local', 
   res.json({ token, message: `${user.first_name} is logged in;  ${user.user_role} `, expires_in: '1800s' });
 
 });
-
-
-
 
 //Logout Route
 authRouter.get('/logout', (req, res) => {

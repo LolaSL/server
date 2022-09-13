@@ -1,11 +1,11 @@
+require('dotenv').config();
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 const Usermodel = require('../models/UserModel');
 const userInstance = new Usermodel();
 
-
 const loadPassport = (passport) => {
-  
+
   passport.use(new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
     try {
 
@@ -20,7 +20,7 @@ const loadPassport = (passport) => {
       return done(err)
     }
   }));
-  
+
   passport.serializeUser((user, done) => done(null, user.id));
   passport.deserializeUser(async (id, done) => {
     const user = await userInstance.getById(id);
@@ -40,5 +40,6 @@ const checkAuthentication = (req, res, next) => {
   res.status(400).json({ message: 'Please login' });
 
 }
+
 
 module.exports = { loadPassport, checkAuthentication };

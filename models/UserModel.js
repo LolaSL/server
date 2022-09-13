@@ -19,15 +19,15 @@ module.exports = class Usermodel {
             throw err.stack;
         }
     }
-    async getAllUsers() {
-        try {
-            const result = await pool.query('SELECT * FROM users', []);
-            console.log(result);
-            return result.rows;
-        } catch (err) {
-            throw err.stack;
-        }
-    }
+    // async getAllUsers() {
+    //     try {
+    //         const result = await pool.query('SELECT * FROM users', []);
+    //         console.log(result);
+    //         return result.rows;
+    //     } catch (err) {
+    //         throw err.stack;
+    //     }
+    // }
 
     async getByEmail(data) {
         let text = 'SELECT * FROM users WHERE email = $1;';

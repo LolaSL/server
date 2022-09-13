@@ -13,7 +13,7 @@ module.exports = class Productmodel {
 
     async getProductById(data) {
         try {
-            const text = 'SELECT * FROM products WHERE id = $1';
+            const text = 'SELECT * FROM products WHERE id = $1;';
             const inputs = [data];
             const result = await pool.query(text, inputs);
             return result.rows[0];

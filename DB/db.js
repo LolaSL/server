@@ -11,9 +11,7 @@ const localConfig = {
 
 const herokuConfig = {
     connectionString: database_url,
-    ssl: {
-        rejectUnauthorized: false
-    }
+  ssl:  false
 }
 
 const pool = new Pool(node_env === 'production' ? herokuConfig : localConfig);

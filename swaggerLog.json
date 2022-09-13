@@ -271,7 +271,7 @@
                     "description": "Luminos Hours And Minutes Hands.",
                     "category": "Vintage",
                     "image_url": "https://cdn.shopify.com/s/files/1/0531/9603/0127/products/51vkSBGWynL_540x.jpg?v=1625456846",
-                    "status": "active",
+                    "status": "Active",
                     "price": 8750
                   },
                   "..."
@@ -355,7 +355,7 @@
         "operationId": "post_login",
         "tags": ["Authentication"],
         "requestBody": {
-          "description": "Object for logging into account. Password must be at least 6 characters long. Email must match to email syntax.",
+          "description": "Object for logging into account. Password must be at least 8 characters long. Email must match to email syntax.",
           "content": {
             "application/json": {
               "schema": {
@@ -392,71 +392,7 @@
         }
       }
     },
-    "/api/users": {
-      "get": {
-        "summary": "Returns all users in the database.",
-        "description": "This path gets all users from the database store and returns them in order of id.",
-        "operationId": "get_users",
-        "tags": ["User"],
-        "responses": {
-          "200": {
-            "description": "All users objects returned to an array.",
-            "content": {
-              "application/json": {
-                "example": [
-                  {
-                    "id": 42,
-                    "email": "2_test_test@example.com",
-                    "password": "$*******************************************S",
-                    "first_name": "TestTestTest2",
-                    "last_name": "TestTestTest2",
-                    "address": "TEST11112, 00/11",
-                    "postcode": "11112",
-                    "city": "TEST11112",
-                    "country": "TEST11112",
-                    "date_joined": "2022-07-03T17:19:11.849Z",
-                    "active": true,
-                    "user_role": "customer",
-                    "modified": "2022-07-03T21:00:00.000Z"
-                  },
-                  {
-                    "id": 43,
-                    "email": "3_test_test@example.com",
-                    "password": "$*******************************************A",
-                    "first_name": "TestTestTest3",
-                    "last_name": "TestTestTest3",
-                    "address": "TEST11113, 00/11",
-                    "postcode": "11113",
-                    "city": "TEST11113",
-                    "country": "TEST11113",
-                    "date_joined": "2022-07-03T17:24:17.630Z",
-                    "active": true,
-                    "user_role": "customer",
-                    "modified": "2022-07-03T21:00:00.000Z"
-                  },
-                  {
-                    "id": 44,
-                    "email": "4_test_test@example.com",
-                    "password": "$*******************************************L",
-                    "first_name": "TestTestTest4",
-                    "last_name": "TestTestTest4",
-                    "address": "TEST11114, 00/11",
-                    "postcode": "11114",
-                    "city": "TEST11114",
-                    "country": "TEST11114",
-                    "date_joined": "2022-07-04T06:56:45.079Z",
-                    "active": true,
-                    "user_role": "customer",
-                    "modified": "2022-07-03T21:00:00.000Z"
-                  },
-                  "..."
-                ]
-              }
-            }
-          }
-        }
-      }
-    },
+
     "/api/logout": {
       "summary": "Logs user out.",
       "description": "This path is for logging a user out and ending the session.",
@@ -477,7 +413,7 @@
         }
       }
     },
-    "/api/user/": {
+    "/api/user": {
       "summary": "Access user account.",
       "description": "Path for accessing and updating user account information.",
       "get": {
@@ -495,7 +431,7 @@
                 },
                 "example": {
                   "email": "test_for_test@example.com",
-                  "password": "test123456",
+                  "password": "********",
                   "first_name": "Test",
                   "last_name": "Testtest",
                   "address": "Test, 00/11",
@@ -525,12 +461,13 @@
               "examples": {
                 "name change": {
                   "value": {
-                    "first_name": "Testiko"
+                    "first_name": "Testiko",
+                    "last_name": "Test"
                   }
                 },
                 "email change": {
                   "value": {
-                    "email": "test_for_testo@example.com"
+                    "email": "new_test_name@example.com"
                   }
                 }
               }
@@ -572,6 +509,7 @@
         }
       }
     },
+
     "/api/carts": {
       "description": "Access users carts",
       "get": {
@@ -1137,88 +1075,127 @@
           }
         }
       }
-    }
-  },
-  "components": {
-    "schemas": {
-      "Registration": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "first_name": {
-            "type": "string"
-          },
-          "last_name": {
-            "type": "string"
-          },
-          "address": {
-            "type": "string"
-          },
-          "postcode": {
-            "type": "string"
-          },
-          "city": {
-            "type": "string"
-          },
-          "country": {
-            "type": "string"
+    },
+    "/api/stripe/create-checkout-session": {
+      "post": {
+        "tags": ["Payment"],
+        "operationId": "post_payment",
+        "description": "Uses Stripe to create a Payment Intent. Returns created object of client payment intent data.",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Payment"
+                },
+                "example": {
+                  "url": "https://checkout.stripe.com/....."
+                }
+              }
+            }
           }
         }
-      },
-      "Login": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
+      }
+    },
+    "components": {
+      "schemas": {
+        "Registration": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            },
+            "first_name": {
+              "type": "string"
+            },
+            "last_name": {
+              "type": "string"
+            },
+            "address": {
+              "type": "string"
+            },
+            "postcode": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            }
           }
-        }
-      },
-      "User": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "first_name": {
-            "type": "string"
-          },
-          "last_name": {
-            "type": "string"
-          },
-          "address": {
-            "type": "string"
-          },
-          "postcode": {
-            "type": "integer"
-          },
-          "city": {
-            "type": "string"
-          },
-          "country": {
-            "type": "string"
-          },
-          "date_joined": {
-            "type": "date"
-          },
-          "active": {
-            "type": "string"
+        },
+        "Login": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
           }
-        }
-      },
-      "Carts": {
-        "type": "array",
-        "items": {
+        },
+        "User": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            },
+            "first_name": {
+              "type": "string"
+            },
+            "last_name": {
+              "type": "string"
+            },
+            "address": {
+              "type": "string"
+            },
+            "postcode": {
+              "type": "integer"
+            },
+            "city": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "date_joined": {
+              "type": "date"
+            },
+            "active": {
+              "type": "string"
+            }
+          }
+        },
+        "Carts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "user_id": {
+                "type": "integer"
+              },
+              "created": {
+                "type": "string"
+              },
+              "modified": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "Cart": {
           "type": "object",
           "properties": {
             "id": {
@@ -1234,36 +1211,56 @@
               "type": "string"
             }
           }
-        }
-      },
-      "Cart": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "user_id": {
-            "type": "integer"
-          },
-          "created": {
-            "type": "string"
-          },
-          "modified": {
-            "type": "string"
+        },
+        "Checkout": {
+          "type": "object",
+          "properties": {
+            "order_id": {
+              "type": "integer"
+            }
           }
-        }
-      },
-      "Checkout": {
-        "type": "object",
-        "properties": {
-          "order_id": {
-            "type": "integer"
+        },
+        "ProductAllCart": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "author": {
+                "type": "string"
+              },
+              "price": {
+                "type": "string"
+              },
+              "category": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "quantity": {
+                "type": "integer"
+              }
+            }
           }
-        }
-      },
-      "ProductAllCart": {
-        "type": "array",
-        "items": {
+        },
+        "ProductAdd": {
+          "type": "object",
+          "properties": {
+            "product_id": {
+              "type": "integer"
+            },
+            "quantity": {
+              "type": "integer"
+            }
+          }
+        },
+        "ProductSingleCart": {
           "type": "object",
           "properties": {
             "id": {
@@ -1288,56 +1285,42 @@
               "type": "integer"
             }
           }
-        }
-      },
-      "ProductAdd": {
-        "type": "object",
-        "properties": {
-          "product_id": {
-            "type": "integer"
-          },
-          "quantity": {
-            "type": "integer"
+        },
+        "UpdateQty": {
+          "type": "object",
+          "properties": {
+            "quantity": {
+              "type": "integer"
+            }
           }
-        }
-      },
-      "ProductSingleCart": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "author": {
-            "type": "string"
-          },
-          "price": {
-            "type": "string"
-          },
-          "category": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "quantity": {
-            "type": "integer"
+        },
+        "OrdersAll": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "user_id": {
+                "type": "integer"
+              },
+              "order_price": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "created": {
+                "type": "string"
+              },
+              "modified": {
+                "type": "string"
+              }
+            }
           }
-        }
-      },
-      "UpdateQty": {
-        "type": "object",
-        "properties": {
-          "quantity": {
-            "type": "integer"
-          }
-        }
-      },
-      "OrdersAll": {
-        "type": "array",
-        "items": {
+        },
+        "Order": {
           "type": "object",
           "properties": {
             "id": {
@@ -1346,7 +1329,7 @@
             "user_id": {
               "type": "integer"
             },
-            "order_price": {
+            "total_price": {
               "type": "string"
             },
             "status": {
@@ -1359,57 +1342,43 @@
               "type": "string"
             }
           }
-        }
-      },
-
-      "Order": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "user_id": {
-            "type": "integer"
-          },
-          "order_price": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string"
-          },
-          "created": {
-            "type": "string"
-          },
-          "modified": {
-            "type": "string"
-          },
-
-          "products": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "integer"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "author": {
-                  "type": "string"
-                },
-                "price": {
-                  "type": "string"
-                },
-                "category": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "quantity": {
-                  "type": "integer"
-                }
+        },
+        "Payment": {
+          "type": "object",
+          "items": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "Products": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "author": {
+                "type": "string"
+              },
+              "price": {
+                "type": "string"
+              },
+              "category": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "quantity": {
+                "type": "integer"
               }
             }
           }

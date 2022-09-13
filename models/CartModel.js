@@ -134,40 +134,4 @@ module.exports = class Cartmodel {
         }
 
     }
-//     async checkout(cart_id, user_id, paymentInfo) {
-//         try {
-//             // Init Stripe with secret key
-//             const stripe = require('stripe')(stripePrivateKey);
-    
-//             // Load cart items
-//             const cartItems = await orderInstance.getCartById(cart_id);
-    
-//             // Generate total price from cart items
-//             const total = cartItems.reduce((total, item) => {
-//                 return total += Number(item.price);
-//             }, 0);
-    
-//             // Generate initial order
-//             const Order = new OrderModel({ total, user_id });
-//             Order.addItems(cartItems);
-//             await Order.create();
-          
-//             // Make charge to payment method
-//             await stripe.charges.create({
-//                 amount: total,
-//                 currency: 'usd',
-//                 source: paymentInfo.id,
-//                 description: 'Product Charge'
-            
-//             })
-            
-//             // On successful charge to payment method, update order status to COMPLETE
-//             const order = Order.update({ status: 'COMPLETE' });
-
-//             return order;
-
-//         } catch (err) {
-//             throw err;
-//         }
-//     }
 }

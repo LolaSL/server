@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
 require('crypto').randomBytes(64).toString('hex');
 const userRouter = require('express').Router();
@@ -7,11 +7,10 @@ const UserModel = require('../models/UserModel');
 const { updateSchema } = require('../func_schemas/validateSchemas');
 const { hashPassword } = require('../func_schemas/validateFunction');
 const { checkAuthentication } = require('../config/passportConfig');
-const { ensureToken } = require('../utils/ensureToken')
-const userInstance = new UserModel();
+// const { ensureToken } = require('../utils/ensureToken');
 const secretKey = process.env.JWT_SECRET;
 
-
+const userInstance = new UserModel();
 // Input validation
 userRouter.use('/', validate(updateSchema), (err, req, res, next) => {
     if (err instanceof ValidationError) return res.status(err.statusCode).json(err);
@@ -19,22 +18,20 @@ userRouter.use('/', validate(updateSchema), (err, req, res, next) => {
 })
 
 // User Routes
-userRouter.get('/', ensureToken, checkAuthentication, (req, res) => {
+userRouter.get('/', checkAuthentication, async (req, res) => {
 
-   
-  jwt.verify(req.token, secretKey, function (err, data) {
+    jwt.verify(req.token, secretKey, function (err, data) {
+
         if (err) {
             res.sendStatus(403);
         } else {
-            res.json({
-                data: data,
+            res.send(data);
 
-            })
         }
     }
     )
 })
-      
+
 
 //New user instance
 userRouter.post('/', checkAuthentication, async (req, res) => {
@@ -47,7 +44,7 @@ userRouter.post('/', checkAuthentication, async (req, res) => {
                 input.value = hashedPassword;
             }
             await userInstance.updateUser(input);
-        
+
         } catch (err) {
             res.status(400).send(err);
         }
@@ -59,7 +56,7 @@ userRouter.post('/', checkAuthentication, async (req, res) => {
 userRouter.put('/', checkAuthentication, async (req, res) => {
     try {
         data = req.body
-        res.status(200).json(data.first_name || data.email )
+        res.status(200).json(data.first_name || data.email)
     } catch (err) {
         res.status(400).send(err);
     }

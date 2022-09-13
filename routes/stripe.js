@@ -1,17 +1,19 @@
 
-require('dotenv').config()
+require("dotenv").config()
+
 const express = require('express');
 const Stripe = require("stripe")
 const stripePrivateKey = process.env.STRIPE_PRIVATE_KEY;
 const stripe = Stripe(stripePrivateKey);
 const router = express.Router();
 const Order = require("../models/OrderModel");
+const { checkAuthentication } = require('../config/passportConfig');
 
-router.post('/create-checkout-session', async (req, res) => {
+router.post('/create-checkout-session', checkAuthentication,  async (req, res) => {
 
   const customer = await stripe.customers.create({
     metadata: {
-      userId: req.body.user_id,
+      user_id: req.body.user_id,
       cart: JSON.stringify(req.body.cart_items),
     }
   })
@@ -22,16 +24,16 @@ router.post('/create-checkout-session', async (req, res) => {
   //       price_data: {
   //         currency: 'usd',
   //         product_data: {
-  //           name: product.name,
-  //           images: [product.image_url],
-  //           desctiprion: product.description,
+  //           name: products.name,
+  //           images: [products.image_url],
+  //           desctiprion: products.description,
   //           metadata: {
-  //             id: product.id,
+  //             id: products.id,
   //           },
   //         },
-  //         unit_amount: product.price * 100,
+  //         unit_amount: products.price * 100,
   //       },
-  //       quantity: product.cart_items.quantity,
+  //       quantity: products.cart_items.quantity,
 
 
   //     }
@@ -117,7 +119,6 @@ router.post('/create-checkout-session', async (req, res) => {
     customer: customer.id,
     // line_items,
     mode: 'payment',
-    customer: customer.id,
     success_url: `${process.env.CLIENT_URL}/success.html`,
     cancel_url: `${process.env.CLIENT_URL}/cancel.html`,
     automatic_tax: { enabled: false },
@@ -133,7 +134,7 @@ const createOrder = async (customer, data) => {
   Items = JSON.stringify(customer.metadata.cart);
 
   const orderInstance = new Order({
-    userId: customer.metadata.user_id,
+    user_id: customer.metadata.user_id,
     customerId: data.customer,
     paymentIntentId: data.payment_intent,
     products: data.product_data,
@@ -186,7 +187,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }),
           console.log(customer);
           console.log('data:', data);
           createOrder(customer, data);
-        }).catch(err => console.error(err.message));
+        }).catch(err => console.log(err.message));
     // Return a 200 response to acknowledge receipt of the event
     res.send().end();
     console.log(eventType)

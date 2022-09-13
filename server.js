@@ -1,6 +1,6 @@
-if (process.env.NODE_ENV !== 'production') {
+// if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
-}
+// }
 const express = require('express');
 const helmet = require("helmet");
 const bodyParser = require('body-parser');
@@ -8,7 +8,7 @@ const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const swaggerLog = require('./swaggerLog.json');
 const cookieParser = require('cookie-parser');
-const session = require('express-session');
+const session = require('cookie-session');
 const passport = require('passport');
 const flash = require('express-flash');
 const authRouter = require('./routes/authRouter');
@@ -17,13 +17,13 @@ const productRouter = require('./routes/productRouter');
 const cartRouter = require('./routes/cartRouter');
 const orderRouter = require('./routes/orderRouter');
 const { loadPassport } = require('./config/passportConfig');
-// const stripe = require('./routes/stripe');
+const stripe = require('./routes/stripe');
 const logger = require('morgan');
 const TWO_HOURS = 60 * 60 * 1000 * 13;
-const port = process.env.port || 8080;
-
-
+const PORT = process.env.PORT || 8080;
 const app = express();
+
+
 // This will set express to render views folder, then to render the files as normal html
 // app.use(express.static('views'));
 // app.set('views', __dirname + '/views');
@@ -36,7 +36,7 @@ app.use(cors({
     credentials: true,
     origin: true,
 }));
-
+app.set("trust proxy", 1);
 app.use(session({
     name: process.env.SESS_NAME,
     cookieName: 'session',
@@ -51,7 +51,7 @@ app.use(session({
     },
 
 }));
-console.log(session)
+
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
@@ -78,11 +78,11 @@ loadPassport(passport);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerLog));
 app.use('/api', authRouter);
-app.use('/api/user', userRouter);
+app.use('/api/user', passport.authenticate('local', { session: false }), userRouter);
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
 app.use('/api/orders', orderRouter);
-// app.use('/api/stripe', stripe)//Stripe payment
+app.use('/api/stripe', stripe)//Stripe payment
 
 
 app.get('/', (req, res) => {
@@ -102,8 +102,8 @@ app.use((error, req, res, next) => {
 })
 
 
-app.listen(port, () => {
-    console.log(`Server is listening on http://localhost:${port}`)
+app.listen(PORT, () => {
+    console.log(`Server is listening on http://localhost:${PORT}`)
 });
 
 

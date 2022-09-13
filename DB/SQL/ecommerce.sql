@@ -40,7 +40,7 @@ CREATE TABLE "products" (
   "id" SERIAL PRIMARY KEY,
   "name" varchar(255) NOT NULL,
   "author" varchar(255),
-   "description" varchar(255),
+  "description" varchar(255),
   "category" varchar(255),
   "image_url" varchar(255),
   "status" varchar(255),
@@ -81,13 +81,11 @@ ALTER TABLE "cart_items" ADD FOREIGN KEY ("cart_id") REFERENCES "carts" ("id");
 
 ALTER TABLE "cart_items" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id");
 
-ALTER TABLE "cart_items" ADD PRIMARY KEY (cart_id, product_id);
+ALTER TABLE "cart_items" ADD PRIMARY KEY ("cart_id", "product_id");
 
-ALTER TABLE "order_items" ADD PRIMARY KEY (order_id, product_id);
+ALTER TABLE "order_items" ADD PRIMARY KEY ("order_id", "product_id");
  
-ALTER TABLE paid_orders ADD FOREIGN KEY ( order_id) REFERENCES orders(id);
 
-ALTER TABLE paid_orders ADD FOREIGN KEY ( user_id) REFERENCES users(id);
 
 
 
