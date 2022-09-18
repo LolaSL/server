@@ -32,7 +32,6 @@
     "node-localstorage": "^2.2.1",
     "nodemon": "^2.0.19",
     "passport": "^0.5.2",
-    "passport-jwt": "^4.0.0",
     "pg": "^8.7.3",
     "pg-format": "^1.0.4",
     "pg-promise": "^10.11.1",
@@ -52,5 +51,5 @@
     "@types/passport-local": "^1.0.34",
     "@types/pg-format": "^1.0.2",
     "@types/swagger-ui-express": "^4.1.3"
-  } 
+  }
 }

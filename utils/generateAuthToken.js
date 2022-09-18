@@ -1,17 +1,19 @@
 const jwt = require("jsonwebtoken");
+secretKey = process.env.JWT_SECRET;
 
-const secretKey = process.env.JWT_SECRET;
-
-const generateAuthToken = ( id, user ) => {
+const generateAuthToken = (user) => {
 
   const token = jwt.sign(
     {
-   id,  user
-      },
-   secretKey, { algorithm: 'HS256' }, {expiresIn: "24h"}
+      user
+    },
+    secretKey, { algorithm: 'HS256' }, { expiresIn: "24h" }
   );
 
+
+  console.log({ token})
   return token;
+
 };
 
 module.exports = { generateAuthToken };

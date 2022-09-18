@@ -34,7 +34,7 @@ cartRouter.get('/', checkAuthentication, async (req, res) => {
 
 // Get cart by cart id
 cartRouter.get('/:id', checkAuthentication, (req, res) => {
-    res.json(req.cart);
+    res.json(req.carts);
 })
 
 //Create new cart

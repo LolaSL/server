@@ -8,7 +8,7 @@ const { updateSchema } = require('../func_schemas/validateSchemas');
 const { hashPassword } = require('../func_schemas/validateFunction');
 const { checkAuthentication } = require('../config/passportConfig');
 // const { ensureToken } = require('../utils/ensureToken');
-const secretKey = process.env.JWT_SECRET;
+secretKey = process.env.JWT_SECRET;
 
 const userInstance = new UserModel();
 // Input validation
@@ -20,13 +20,14 @@ userRouter.use('/', validate(updateSchema), (err, req, res, next) => {
 // User Routes
 userRouter.get('/', checkAuthentication, async (req, res) => {
 
-    jwt.verify(req.token, secretKey, function (err, data) {
+    jwt.verify(req.token, secretKey, function (err, user) {
 
-        if (err) {
-            res.sendStatus(403);
-        } else {
-            res.send(data);
+        try {
+            let user = req.user
+            if (req.user) return res.status(200).json(req.user)
 
+        } catch (err) {
+            res.status(400).send(err);
         }
     }
     )
@@ -34,7 +35,7 @@ userRouter.get('/', checkAuthentication, async (req, res) => {
 
 
 //New user instance
-userRouter.post('/', checkAuthentication, async (req, res) => {
+userRouter.put('/', checkAuthentication, async (req, res) => {
     const data = req.body;
     for (const key in data) {
         try {
@@ -43,25 +44,14 @@ userRouter.post('/', checkAuthentication, async (req, res) => {
                 let hashedPassword = await hashPassword(input.value);
                 input.value = hashedPassword;
             }
-            await userInstance.updateUser(input);
+            await userInstance.updateUserByEmail(input);
 
         } catch (err) {
-            res.status(400).send(err);
+            res.status(403).json({ error: err.message });
         }
     }
     res.send('Update is successful');
 });
-
-//Update user
-userRouter.put('/', checkAuthentication, async (req, res) => {
-    try {
-        data = req.body
-        res.status(200).json(data.first_name || data.email)
-    } catch (err) {
-        res.status(400).send(err);
-    }
-});
-
 
 //Delete user
 userRouter.delete('/', checkAuthentication, async (req, res) => {
@@ -69,7 +59,7 @@ userRouter.delete('/', checkAuthentication, async (req, res) => {
         await userInstance.deleteByEmail(req.user.email);
 
     } catch (err) {
-        res.status(400).send(err)
+        res.status(403).json({ error: err.message });
     }
     res.status(204).send();
 });

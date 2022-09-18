@@ -51,9 +51,9 @@ module.exports = class Usermodel {
         }
     }
 
-    async updateUser(data) {
-        let text = format('UPDATE users SET first_name = $1 WHERE email = $2;', data.column);
-        let inputs = [data.first_name, data.email];
+    async updateUserByEmail(data) {
+        let text = format('UPDATE users SET %I = $1 WHERE email = $2;', data.column);
+        let inputs = [data.value, data.email];
         try {
             return await pool.query(text, inputs);
         } catch (err) {

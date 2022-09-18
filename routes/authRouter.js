@@ -11,7 +11,7 @@ const { generateAuthToken } = require("../utils/generateAuthToken");
 // const { checkAuthentication } = require('../config/passportConfig');
 // const { ensureToken } = require('../utils/ensureToken');
 
-// authRouter.get('/users', checkAuthentication, async (req, res) => {
+// authRouter.get('/users', ensureToken, checkAuthentication, async (req, res) => {
 
 //   try {
 //     const users = await userInstance.getAllUsers()
@@ -23,7 +23,7 @@ const { generateAuthToken } = require("../utils/generateAuthToken");
 //   }
 // })
 //Autherization Routes
-authRouter.post('/register', validate(registerSchema), async (req, res) => {
+authRouter.post('/register', validate(registerSchema), async (req, res, next) => {
   if (req.user) return res.status(400).json({ message: 'Please log out to create a new user.' });
   let data = req.body;
   //Check if email exists   
@@ -43,14 +43,20 @@ authRouter.post('/register', validate(registerSchema), async (req, res) => {
 
   } catch (err) {
     res.status(400).send(err);
+    next()
   }
 
 });
 //login Route
-authRouter.post('/login', validate(loginSchema), passport.authenticate('local', { failureFlash: true }), (req, res) => {
-  const user = req.user;
+authRouter.post('/login', validate(loginSchema), passport.authenticate('local', { failureFlash: true }), (req, res, next) => {
+  try{const user = req.user;
+  console.log({user})
   const token = generateAuthToken(user, user.user_roles);
-  res.json({ token, message: `${user.first_name} is logged in;  ${user.user_role} `, expires_in: '1800s' });
+    res.json({ token, message: `${user.first_name} is logged in;  ${user.user_role} `, expires_in: '1800s' });
+  } catch(err) {
+    next(err);
+  }
+  
 
 });
 

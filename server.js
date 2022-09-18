@@ -1,6 +1,6 @@
-// if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
-// }
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config({ override: true });
+}
 const express = require('express');
 const helmet = require("helmet");
 const bodyParser = require('body-parser');
@@ -21,6 +21,7 @@ const stripe = require('./routes/stripe');
 const logger = require('morgan');
 const TWO_HOURS = 60 * 60 * 1000 * 13;
 const PORT = process.env.PORT || 8080;
+const methodOverride = require('method-override')
 const app = express();
 
 
@@ -37,6 +38,8 @@ app.use(cors({
     origin: true,
 }));
 app.set("trust proxy", 1);
+// override with POST having ?_method=PUT
+app.use(methodOverride('_method'));
 app.use(session({
     name: process.env.SESS_NAME,
     cookieName: 'session',
@@ -75,10 +78,14 @@ loadPassport(passport);
 //         username
 //     })
 // })
-
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerLog));
+const options = {
+    swaggerOptions: {
+      validatorUrl: null
+    }
+  };
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerLog, options));
 app.use('/api', authRouter);
-app.use('/api/user', passport.authenticate('local', { session: false }), userRouter);
+app.use('/api/user',  userRouter);
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
 app.use('/api/orders', orderRouter);
