@@ -29,18 +29,6 @@ orderRouter.get('/:id',   checkAuthentication,  async (req, res, next) => {
         res.status(400).send(err);
     }
 })
-// createOrder is fired by stripe webhook
-// example endpoint
 
-// orderRouter.post("/",  async (req, res) => {
-//     const newOrder = new Order(req.body);
-  
-//     try {
-//       const savedOrder = await newOrder.save();
-//       res.status(200).send(savedOrder);
-//     } catch (err) {
-//       res.status(500).send(err);
-//     }
-// });
 
  module.exports = orderRouter;

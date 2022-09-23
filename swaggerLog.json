@@ -978,6 +978,55 @@
         }
       }
     },
+    "/api/orders/create": {
+      "summary": "Creates a new user order.",
+      "description": "This path is for creating a new order.",
+      "post": {
+        "summary": "Creates anew order for the user.",
+        "description": "Creates an account for a new user.",
+        "operationId": "post_create",
+        "tags": ["Orders"],
+        "requestBody": {
+          "description": "Object for creating a new order.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Orders"
+              },
+              "example": {
+                "id": 22,
+                "status": "PENDING",
+                "created_at": "2022-05-18T13:54:53.660Z",
+                "modified": "2022-05-24T18:15:40.269Z",
+                "total_price": "$25,056.00"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "New Order created",
+            "content": {
+              "text/plain": {
+                "example": "New Order created"
+              }
+            }
+          },
+          "400": {
+            "description": "Order was not created",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Order was not created"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/orders": {
       "get": {
         "summary": "Get all orders.",
@@ -1071,7 +1120,7 @@
                   "total_price": "$189,990.00",
                   "products": [
                     {
-                      "order_items":  "(4,4,3,\"$189,990.00\")",
+                      "order_items": "(4,4,3,\"$189,990.00\")",
                       "product_id": 4,
                       "quantity": 3
                     }
