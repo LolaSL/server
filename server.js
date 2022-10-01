@@ -38,7 +38,6 @@ app.use(cors({
     origin: true,
 }));
 app.set("trust proxy", 1);
-// override with POST having ?_method=PUT
 app.use(methodOverride('_method'));
 app.use(session({
     name: process.env.SESS_NAME,
@@ -80,12 +79,13 @@ loadPassport(passport);
 // })
 const options = {
     swaggerOptions: {
-      validatorUrl: null
+        validatorUrl: null,
+        url: "http://localhost:8000/api-docs/#",
     }
-  };
+};
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerLog, options));
 app.use('/api', authRouter);
-app.use('/api/user',  userRouter);
+app.use('/api/user', userRouter);
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
 app.use('/api/orders', orderRouter);

@@ -11,8 +11,8 @@ module.exports = class Usermodel {
         console.log(inputs)
 
         try {
-            if (data.password.length < 6) {
-                return res.status(401).json("Password should be at least 6 characters");
+            if (data.password.length < 8) {
+                return res.status(401).json("Password should be at least 8 characters");
             }
             return await pool.query(text, inputs);
         } catch (err) {

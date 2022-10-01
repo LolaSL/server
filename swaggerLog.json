@@ -958,9 +958,10 @@
     },
     "/api/stripe/create-checkout-session": {
       "post": {
+        "summary": "Creates a Payment intent.",
         "tags": ["Payment"],
         "operationId": "post_payment",
-        "description": "Uses Stripe to create a Payment Intent. Returns created object of client payment intent data.",
+        "description": "Uses Stripe to create a Payment Intent for checkout session. Returns created object of client payment intent data.",
         "responses": {
           "200": {
             "description": "Ok",
@@ -971,55 +972,6 @@
                 },
                 "example": {
                   "url": "https://checkout.stripe.com/....."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/orders/create": {
-      "summary": "Creates a new user order.",
-      "description": "This path is for creating a new order.",
-      "post": {
-        "summary": "Creates anew order for the user.",
-        "description": "Creates an account for a new user.",
-        "operationId": "post_create",
-        "tags": ["Orders"],
-        "requestBody": {
-          "description": "Object for creating a new order.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Orders"
-              },
-              "example": {
-                "id": 22,
-                "status": "PENDING",
-                "created_at": "2022-05-18T13:54:53.660Z",
-                "modified": "2022-05-24T18:15:40.269Z",
-                "total_price": "$25,056.00"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "New Order created",
-            "content": {
-              "text/plain": {
-                "example": "New Order created"
-              }
-            }
-          },
-          "400": {
-            "description": "Order was not created",
-            "content": {
-              "text/plain": {
-                "examples": {
-                  "Error": {
-                    "value": "Order was not created"
-                  }
                 }
               }
             }
