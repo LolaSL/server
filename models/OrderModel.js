@@ -4,14 +4,15 @@ const { query } = require('../DB/db');
 module.exports = class Order {
 
     async create(data) {
-        const text = 'INSERT INTO orders (user_id, status, created_at, modified, total_price ) VALUES ($1, $2, current_timestamp, current_timestamp, $3) RETURNING id;';
-        const inputs = [data.user_id, data.status, data.created_at, data.modified, data.total_price];
+        const text = 'INSERT INTO orders (user_id, status, created_at, modified_at, total_price) VALUES ($1, $2, current_timestamp,current_timestamp, $5 ) RETURNING id;';
+        const inputs = [data, 'PENDING'];
         try {
             return await query(text, inputs);
         } catch (err) {
             throw err.stack;
         }
     }
+
 
     async addProduct(data) {
         const text = 'INSERT INTO order_items (order_id, product_id, quantity, price ) VALUES ($1, $2, $3, (SELECT price FROM products WHERE id = $2));';
@@ -44,7 +45,7 @@ module.exports = class Order {
             throw err.stack;
         }
     }
-  
+
     async getOrderById(data) {
         const text = 'SELECT * FROM orders WHERE id = $1';
         const inputs = [data];
@@ -58,12 +59,6 @@ module.exports = class Order {
             throw err.stack;
         }
     }
-// async calculateOrderAmount (userId) {
-//         // Get price from carts in db and not from items (for now)
-//         const cart = await getCartById(userId)
-//         const totalPrice = cart.reduce((acc, item) => 
-//             acc + parseFloat(item.product.price) * parseInt(item.quantity, 10), 0)
-//         return totalPrice * 100 //Return price in cents
-//       }
+
 
 }

@@ -4,6 +4,18 @@ const { checkAuthentication } = require('../config/passportConfig');
 const orderInstance = new Order();
 
 
+//Create order object
+orderRouter.post('/create',  checkAuthentication, async (req, res) => {
+
+    try {
+        const { order } = req.data;
+        const result = await orderInstance.create(order);
+        if (result.length === 0) return res.status(400).send('No order  created');
+        res.json(result);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+})
 //Get all orders
 orderRouter.get('/',  checkAuthentication, async (req, res) => {
 

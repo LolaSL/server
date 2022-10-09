@@ -50,45 +50,6 @@ productRouter.get('/:id', async (req, res) => {
     }
 })
 
-//Get products by category
-productRouter.get('/categories/:category', async (req, res) => {
-
-    let category = req.params.category;
-
-    try {
-        const productList = await productInstance.getProductsByCategory(category);
-        if (productList.length === 0) return res.status(404).send('Invalid category');
-        res.json(productList);
-    } catch (err) {
-        res.status(400).send(err);
-    }
-})
-//Get products by status
-productRouter.get('/status/:status', async (req, res) => {
-
-    let status = req.params.status;
-
-    try {
-        const productList = await productInstance.getProductsByStatus(status);
-        if (productList.length === 0) return res.status(404).send('Invalid product status');
-        res.json(productList);
-    } catch (err) {
-        res.status(400).send(err);
-    }
-})
-//Get products by price
-productRouter.get('/price/:price', async (req, res) => {
-
-    let price = req.params.price;
-
-    try {
-        const productList = await productInstance.getProductsByPrice(price);
-        if (productList.length === 0) return res.status(404).send('Invalid product price');
-        res.json(productList);
-    } catch (err) {
-        res.status(400).send(err);
-    }
-})
 //update products
 productRouter.put('/:id', async (req, res) => {
     try {

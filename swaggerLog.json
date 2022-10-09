@@ -30,19 +30,19 @@
                     "author": "Andrej Ostapchuk",
                     "description": "The picture with a volume and a depth of space.",
                     "category": "Abstract",
-                    "image_url": "https://d3rf6j5nx5r04a.cloudfront.net/g_4p_c2fVqEA5wws-B8J3xRJsHs=/1120x0/product/6/7/9478e49807e04831a0fff551fe464314_opt.jpg",
+                    "image_url": "https://images.saatchiart.com/saatchi/1084989/art/7790864/6858846-RZZCVXSC-7.jpg",
                     "status": "Active",
-                    "price": 47500
+                    "price": 1299
                   },
                   {
                     "id": 2,
-                    "name": "Poires et Raisins",
-                    "author": "Pascal Giroud",
-                    "price": "270.21",
-                    "description": "Nature is my greatest source of inspiration.",
+                    "name": "Cherries",
+                    "author": "Tognet",
+                    "description": "This unique and original contemporary artwork 'Cherries'.",
                     "category": "Impressionistic",
-                    "image_url": "https://d3rf6j5nx5r04a.cloudfront.net/m-1L9HX9Ok69cgTlozcISIJ6efo=/1120x0/product/c/5/f0d3668ec9dc46c3b9f0078195522fcd_opt.jpg",
-                    "status": "Active"
+                    "image_url": "https://cdn.carredartistes.com/products_images/prod_89051/f_bernard-tognet-tobea069-front-0.jpg",
+                    "status": "Active",
+                    "price": 265
                   },
                   "..."
                 ]
@@ -76,13 +76,13 @@
               "application/json": {
                 "example": {
                   "id": 2,
-                  "name": "Poires et Raisins",
-                  "author": "Pascal Giroud",
-                  "description": "Nature is my greatest source of inspiration.",
+                  "name": "Cherries",
+                  "author": "Tognet",
+                  "description": "This unique and original contemporary artwork 'Cherries'.",
                   "category": "Impressionistic",
-                  "image_url": "https://d3rf6j5nx5r04a.cloudfront.net/m-1L9HX9Ok69cgTlozcISIJ6efo=/1120x0/product/c/5/f0d3668ec9dc46c3b9f0078195522fcd_opt.jpg",
+                  "image_url": "https://cdn.carredartistes.com/products_images/prod_89051/f_bernard-tognet-tobea069-front-0.jpg",
                   "status": "Active",
-                  "price": 27021
+                  "price": 265
                 }
               }
             }
@@ -102,198 +102,7 @@
         }
       }
     },
-    "/api/products/categories/{category}": {
-      "get": {
-        "summary": "Get products in specified category.",
-        "description": "This path fetches all products in a category using the category parameter.",
-        "operationId": "get_products_categories",
-        "tags": ["Products"],
-        "parameters": [
-          {
-            "name": "category",
-            "in": "path",
-            "description": "Category of products",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Returns all product objects in the selected category, to an array.",
-            "content": {
-              "application/json": {
-                "example": [
-                  {
-                    "id": 14,
-                    "name": "Kinko Sennin on a Koi",
-                    "author": "Netsuke",
-                    "description": "Kinko Sennin on a Koi. Ivory, Meiji-Period (1868 - 1912)",
-                    "category": "Netsuke",
-                    "image_url": "https://woodblock-print.eu/images/stories/virtuemart/product/CF_N67_Unsterblicher%20mit%20Koi7.jpg",
-                    "status": "Sold",
-                    "price": 13640
-                  },
-                  {
-                    "id": 15,
-                    "name": "Dragon",
-                    "author": "Netsuke",
-                    "description": "Dragon. Ivory, Meiji-Period (1868 - 1912)",
-                    "category": "Netsuke",
-                    "image_url": "https://springfieldmuseums.org/wp-content/uploads/2021/01/GWVS_75_23_127_3_sm.jpg",
-                    "status": "Active",
-                    "price": 76499
-                  },
-                  {
-                    "id": 16,
-                    "name": "Raiden, the god of wind, thunder and lightning",
-                    "author": "Netsuke",
-                    "description": "Netsuke depicting Raiden, the god of wind, thunder and lightning, Japan, 19th century, carved ivory",
-                    "category": "Netsuke",
-                    "image_url": "http://www.vam.ac.uk/__data/assets/image/0017/236222/2006AL0460_netsuke_main.jpg",
-                    "status": "Sold",
-                    "price": 10634
-                  },
-                  "..."
-                ]
-              }
-            }
-          },
-          "400": {
-            "description": "Error for inavlid product category.",
-            "content": {
-              "text/plain": {
-                "examples": {
-                  "Error": {
-                    "value": "Invalid category"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/products/status/{status}": {
-      "get": {
-        "summary": "Get products in specified product status.",
-        "description": "This path fetches all products in a status using the status parameter.",
-        "operationId": "get_products_status",
-        "tags": ["Products"],
-        "parameters": [
-          {
-            "name": "status",
-            "in": "path",
-            "description": "Status of products",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Returns all product objects in the selected status, to an array.",
-            "content": {
-              "application/json": {
-                "example": [
-                  {
-                    "id": 5,
-                    "name": "Alarm Clock",
-                    "author": "BULOVA",
-                    "description": "Luminos Hours And Minutes Hands.",
-                    "category": "Vintage",
-                    "image_url": "https://cdn.shopify.com/s/files/1/0531/9603/0127/products/51vkSBGWynL_540x.jpg?v=1625456846",
-                    "status": "active",
-                    "price": 8750
-                  },
-                  {
-                    "id": 6,
-                    "name": "Antique Wall Clock",
-                    "author": "Unknown",
-                    "description": "The pendulum wall clocks",
-                    "category": "Vintage",
-                    "image_url": "https://stylesatlife.com/wp-content/uploads/2021/01/Antique-Clock-Designs-25-Latest-Collection-for-Vintage-Look.jpg",
-                    "status": "Active",
-                    "price": 13949
-                  },
-                  "..."
-                ]
-              }
-            }
-          },
-          "400": {
-            "description": "Error for inavlid product status.",
-            "content": {
-              "text/plain": {
-                "examples": {
-                  "Error": {
-                    "value": "Invalid product status"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/products/price/{price}": {
-      "get": {
-        "summary": "Get products in specified product price.",
-        "description": "This path fetches products in a price using the price parameter.",
-        "operationId": "get_products_price",
-        "tags": ["Products"],
-        "parameters": [
-          {
-            "name": "price",
-            "in": "path",
-            "description": "Price of products",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100000,
-              "default": 312
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Returns  product objects in the selected price, to an array.",
-            "content": {
-              "application/json": {
-                "example": [
-                  {
-                    "id": 5,
-                    "name": "Alarm Clock",
-                    "author": "BULOVA",
-                    "description": "Luminos Hours And Minutes Hands.",
-                    "category": "Vintage",
-                    "image_url": "https://cdn.shopify.com/s/files/1/0531/9603/0127/products/51vkSBGWynL_540x.jpg?v=1625456846",
-                    "status": "Active",
-                    "price": 8750
-                  },
-                  "..."
-                ]
-              }
-            }
-          },
-          "400": {
-            "description": "Error for inavlid product price.",
-            "content": {
-              "text/plain": {
-                "examples": {
-                  "Error": {
-                    "value": "Invalid product price"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
+
     "/api/register": {
       "summary": "Input user data to register.",
       "description": "This path is for creating an account to add items to user cart for further purchases.",
@@ -715,6 +524,7 @@
                     "description": "The picture with a volume and a depth of space.",
                     "category": "Abstract",
                     "status": "Active",
+                    "price": 1299,
                     "quantity": 1
                   },
                   {
@@ -724,7 +534,7 @@
                     "description": "Dragon. Ivory, Meiji-Period (1868 - 1912)",
                     "category": "Netsuke",
                     "status": "Active",
-                    "price": 76499,
+                    "price": 25056,
                     "quantity": 1
                   },
                   "..."
@@ -842,7 +652,7 @@
                   "description": "Dragon. Ivory, Meiji-Period (1868 - 1912)",
                   "category": "Netsuke",
                   "status": "Active",
-                  "price": 76499,
+                  "price": 25056,
                   "quantity": 1
                 }
               }
@@ -972,6 +782,50 @@
                 },
                 "example": {
                   "url": "https://checkout.stripe.com/....."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/orders/create": {
+      "post": {
+        "summary": "Creates a new order.",
+        "description": "This path create an  order for your account.",
+        "operationId": "post_orders",
+        "tags": ["Orders"],
+        "responses": {
+          "200": {
+            "description": "Created order object sent in an array.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrdersAll"
+                },
+                "example": [
+                  {
+                    "id": 3,
+                    "user_id": 22,
+                    "status": "PENDING",
+                    "created_at": "2022-05-18T15:41:11.354Z",
+                    "modified": "2022-05-24T18:15:40.269Z",
+                    "total_price": "$712,500.00"
+                  },
+
+                  "..."
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "No order created.",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "No order created."
+                  }
                 }
               }
             }
@@ -1243,7 +1097,7 @@
                 "type": "string"
               },
               "price": {
-                "type": "string"
+                "type": "numeric"
               },
               "category": {
                 "type": "string"
@@ -1281,7 +1135,7 @@
               "type": "string"
             },
             "price": {
-              "type": "string"
+              "type": "numeric"
             },
             "category": {
               "type": "string"

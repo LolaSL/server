@@ -22,18 +22,18 @@ CREATE TABLE "users" (
 
 CREATE TABLE "order_items" (
   "order_id" INTEGER,
-  "product_id" iNTEGER,
+  "product_id" INTEGER,
   "quantity" INTEGER DEFAULT 1,
-  "price" money
+  "price" numeric 
 );
 
 CREATE TABLE "orders" (
   "id" SERIAL PRIMARY KEY,
   "user_id" INTEGER,
   "status" varchar(100),
-  "created_at" timestamp DEFAULT (now()),
+  "created_at" timestamp,
   "modified" timestamp,
-  "total_price" money,
+  "total_price" numeric,
 );
 
 CREATE TABLE "products" (
@@ -44,7 +44,7 @@ CREATE TABLE "products" (
   "category" varchar(255),
   "image_url" varchar(255),
   "status" varchar(255),
-  "price" money, 
+  "price" numeric, 
 );
 
 CREATE TABLE "carts" (
@@ -84,6 +84,9 @@ ALTER TABLE "cart_items" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("
 ALTER TABLE "cart_items" ADD PRIMARY KEY ("cart_id", "product_id");
 
 ALTER TABLE "order_items" ADD PRIMARY KEY ("order_id", "product_id");
+
+ALTER TABLE "users" ALTER COLUMN "user_role" SET DEFAULT "customer"
+; 
  
 
 
