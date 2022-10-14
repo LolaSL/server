@@ -24,103 +24,68 @@ var userInstance = new Usermodel();
 var authRouter = require('express').Router();
 
 var _require4 = require("../utils/generateAuthToken"),
-    generateAuthToken = _require4.generateAuthToken;
+    generateAuthToken = _require4.generateAuthToken; // const { checkAuthentication } = require('../config/passportConfig');
+// const { ensureToken } = require('../utils/ensureToken');
+//Autherization Routes
 
-var _require5 = require('../config/passportConfig'),
-    checkAuthentication = _require5.checkAuthentication;
 
-var _require6 = require('../utils/ensureToken'),
-    ensureToken = _require6.ensureToken;
-
-authRouter.get('/users', // ensureToken,
-checkAuthentication, function _callee(req, res) {
-  var users;
+authRouter.post('/register', validate(registerSchema), function _callee(req, res, next) {
+  var data, userCheck, bcryptPassword;
   return regeneratorRuntime.async(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
-          _context.prev = 0;
-          _context.next = 3;
-          return regeneratorRuntime.awrap(userInstance.getAllUsers());
-
-        case 3:
-          users = _context.sent;
-          res.json({
-            users: users
-          });
-          _context.next = 10;
-          break;
-
-        case 7:
-          _context.prev = 7;
-          _context.t0 = _context["catch"](0);
-          res.status(400).send(_context.t0);
-
-        case 10:
-        case "end":
-          return _context.stop();
-      }
-    }
-  }, null, null, [[0, 7]]);
-}); //Autherization Routes
-
-authRouter.post('/register', validate(registerSchema), function _callee2(req, res, next) {
-  var data, userCheck, bcryptPassword;
-  return regeneratorRuntime.async(function _callee2$(_context2) {
-    while (1) {
-      switch (_context2.prev = _context2.next) {
-        case 0:
           if (!req.user) {
-            _context2.next = 2;
+            _context.next = 2;
             break;
           }
 
-          return _context2.abrupt("return", res.status(400).json({
+          return _context.abrupt("return", res.status(400).json({
             message: 'Please log out to create a new user.'
           }));
 
         case 2:
           data = req.body; //Check if email exists   
 
-          _context2.next = 5;
+          _context.next = 5;
           return regeneratorRuntime.awrap(userInstance.getByEmail(data.email));
 
         case 5:
-          userCheck = _context2.sent;
+          userCheck = _context.sent;
 
           if (!userCheck) {
-            _context2.next = 8;
+            _context.next = 8;
             break;
           }
 
-          return _context2.abrupt("return", res.status(400).send('Email already in use'));
+          return _context.abrupt("return", res.status(400).send('Email already in use'));
 
         case 8:
-          _context2.next = 10;
+          _context.next = 10;
           return regeneratorRuntime.awrap(hashPassword(data.password));
 
         case 10:
-          bcryptPassword = _context2.sent;
+          bcryptPassword = _context.sent;
           data.password = bcryptPassword; //Create new user
 
-          _context2.prev = 12;
-          _context2.next = 15;
+          _context.prev = 12;
+          _context.next = 15;
           return regeneratorRuntime.awrap(userInstance.create(data));
 
         case 15:
           res.status(201).send('User created');
-          _context2.next = 22;
+          _context.next = 22;
           break;
 
         case 18:
-          _context2.prev = 18;
-          _context2.t0 = _context2["catch"](12);
-          res.status(400).send(_context2.t0);
+          _context.prev = 18;
+          _context.t0 = _context["catch"](12);
+          res.status(400).send(_context.t0);
           next();
 
         case 22:
         case "end":
-          return _context2.stop();
+          return _context.stop();
       }
     }
   }, null, null, [[12, 18]]);

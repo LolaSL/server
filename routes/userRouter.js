@@ -17,15 +17,37 @@ userRouter.use('/', validate(updateSchema), (err, req, res, next) => {
     next();
 })
 
-// User Routes
-userRouter.get('/', checkAuthentication, async (req, res) => {
 
-    jwt.verify(req.token, secretKey, function (err, user) {
+userRouter.get('/',
+//   ensureToken,
+  checkAuthentication, async (req, res) => {
+
+  try {
+    const users = await userInstance.getAllUsers()
+
+    res.json({ users });
+
+  } catch (err) {
+    res.status(400).send(err);
+  }
+})
+userRouter.get('/:id', checkAuthentication, async (req, res) => {
+    const { id } = req.user;
+  
+    const user = await userInstance.getById(id);
+  
+    return res.status(200).json(user);
+});
+  
+// User Routes
+userRouter.get('/:id', checkAuthentication, async (req, res, next) => {
+
+  jwt.verify(req.token, secretKey, function (err, user) {
 
         try {
-            let user = req.user
-            if (req.user) return res.status(200).json(req.user)
-
+            req.user = ensured;
+            if (reg.user) return res.status(200).json(req.user)
+next()
         } catch (err) {
             res.status(400).send(err);
         }
@@ -33,9 +55,8 @@ userRouter.get('/', checkAuthentication, async (req, res) => {
     )
 })
 
-
 //New user instance
-userRouter.put('/', checkAuthentication, async (req, res) => {
+userRouter.put('/:id', checkAuthentication, async (req, res) => {
     const data = req.body;
     for (const key in data) {
         try {
@@ -54,7 +75,7 @@ userRouter.put('/', checkAuthentication, async (req, res) => {
 });
 
 //Delete user
-userRouter.delete('/', checkAuthentication, async (req, res) => {
+userRouter.delete('/:id', checkAuthentication, async (req, res) => {
     try {
         await userInstance.deleteByEmail(req.user.email);
 

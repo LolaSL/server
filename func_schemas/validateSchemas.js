@@ -29,7 +29,7 @@ module.exports = {
     updateSchema: {
         body: Joi.object({
             email: Joi.string().min(6).email(),
-            first_name: Joi.string().alphanum().min(3).max(30),
+           
         })
     }
 };

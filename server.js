@@ -85,7 +85,7 @@ const options = {
 };
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerLog, options));
 app.use('/api', authRouter);
-app.use('/api/user', userRouter);
+app.use('/api/users/', userRouter);
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
 app.use('/api/orders', orderRouter);
@@ -94,7 +94,8 @@ app.use('/api/stripe', stripe)//Stripe payment
 
 app.get('/', (req, res) => {
 
-    res.redirect('/api-docs');
+    res.redirect('/api-docs',
+    );   
 })
 
 

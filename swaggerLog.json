@@ -119,14 +119,14 @@
                 "$ref": "#/components/schemas/Registration"
               },
               "example": {
-                "email": "test_for_test@example.com",
-                "password": "test123456",
-                "first_name": "Test",
-                "last_name": "Testtest",
-                "address": "Test, 00/11",
-                "postcode": "010101",
-                "city": "Test",
-                "country": "Test"
+                "email": "",
+                "password": "",
+                "first_name": "",
+                "last_name": "",
+                "address": "",
+                "postcode": "",
+                "city": "",
+                "country": ""
               }
             }
           }
@@ -222,21 +222,108 @@
         }
       }
     },
-    "/api/user": {
+    "/api/users": {
+      "get": {
+        "summary": "Returns all users in the database.",
+        "description": "This path gets all users from the database store and returns them in order of id.",
+        "operationId": "get_users",
+        "parameters": [
+          {
+            "name": "users",
+            "in": "path",
+            "description": "The id of all  users.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "tags": ["Users"],
+        "responses": {
+          "200": {
+            "description": "All users objects returned to an array.",
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "id": 42,
+                    "email": "2_test_test@example.com",
+                    "password": "$********$",
+                    "first_name": "TestTestTest2",
+                    "last_name": "TestTestTest2",
+                    "address": "TEST11112, 00/11",
+                    "postcode": "11112",
+                    "city": "TEST11112",
+                    "country": "TEST11112",
+                    "date_joined": "2022-07-03T17:19:11.849Z",
+                    "active": true,
+                    "user_role": "customer",
+                    "modified": "2022-07-03T21:00:00.000Z"
+                  },
+                  {
+                    "id": 43,
+                    "email": "3_test_test@example.com",
+                    "password": "$********$",
+                    "first_name": "TestTestTest3",
+                    "last_name": "TestTestTest3",
+                    "address": "TEST11113, 00/11",
+                    "postcode": "11113",
+                    "city": "TEST11113",
+                    "country": "TEST11113",
+                    "date_joined": "2022-07-03T17:24:17.630Z",
+                    "active": true,
+                    "user_role": "customer",
+                    "modified": "2022-07-03T21:00:00.000Z"
+                  },
+                  {
+                    "id": 44,
+                    "email": "4_test_test@example.com",
+                    "password": "$********$",
+                    "first_name": "TestTestTest4",
+                    "last_name": "TestTestTest4",
+                    "address": "TEST11114, 00/11",
+                    "postcode": "11114",
+                    "city": "TEST11114",
+                    "country": "TEST11114",
+                    "date_joined": "2022-07-04T06:56:45.079Z",
+                    "active": true,
+                    "user_role": "customer",
+                    "modified": "2022-07-03T21:00:00.000Z"
+                  },
+                  "..."
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/{userId}": {
       "summary": "Access user account.",
       "description": "Path for accessing and updating user account information.",
       "get": {
         "summary": "Get user account information.",
         "description": "This path fetches user account information if logged in with Passport. Password not shown with info.",
-        "operationId": "get_user",
-        "tags": ["User"],
+        "operationId": "get_userId",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "The id of the user.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "tags": ["Users"],
         "responses": {
           "200": {
             "description": "Object is containing user info.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/Users"
                 },
                 "example": {
                   "email": "test_for_test@example.com",
@@ -261,14 +348,25 @@
       "put": {
         "summary": "Update account information.",
         "description": "Update account information - email if logged in with Passport.",
-        "operationId": "put_user",
-        "tags": ["User"],
+        "operationId": "put_userId",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "The id of the user.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "tags": ["Users"],
         "requestBody": {
           "description": "Update user email by sending new email, changed in key value pairs.\nPossible send one or many updates in the same request body.",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "$ref": "#/components/schemas/Users"
               },
               "examples": {
                 "email change": {
@@ -306,8 +404,19 @@
       "delete": {
         "summary": "Deletes user account",
         "description": "This path deletes user account from the database. Make sure you want to delete because there is no any recovery proccess.",
-        "operationId": "delete_user",
-        "tags": ["User"],
+        "operationId": "delete_userId",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "The id of the user.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "tags": ["Users"],
         "responses": {
           "204": {
             "description": "No content - Delete is successful."
@@ -993,7 +1102,7 @@
             }
           }
         },
-        "User": {
+        "Users": {
           "type": "object",
           "properties": {
             "email": {
@@ -1182,7 +1291,7 @@
             }
           }
         },
-        "Order": {
+        "Orders": {
           "type": "object",
           "properties": {
             "id": {
