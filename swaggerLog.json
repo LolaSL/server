@@ -171,8 +171,8 @@
                 "$ref": "#/components/schemas/Login"
               },
               "example": {
-                "email": "test_for_test@example.com",
-                "password": "test123456"
+                "email": "",
+                "password": ""
               }
             }
           }
