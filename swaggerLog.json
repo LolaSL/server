@@ -227,17 +227,6 @@
         "summary": "Returns all users in the database.",
         "description": "This path gets all users from the database store and returns them in order of id.",
         "operationId": "get_users",
-        "parameters": [
-          {
-            "name": "users",
-            "in": "path",
-            "description": "The id of all  users.",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
         "tags": ["Users"],
         "responses": {
           "200": {
@@ -1024,7 +1013,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Order"
+                  "$ref": "#/components/schemas/OrderId"
                 },
                 "example": {
                   "id": 4,
@@ -1058,115 +1047,97 @@
           }
         }
       }
-    },
-
-    "components": {
-      "schemas": {
-        "Registration": {
-          "type": "object",
-          "properties": {
-            "email": {
-              "type": "string"
-            },
-            "password": {
-              "type": "string"
-            },
-            "first_name": {
-              "type": "string"
-            },
-            "last_name": {
-              "type": "string"
-            },
-            "address": {
-              "type": "string"
-            },
-            "postcode": {
-              "type": "string"
-            },
-            "city": {
-              "type": "string"
-            },
-            "country": {
-              "type": "string"
-            }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Registration": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "postcode": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
           }
-        },
-        "Login": {
-          "type": "object",
-          "properties": {
-            "email": {
-              "type": "string"
-            },
-            "password": {
-              "type": "string"
-            }
+        }
+      },
+      "Login": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
           }
-        },
-        "Users": {
-          "type": "object",
-          "properties": {
-            "email": {
-              "type": "string"
-            },
-            "password": {
-              "type": "string"
-            },
-            "first_name": {
-              "type": "string"
-            },
-            "last_name": {
-              "type": "string"
-            },
-            "address": {
-              "type": "string"
-            },
-            "postcode": {
-              "type": "integer"
-            },
-            "city": {
-              "type": "string"
-            },
-            "country": {
-              "type": "string"
-            },
-            "date_joined": {
-              "type": "date"
-            },
-            "active": {
-              "type": "string"
-            },
-            "user_role": {
-              "type": "string"
-            },
-            "modified": {
-              "type": "date"
-            },
-            "is_admin": {
-              "type": "boolean"
-            }
+        }
+      },
+      "Users": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "postcode": {
+            "type": "integer"
+          },
+          "city": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "date_joined": {
+            "type": "date"
+          },
+          "active": {
+            "type": "string"
+          },
+          "user_role": {
+            "type": "string"
+          },
+          "modified": {
+            "type": "date"
+          },
+          "is_admin": {
+            "type": "boolean"
           }
-        },
-        "Carts": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "integer"
-              },
-              "user_id": {
-                "type": "integer"
-              },
-              "created": {
-                "type": "string"
-              },
-              "modified": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "Cart": {
+        }
+      },
+      "Carts": {
+        "type": "array",
+        "items": {
           "type": "object",
           "properties": {
             "id": {
@@ -1182,56 +1153,36 @@
               "type": "string"
             }
           }
-        },
-        "Checkout": {
-          "type": "object",
-          "properties": {
-            "order_id": {
-              "type": "integer"
-            }
+        }
+      },
+      "Cart": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "user_id": {
+            "type": "integer"
+          },
+          "created": {
+            "type": "string"
+          },
+          "modified": {
+            "type": "string"
           }
-        },
-        "ProductAllCart": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "integer"
-              },
-              "name": {
-                "type": "string"
-              },
-              "author": {
-                "type": "string"
-              },
-              "price": {
-                "type": "numeric"
-              },
-              "category": {
-                "type": "string"
-              },
-              "description": {
-                "type": "string"
-              },
-              "quantity": {
-                "type": "integer"
-              }
-            }
+        }
+      },
+      "Checkout": {
+        "type": "object",
+        "properties": {
+          "order_id": {
+            "type": "integer"
           }
-        },
-        "ProductAdd": {
-          "type": "object",
-          "properties": {
-            "product_id": {
-              "type": "integer"
-            },
-            "quantity": {
-              "type": "integer"
-            }
-          }
-        },
-        "ProductSingleCart": {
+        }
+      },
+      "ProductAllCart": {
+        "type": "array",
+        "items": {
           "type": "object",
           "properties": {
             "id": {
@@ -1256,42 +1207,56 @@
               "type": "integer"
             }
           }
-        },
-        "UpdateQty": {
-          "type": "object",
-          "properties": {
-            "quantity": {
-              "type": "integer"
-            }
+        }
+      },
+      "ProductAdd": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "integer"
+          },
+          "quantity": {
+            "type": "integer"
           }
-        },
-        "OrdersAll": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "integer"
-              },
-              "user_id": {
-                "type": "integer"
-              },
-              "order_price": {
-                "type": "string"
-              },
-              "status": {
-                "type": "string"
-              },
-              "created": {
-                "type": "string"
-              },
-              "modified": {
-                "type": "string"
-              }
-            }
+        }
+      },
+      "ProductSingleCart": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          },
+          "price": {
+            "type": "numeric"
+          },
+          "category": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer"
           }
-        },
-        "Orders": {
+        }
+      },
+      "UpdateQty": {
+        "type": "object",
+        "properties": {
+          "quantity": {
+            "type": "integer"
+          }
+        }
+      },
+      "OrdersAll": {
+        "type": "array",
+        "items": {
           "type": "object",
           "properties": {
             "id": {
@@ -1300,7 +1265,7 @@
             "user_id": {
               "type": "integer"
             },
-            "total_price": {
+            "order_price": {
               "type": "string"
             },
             "status": {
@@ -1313,44 +1278,67 @@
               "type": "string"
             }
           }
-        },
-        "Payment": {
+        }
+      },
+      "Orders": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "user_id": {
+            "type": "integer"
+          },
+          "total_price": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string"
+          },
+          "modified": {
+            "type": "string"
+          }
+        }
+      },
+      "Payment": {
+        "type": "object",
+        "items": {
           "type": "object",
-          "items": {
-            "type": "object",
-            "properties": {
-              "url": {
-                "type": "string"
-              }
+          "properties": {
+            "url": {
+              "type": "string"
             }
           }
-        },
-        "Products": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "integer"
-              },
-              "name": {
-                "type": "string"
-              },
-              "author": {
-                "type": "string"
-              },
-              "price": {
-                "type": "string"
-              },
-              "category": {
-                "type": "string"
-              },
-              "description": {
-                "type": "string"
-              },
-              "quantity": {
-                "type": "integer"
-              }
+        }
+      },
+      "Products": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "author": {
+              "type": "string"
+            },
+            "price": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "quantity": {
+              "type": "integer"
             }
           }
         }

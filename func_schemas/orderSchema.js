@@ -1,5 +1,5 @@
 const Joi = require('joi').extend(require('@joi/date'));
-const OrderModel = require('../models/OrderModel')
+
 module.exports = {
     orderSchema:
     {
@@ -15,10 +15,8 @@ module.exports = {
             shipping: Joi.Object().required(),
             payment_status: Joi.String().required(),
         },
-    
+
         )
     }
 }
 
-const newOrder = OrderModel("newOrder", orderSchema);
-exports.Order = Order;

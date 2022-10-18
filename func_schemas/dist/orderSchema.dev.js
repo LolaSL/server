@@ -2,8 +2,6 @@
 
 var Joi = require('joi').extend(require('@joi/date'));
 
-var OrderModel = require('../models/OrderModel');
-
 module.exports = {
   orderSchema: {
     body: Joi.object({
@@ -21,5 +19,3 @@ module.exports = {
     })
   }
 };
-var newOrder = OrderModel("newOrder", orderSchema);
-exports.Order = Order;

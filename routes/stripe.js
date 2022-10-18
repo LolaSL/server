@@ -10,30 +10,42 @@ const Order = require("../models/OrderModel");
 const { checkAuthentication } = require('../config/passportConfig');
 
 router.post('/create-checkout-session', checkAuthentication,  async (req, res) => {
-
+  const { items, email } = req.body;
   const customer = await stripe.customers.create({
+    
     metadata: {
       user_id: req.body.user_id,
       cart: JSON.stringify(req.body.cart_items),
     }
   })
-
+  const transformedItems = items?.cart.map((item) => ({
+    quantity: 1,
+    price_data: {
+        currency: "usd",
+        unit_amount: item.price * 100,
+        product_data: {
+            name: item.name,
+            description: item.description, //description here
+            images: [item.image],
+        },
+    },
+}));
   // const line_items = req.body.cart_items
-  //   .map(product => {
+  //   .map(item => {
   //     return {
   //       price_data: {
   //         currency: 'usd',
   //         product_data: {
-  //           name: products.name,
-  //           images: [products.image_url],
-  //           desctiprion: products.description,
+  //           name: item.name,
+  //           images: [item.image_url],
+  //           desctiprion: item.description,
   //           metadata: {
-  //             id: products.id,
+  //             id: item.id,
   //           },
   //         },
-  //         unit_amount: products.price * 100,
+  //         unit_amount: item.price * 100,
   //       },
-  //       quantity: products.cart_items.quantity,
+  //       quantity: item.cart_items.quantity,
 
 
   //     }
@@ -90,34 +102,39 @@ router.post('/create-checkout-session', checkAuthentication,  async (req, res) =
         }
       },
     ],
-    line_items: [
+    // line_items: [
 
-      {
-        price_data: {
-          currency: 'usd',
-          product_data: {
-            name: 'Abstract cityscape',
-          },
-          unit_amount: 47500,
-        },
-        quantity: 1,
-      },
-      {
-        price_data: {
-          currency: 'usd',
-          product_data: {
-            name: 'Sunburstwall clock',
-          },
-          unit_amount: 35100,
+    //   {
+    //     price_data: {
+    //       currency: 'usd',
+    //       product_data: {
+    //         name: 'Abstract cityscape',
+    //       },
+    //       unit_amount: 47500,
+    //     },
+    //     quantity: 1,
+    //   },
+    //   {
+    //     price_data: {
+    //       currency: 'usd',
+    //       product_data: {
+    //         name: 'Sunburstwall clock',
+    //       },
+    //       unit_amount: 35100,
 
-        },
-        quantity: 1,
+    //     },
+    //     quantity: 1,
 
-      },
-    ],
+    //   },
+    // ],
     phone_number_collection: { enabled: true },
     customer: customer.id,
-    // line_items,
+    line_items: transformedItems,
+    metadata: {
+      email,
+      customer
+   
+  },
     mode: 'payment',
     success_url: `${process.env.CLIENT_URL}/success.html`,
     cancel_url: `${process.env.CLIENT_URL}/cancel.html`,
@@ -137,7 +154,8 @@ const createOrder = async (customer, data) => {
     user_id: customer.metadata.user_id,
     customerId: data.customer,
     paymentIntentId: data.payment_intent,
-    products: data.product_data,
+    // products: data.product_data,
+    products,
     subtotal: data.amount_subtotal,
     total: data.amount_total,
     shipping: data.customer_details,

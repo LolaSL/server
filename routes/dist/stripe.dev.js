@@ -16,12 +16,14 @@ var _require = require('../config/passportConfig'),
     checkAuthentication = _require.checkAuthentication;
 
 router.post('/create-checkout-session', checkAuthentication, function _callee(req, res) {
-  var customer, session;
+  var _req$body, items, email, customer, transformedItems, session;
+
   return regeneratorRuntime.async(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
-          _context.next = 2;
+          _req$body = req.body, items = _req$body.items, email = _req$body.email;
+          _context.next = 3;
           return regeneratorRuntime.awrap(stripe.customers.create({
             metadata: {
               user_id: req.body.user_id,
@@ -29,9 +31,43 @@ router.post('/create-checkout-session', checkAuthentication, function _callee(re
             }
           }));
 
-        case 2:
+        case 3:
           customer = _context.sent;
-          _context.next = 5;
+          transformedItems = items.map(function (item) {
+            return {
+              quantity: 1,
+              price_data: {
+                currency: "usd",
+                unit_amount: item.price * 100,
+                product_data: {
+                  name: item.name,
+                  description: item.description,
+                  //description here
+                  images: [item.image]
+                }
+              }
+            };
+          }); // const line_items = req.body.cart_items
+          //   .map(item => {
+          //     return {
+          //       price_data: {
+          //         currency: 'usd',
+          //         product_data: {
+          //           name: item.name,
+          //           images: [item.image_url],
+          //           desctiprion: item.description,
+          //           metadata: {
+          //             id: item.id,
+          //           },
+          //         },
+          //         unit_amount: item.price * 100,
+          //       },
+          //       quantity: item.cart_items.quantity,
+          //     }
+          //   }
+          // );
+
+          _context.next = 7;
           return regeneratorRuntime.awrap(stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             shipping_address_collection: {
@@ -78,30 +114,39 @@ router.post('/create-checkout-session', checkAuthentication, function _callee(re
                 }
               }
             }],
-            line_items: [{
-              price_data: {
-                currency: 'usd',
-                product_data: {
-                  name: 'Abstract cityscape'
-                },
-                unit_amount: 47500
-              },
-              quantity: 1
-            }, {
-              price_data: {
-                currency: 'usd',
-                product_data: {
-                  name: 'Sunburstwall clock'
-                },
-                unit_amount: 35100
-              },
-              quantity: 1
-            }],
+            // line_items: [
+            //   {
+            //     price_data: {
+            //       currency: 'usd',
+            //       product_data: {
+            //         name: 'Abstract cityscape',
+            //       },
+            //       unit_amount: 47500,
+            //     },
+            //     quantity: 1,
+            //   },
+            //   {
+            //     price_data: {
+            //       currency: 'usd',
+            //       product_data: {
+            //         name: 'Sunburstwall clock',
+            //       },
+            //       unit_amount: 35100,
+            //     },
+            //     quantity: 1,
+            //   },
+            // ],
             phone_number_collection: {
               enabled: true
             },
             customer: customer.id,
-            // line_items,
+            line_items: transformedItems,
+            metadata: {
+              email: email,
+              images: JSON.stringify(items.map(function (item) {
+                return item.image;
+              }))
+            },
             mode: 'payment',
             success_url: "".concat(process.env.CLIENT_URL, "/success.html"),
             cancel_url: "".concat(process.env.CLIENT_URL, "/cancel.html"),
@@ -110,14 +155,14 @@ router.post('/create-checkout-session', checkAuthentication, function _callee(re
             }
           }));
 
-        case 5:
+        case 7:
           session = _context.sent;
           res.send({
             url: session.url
           });
           console.log(session);
 
-        case 8:
+        case 10:
         case "end":
           return _context.stop();
       }
@@ -136,7 +181,8 @@ var createOrder = function createOrder(customer, data) {
             user_id: customer.metadata.user_id,
             customerId: data.customer,
             paymentIntentId: data.payment_intent,
-            products: data.product_data,
+            // products: data.product_data,
+            products: products,
             subtotal: data.amount_subtotal,
             total: data.amount_total,
             shipping: data.customer_details,

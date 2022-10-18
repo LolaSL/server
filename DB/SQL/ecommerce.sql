@@ -32,8 +32,10 @@ CREATE TABLE "orders" (
   "user_id" INTEGER,
   "status" varchar(100),
   "created_at" timestamp,
-  "modified" timestamp,
   "total_price" numeric,
+  "price" numeric,
+  "ref" varchar(100),
+  "payment_method" INTEGER
 );
 
 CREATE TABLE "products" (
