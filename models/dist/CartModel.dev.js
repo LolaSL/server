@@ -22,10 +22,10 @@ function () {
   }
 
   _createClass(Cartmodel, [{
-    key: "create",
-    value: function create(data) {
+    key: "createCart",
+    value: function createCart(data) {
       var text, inputs;
-      return regeneratorRuntime.async(function create$(_context) {
+      return regeneratorRuntime.async(function createCart$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:

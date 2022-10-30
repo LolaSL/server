@@ -33,9 +33,9 @@ CREATE TABLE "orders" (
   "status" varchar(100),
   "created_at" timestamp,
   "total_price" numeric,
-  "price" numeric,
   "ref" varchar(100),
-  "payment_method" INTEGER
+  "payment_method_types" varchar
+  modified  timestamp,
 );
 
 CREATE TABLE "products" (

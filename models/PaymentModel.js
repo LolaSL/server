@@ -6,7 +6,7 @@
 //   payment = async (price, email) => {
 //     try {
 //       return await stripe.paymentIntents.create({
-//         price,
+//         amount,
 //         currency: "usd",
 //         payment_method_types: ["card"],
 //           receipt_email: email,

@@ -4,7 +4,7 @@ const orderInstance = new Order();
 const stripePrivateKey = process.env.STRIPE_PRIVATE_KEY;
 module.exports = class Cartmodel {
 
-    async create(data) {
+    async createCart(data) {
         const text = 'INSERT INTO carts (user_id, created_at) VALUES ($1, current_timestamp);';
         const inputs = [data];
         try {

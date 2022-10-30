@@ -110,7 +110,7 @@ var options = {
 };
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerLog, options));
 app.use('/api', authRouter);
-app.use('/api/users/', userRouter);
+app.use('/api/users', userRouter);
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
 app.use('/api/orders', orderRouter);

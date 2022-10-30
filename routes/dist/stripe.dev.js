@@ -6,8 +6,7 @@ var express = require('express');
 
 var Stripe = require("stripe");
 
-var stripePrivateKey = process.env.STRIPE_PRIVATE_KEY;
-var stripe = Stripe(stripePrivateKey);
+var stripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
 var router = express.Router();
 
 var Order = require("../models/OrderModel");
@@ -16,14 +15,12 @@ var _require = require('../config/passportConfig'),
     checkAuthentication = _require.checkAuthentication;
 
 router.post('/create-checkout-session', checkAuthentication, function _callee(req, res) {
-  var _req$body, items, email, customer, transformedItems, session;
-
+  var customer, session;
   return regeneratorRuntime.async(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
-          _req$body = req.body, items = _req$body.items, email = _req$body.email;
-          _context.next = 3;
+          _context.next = 2;
           return regeneratorRuntime.awrap(stripe.customers.create({
             metadata: {
               user_id: req.body.user_id,
@@ -31,43 +28,9 @@ router.post('/create-checkout-session', checkAuthentication, function _callee(re
             }
           }));
 
-        case 3:
+        case 2:
           customer = _context.sent;
-          transformedItems = items.map(function (item) {
-            return {
-              quantity: 1,
-              price_data: {
-                currency: "usd",
-                unit_amount: item.price * 100,
-                product_data: {
-                  name: item.name,
-                  description: item.description,
-                  //description here
-                  images: [item.image]
-                }
-              }
-            };
-          }); // const line_items = req.body.cart_items
-          //   .map(item => {
-          //     return {
-          //       price_data: {
-          //         currency: 'usd',
-          //         product_data: {
-          //           name: item.name,
-          //           images: [item.image_url],
-          //           desctiprion: item.description,
-          //           metadata: {
-          //             id: item.id,
-          //           },
-          //         },
-          //         unit_amount: item.price * 100,
-          //       },
-          //       quantity: item.cart_items.quantity,
-          //     }
-          //   }
-          // );
-
-          _context.next = 7;
+          _context.next = 5;
           return regeneratorRuntime.awrap(stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             shipping_address_collection: {
@@ -114,55 +77,41 @@ router.post('/create-checkout-session', checkAuthentication, function _callee(re
                 }
               }
             }],
-            // line_items: [
-            //   {
-            //     price_data: {
-            //       currency: 'usd',
-            //       product_data: {
-            //         name: 'Abstract cityscape',
-            //       },
-            //       unit_amount: 47500,
-            //     },
-            //     quantity: 1,
-            //   },
-            //   {
-            //     price_data: {
-            //       currency: 'usd',
-            //       product_data: {
-            //         name: 'Sunburstwall clock',
-            //       },
-            //       unit_amount: 35100,
-            //     },
-            //     quantity: 1,
-            //   },
-            // ],
+            line_items: [{
+              price_data: {
+                currency: 'usd',
+                product_data: {
+                  name: 'T-shirt'
+                },
+                unit_amount: 2000
+              },
+              quantity: 1
+            }],
             phone_number_collection: {
               enabled: true
             },
             customer: customer.id,
-            line_items: transformedItems,
-            metadata: {
-              email: email,
-              images: JSON.stringify(items.map(function (item) {
-                return item.image;
-              }))
-            },
+            // line_items: transformedItems,
+            //   metadata: {
+            //     email,
+            //     customer
+            // },
             mode: 'payment',
-            success_url: "".concat(process.env.CLIENT_URL, "/success.html"),
-            cancel_url: "".concat(process.env.CLIENT_URL, "/cancel.html"),
+            success_url: "".concat(process.env.CLIENT_URL, "/carts/success"),
+            cancel_url: "".concat(process.env.CLIENT_URL, "/carts"),
             automatic_tax: {
               enabled: false
             }
           }));
 
-        case 7:
+        case 5:
           session = _context.sent;
           res.send({
             url: session.url
           });
           console.log(session);
 
-        case 10:
+        case 8:
         case "end":
           return _context.stop();
       }
@@ -181,8 +130,8 @@ var createOrder = function createOrder(customer, data) {
             user_id: customer.metadata.user_id,
             customerId: data.customer,
             paymentIntentId: data.payment_intent,
-            // products: data.product_data,
-            products: products,
+            products: data.product_data,
+            // products:data.products,
             subtotal: data.amount_subtotal,
             total: data.amount_total,
             shipping: data.customer_details,

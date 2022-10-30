@@ -1,16 +1,13 @@
-
 require("dotenv").config()
-
 const express = require('express');
 const Stripe = require("stripe")
-const stripePrivateKey = process.env.STRIPE_PRIVATE_KEY;
-const stripe = Stripe(stripePrivateKey);
+const stripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
 const router = express.Router();
 const Order = require("../models/OrderModel");
 const { checkAuthentication } = require('../config/passportConfig');
 
 router.post('/create-checkout-session', checkAuthentication,  async (req, res) => {
-  const { items, email } = req.body;
+  // const { items, email } = req.body;
   const customer = await stripe.customers.create({
     
     metadata: {
@@ -18,18 +15,18 @@ router.post('/create-checkout-session', checkAuthentication,  async (req, res) =
       cart: JSON.stringify(req.body.cart_items),
     }
   })
-  const transformedItems = items?.cart.map((item) => ({
-    quantity: 1,
-    price_data: {
-        currency: "usd",
-        unit_amount: item.price * 100,
-        product_data: {
-            name: item.name,
-            description: item.description, //description here
-            images: [item.image],
-        },
-    },
-}));
+//   const transformedItems = items?.cart.map((item) => ({
+//     quantity: 1,
+//     price_data: {
+//         currency: "usd",
+//         unit_amount: item.price * 100,
+//         product_data: {
+//             name: item.name,
+//             description: item.description, //description here
+//             images: [item.image],
+//         },
+//     },
+// }));
   // const line_items = req.body.cart_items
   //   .map(item => {
   //     return {
@@ -102,42 +99,30 @@ router.post('/create-checkout-session', checkAuthentication,  async (req, res) =
         }
       },
     ],
-    // line_items: [
+    line_items: [
 
-    //   {
-    //     price_data: {
-    //       currency: 'usd',
-    //       product_data: {
-    //         name: 'Abstract cityscape',
-    //       },
-    //       unit_amount: 47500,
-    //     },
-    //     quantity: 1,
-    //   },
-    //   {
-    //     price_data: {
-    //       currency: 'usd',
-    //       product_data: {
-    //         name: 'Sunburstwall clock',
-    //       },
-    //       unit_amount: 35100,
-
-    //     },
-    //     quantity: 1,
-
-    //   },
-    // ],
+      {
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: 'T-shirt',
+          },
+          unit_amount: 2000,
+        },
+        quantity: 1,
+      },
+    ],
     phone_number_collection: { enabled: true },
     customer: customer.id,
-    line_items: transformedItems,
-    metadata: {
-      email,
-      customer
+    // line_items: transformedItems,
+  //   metadata: {
+  //     email,
+  //     customer
    
-  },
+  // },
     mode: 'payment',
-    success_url: `${process.env.CLIENT_URL}/success.html`,
-    cancel_url: `${process.env.CLIENT_URL}/cancel.html`,
+    success_url: `${process.env.CLIENT_URL}/carts/success`,
+    cancel_url: `${process.env.CLIENT_URL}/carts`,
     automatic_tax: { enabled: false },
   });
 
@@ -154,8 +139,8 @@ const createOrder = async (customer, data) => {
     user_id: customer.metadata.user_id,
     customerId: data.customer,
     paymentIntentId: data.payment_intent,
-    // products: data.product_data,
-    products,
+    products: data.product_data,
+    // products:data.products,
     subtotal: data.amount_subtotal,
     total: data.amount_total,
     shipping: data.customer_details,

@@ -110,7 +110,7 @@ cartRouter.post('/', checkAuthentication, function _callee3(req, res) {
         case 0:
           _context3.prev = 0;
           _context3.next = 3;
-          return regeneratorRuntime.awrap(cartInstance.create(req.user.id));
+          return regeneratorRuntime.awrap(cartInstance.createCart(req.user.id));
 
         case 3:
           newCart = _context3.sent;

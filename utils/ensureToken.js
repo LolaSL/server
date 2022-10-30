@@ -6,8 +6,6 @@ const ensureToken = (req, res, next) => {
     const bearer = authHeader.split(" ");
     const bearerToken = bearer[1];
     req.token = bearerToken;
-    const decoded = jwt.decode(bearerToken);
-    console.log({ decoded })
     next();
 
   } else {

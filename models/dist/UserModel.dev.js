@@ -157,7 +157,7 @@ function () {
               inputs = [data.value, data.email];
               _context5.prev = 2;
               _context5.next = 5;
-              return regeneratorRuntime.awrap(pool.query(text, inputs));
+              return regeneratorRuntime.awrap(query(text, inputs));
 
             case 5:
               return _context5.abrupt("return", _context5.sent);

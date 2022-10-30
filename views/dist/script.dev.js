@@ -1,25 +1,21 @@
 "use strict";
 
-var SERVER_URL = 'http://localhost:8000';
 var button = document.querySelector("button");
 button.addEventListener("click", function () {
   console.log("Checkout");
-  fetch("".concat(SERVER_URL, "/api/stripe/create-checkout-session"), {
+  fetch("/api/stripe/create-checkout-session", {
     method: "POST",
     credentials: 'include',
     headers: {
       'Accept': 'application/json',
       "Content-Type": "application/json"
     },
-    // body: JSON.stringify({
-    //     product_data: {
-    //         name: "T-shirt",
-    //         unit_amount: 20,
-    //         quantity: 1
-    //     },
-    // }),
     body: JSON.stringify({
-      items: checkoutData
+      product_data: {
+        name: "T-shirt",
+        unit_amount: 20,
+        quantity: 1
+      }
     })
   }).then(function _callee(res) {
     var json;

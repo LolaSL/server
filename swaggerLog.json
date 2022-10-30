@@ -237,7 +237,7 @@
                   {
                     "id": 42,
                     "email": "2_test_test@example.com",
-                    "password": "$********$",
+                    "password": "********",
                     "first_name": "TestTestTest2",
                     "last_name": "TestTestTest2",
                     "address": "TEST11112, 00/11",
@@ -252,7 +252,7 @@
                   {
                     "id": 43,
                     "email": "3_test_test@example.com",
-                    "password": "$********$",
+                    "password": "********",
                     "first_name": "TestTestTest3",
                     "last_name": "TestTestTest3",
                     "address": "TEST11113, 00/11",
@@ -267,7 +267,7 @@
                   {
                     "id": 44,
                     "email": "4_test_test@example.com",
-                    "password": "$********$",
+                    "password": "********",
                     "first_name": "TestTestTest4",
                     "last_name": "TestTestTest4",
                     "address": "TEST11114, 00/11",
@@ -360,7 +360,7 @@
               "examples": {
                 "email change": {
                   "value": {
-                    "email": "new_test_name@example.com"
+                    "email": "new@example.com"
                   }
                 }
               }
@@ -408,7 +408,7 @@
         "tags": ["Users"],
         "responses": {
           "204": {
-            "description": "No content - Delete is successful."
+            "description": "User deleted Successfully!"
           }
         }
       }
@@ -1013,7 +1013,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OrderId"
+                  "$ref": "#/components/schemas/orderId"
                 },
                 "example": {
                   "id": 4,

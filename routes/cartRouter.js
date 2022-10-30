@@ -40,7 +40,7 @@ cartRouter.get('/:id', checkAuthentication, (req, res) => {
 //Create new cart
 cartRouter.post('/', checkAuthentication, async (req, res) => {
     try {
-        const newCart = await cartInstance.create(req.user.id);
+        const newCart = await cartInstance.createCart(req.user.id);
         if (!newCart) return res.status(400).send('Invalid user_id');
         res.status(201).send('Cart created');
     } catch (err) {
