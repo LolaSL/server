@@ -25,7 +25,7 @@ function () {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              text = "INSERT INTO users(email, password, first_name, last_name, address, postcode, city, country)\n        VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING*";
+              text = "INSERT INTO users(email, password, first_name, last_name, address, postcode, city, country )\n        VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING*";
               inputs = [data.email, data.password, data.first_name, data.last_name, data.address, data.postcode, data.city, data.country];
               console.log(inputs);
               _context.prev = 3;
@@ -66,7 +66,7 @@ function () {
             case 0:
               _context2.prev = 0;
               _context2.next = 3;
-              return regeneratorRuntime.awrap(pool.query('SELECT * FROM users', []));
+              return regeneratorRuntime.awrap(pool.query('SELECT * FROM users ORDER BY id ASC', []));
 
             case 3:
               result = _context2.sent;
@@ -144,36 +144,54 @@ function () {
           }
         }
       }, null, null, [[2, 9]]);
-    }
+    } // async getRoles(data) {
+    //     let text = 'SELECT * FROM users  where is_admin = $1';
+    //     let inputs = [data];
+    //     try {
+    //         const result = await pool.query(text, inputs);
+    //         return result.rows[0];
+    //     } catch (err) {
+    //         throw err.stack;
+    //     }
+    // }
+
   }, {
     key: "updateUserByEmail",
     value: function updateUserByEmail(data) {
-      var text, inputs;
+      var text, inputs, result;
       return regeneratorRuntime.async(function updateUserByEmail$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
               text = format('UPDATE users SET %I = $1 WHERE email = $2;', data.column);
-              inputs = [data.value, data.email];
+              inputs = [data.email, data.id];
               _context5.prev = 2;
               _context5.next = 5;
-              return regeneratorRuntime.awrap(query(text, inputs));
+              return regeneratorRuntime.awrap(pool.query(text, inputs));
 
             case 5:
-              return _context5.abrupt("return", _context5.sent);
+              result = _context5.sent;
+              return _context5.abrupt("return", result.rows[0]);
 
-            case 8:
-              _context5.prev = 8;
+            case 9:
+              _context5.prev = 9;
               _context5.t0 = _context5["catch"](2);
               throw _context5.t0.stack;
 
-            case 11:
+            case 12:
             case "end":
               return _context5.stop();
           }
         }
-      }, null, null, [[2, 8]]);
-    }
+      }, null, null, [[2, 9]]);
+    } // async updateUserByEmail({ email }) {
+    //     const { rows: user } = await pool.query(
+    //         `UPDATE users set  email = $1,  returning email, id`,
+    //         [email, id]
+    //     );
+    //     return user[0];
+    // };
+
   }, {
     key: "deleteByEmail",
     value: function deleteByEmail(data) {

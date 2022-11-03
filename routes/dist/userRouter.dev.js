@@ -21,7 +21,7 @@ var _require3 = require('../func_schemas/validateFunction'),
     hashPassword = _require3.hashPassword;
 
 var _require4 = require('../config/passportConfig'),
-    checkAuthentication = _require4.checkAuthentication; // const { ensureToken } = require('../utils/ensureToken');
+    checkAuthentication = _require4.checkAuthentication; // const { isAdmin, ensureToken } = require('../utils/ensureToken');
 
 
 secretKey = process.env.JWT_SECRET;
@@ -31,8 +31,7 @@ userRouter.use('/', validate(updateSchema), function (err, req, res, next) {
   if (err instanceof ValidationError) return res.status(err.statusCode).json(err);
   next();
 });
-userRouter.get('/', //   ensureToken,
-checkAuthentication, function _callee(req, res) {
+userRouter.get('/', checkAuthentication, function _callee(req, res) {
   var users;
   return regeneratorRuntime.async(function _callee$(_context) {
     while (1) {
@@ -53,7 +52,7 @@ checkAuthentication, function _callee(req, res) {
         case 7:
           _context.prev = 7;
           _context.t0 = _context["catch"](0);
-          res.status(400).send(_context.t0);
+          res.status(401).send(_context.t0);
 
         case 10:
         case "end":
@@ -63,7 +62,7 @@ checkAuthentication, function _callee(req, res) {
   }, null, null, [[0, 7]]);
 });
 userRouter.get('/:id', checkAuthentication, function _callee2(req, res) {
-  var id, user, decoded;
+  var id, user;
   return regeneratorRuntime.async(function _callee2$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
@@ -83,19 +82,20 @@ userRouter.get('/:id', checkAuthentication, function _callee2(req, res) {
           return _context2.abrupt("return", res.status(200).json(user));
 
         case 6:
-          decoded = jwt.verify(req.token, secretKey, function (req, res, next) {
+          jwt.verify(req.token, secretKey, function (req, res, decoded, next) {
             console.log(decoded);
 
             try {
-              req.user = decoded;
-              req.header = userInstance.getById(decoded.id).select('password');
+              req.user.id = decoded.id;
+              req.header = userInstance.getById(decoded.id).select('admin');
 
               if (decoded) {
                 return res.status(200).json(req.user);
-                next();
               }
+
+              next();
             } catch (err) {
-              res.status(400).send(err);
+              res.status(401).send(err);
             }
           });
 
@@ -105,10 +105,7 @@ userRouter.get('/:id', checkAuthentication, function _callee2(req, res) {
       }
     }
   });
-}); // // User Routes
-// userRouter.get('/:id',   checkAuthentication,  async (req, res, next) => {
-// })
-//New user instance
+}); //New user instance
 
 userRouter.put('/:id', checkAuthentication, function _callee3(req, res) {
   var data, key, input, hashedPassword;
@@ -116,12 +113,12 @@ userRouter.put('/:id', checkAuthentication, function _callee3(req, res) {
     while (1) {
       switch (_context3.prev = _context3.next) {
         case 0:
-          data = req.email;
+          data = req.body;
           _context3.t0 = regeneratorRuntime.keys(data);
 
         case 2:
           if ((_context3.t1 = _context3.t0()).done) {
-            _context3.next = 20;
+            _context3.next = 21;
             break;
           }
 
@@ -130,11 +127,11 @@ userRouter.put('/:id', checkAuthentication, function _callee3(req, res) {
           input = {
             column: key,
             value: data[key],
-            email: req.user.email
+            email: req.body.email
           };
 
           if (!(key === 'password')) {
-            _context3.next = 13;
+            _context3.next = 11;
             break;
           }
 
@@ -144,33 +141,33 @@ userRouter.put('/:id', checkAuthentication, function _callee3(req, res) {
         case 9:
           hashedPassword = _context3.sent;
           input.value = hashedPassword;
+
+        case 11:
           _context3.next = 13;
-          return regeneratorRuntime.awrap(userInstance.updateUserByEmail(req.user.email));
+          return regeneratorRuntime.awrap(userInstance.updateUserByEmail(input));
 
         case 13:
-          _context3.next = 18;
+          res.status(200).send({
+            message: "User updated with email: ".concat(req.body.email, " successfully!")
+          });
+          _context3.next = 19;
           break;
 
-        case 15:
-          _context3.prev = 15;
+        case 16:
+          _context3.prev = 16;
           _context3.t2 = _context3["catch"](4);
-          res.status(400).send(_context3.t2);
+          res.status(401).send(_context3.t2);
 
-        case 18:
+        case 19:
           _context3.next = 2;
           break;
-
-        case 20:
-          res.status(200).send({
-            message: "User updated Successfully!"
-          });
 
         case 21:
         case "end":
           return _context3.stop();
       }
     }
-  }, null, null, [[4, 15]]);
+  }, null, null, [[4, 16]]);
 }); //Delete user
 
 userRouter["delete"]('/:id', checkAuthentication, function _callee4(req, res) {
@@ -192,7 +189,7 @@ userRouter["delete"]('/:id', checkAuthentication, function _callee4(req, res) {
         case 6:
           _context4.prev = 6;
           _context4.t0 = _context4["catch"](0);
-          res.status(403).send(_context4.t0);
+          res.status(401).send(_context4.t0);
 
         case 9:
         case "end":

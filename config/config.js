@@ -9,6 +9,12 @@ module.exports = {
         port: process.env.DB_PORT,
 
     },
+    pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
+      },
 
     node_env: process.env.NODE_ENV,
     database_url: process.env.DATABASE_URL,

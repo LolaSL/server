@@ -133,10 +133,12 @@
         },
         "responses": {
           "201": {
-            "description": "User created",
+            "description": "User created. Token was created.",
             "content": {
               "text/plain": {
-                "example": "User created"
+                "example": {
+                  "token": "User created.Token was created."
+                }
               }
             }
           },
@@ -360,7 +362,7 @@
               "examples": {
                 "email change": {
                   "value": {
-                    "email": "new@example.com"
+                    "email": ""
                   }
                 }
               }

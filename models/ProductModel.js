@@ -3,7 +3,7 @@ module.exports = class Productmodel {
 
     async getAllProducts() {
         try {
-            const result = await pool.query('SELECT * FROM products', []);
+            const result = await pool.query('SELECT * FROM products ORDER BY id ASC', []);
             console.log(result);
             return result.rows;
         } catch (err) {

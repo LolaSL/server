@@ -32,7 +32,7 @@ productRouter.get('/', async (req, res) => {
         console.log(productList)
         res.json({ productList });
     } catch (err) {
-        res.status(400).send(err);
+        res.status(401).send(err);
     }
 })
 

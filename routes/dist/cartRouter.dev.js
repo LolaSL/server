@@ -9,7 +9,12 @@ var productCartRouter = require('./productCartRouter');
 var _require = require('../config/passportConfig'),
     checkAuthentication = _require.checkAuthentication;
 
-var cartInstance = new Cartmodel(); //Id check middleware
+var cartInstance = new Cartmodel();
+
+var _require2 = require("../utils/ensureToken"),
+    ensureToken = _require2.ensureToken,
+    isAdmin = _require2.isAdmin; //Id check middleware
+
 
 cartRouter.use('/:id', checkAuthentication, function _callee(req, res, next) {
   var carts;
@@ -58,7 +63,7 @@ cartRouter.use('/:id', checkAuthentication, function _callee(req, res, next) {
   }, null, null, [[0, 12]]);
 }); //Product cart router
 
-cartRouter.use('/:id/items', productCartRouter); // Get all carts for user_id
+cartRouter.use('/:id/items', productCartRouter); // Get cart by user_id
 
 cartRouter.get('/', checkAuthentication, function _callee2(req, res) {
   var userCarts;
@@ -68,7 +73,7 @@ cartRouter.get('/', checkAuthentication, function _callee2(req, res) {
         case 0:
           _context2.prev = 0;
           _context2.next = 3;
-          return regeneratorRuntime.awrap(cartInstance.getCartsByUserId(req.user.id));
+          return regeneratorRuntime.awrap(cartInstance.getCartByUserId(req.user.id));
 
         case 3:
           userCarts = _context2.sent;

@@ -7,21 +7,26 @@ var Order = require('../models/OrderModel');
 var _require = require('../config/passportConfig'),
     checkAuthentication = _require.checkAuthentication;
 
-var orderInstance = new Order(); //Create order object
+var orderInstance = new Order();
+
+var _require2 = require("../utils/ensureToken"),
+    ensureToken = _require2.ensureToken,
+    isAdmin = _require2.isAdmin; //Create order object
+
 
 orderRouter.post('/create', checkAuthentication, function _callee(req, res) {
-  var order, result;
+  var order, savedOrder;
   return regeneratorRuntime.async(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
           _context.prev = 0;
-          order = req.data.order;
+          order = req.body.order.order;
           _context.next = 4;
           return regeneratorRuntime.awrap(orderInstance.create(order));
 
         case 4:
-          result = _context.sent;
+          savedOrder = _context.sent;
 
           if (!(result.length === 0)) {
             _context.next = 7;
@@ -31,7 +36,8 @@ orderRouter.post('/create', checkAuthentication, function _callee(req, res) {
           return _context.abrupt("return", res.status(400).send('No order  created'));
 
         case 7:
-          res.json(result);
+          // res.json(result);
+          res.status(200).send(savedOrder);
           _context.next = 13;
           break;
 
@@ -49,7 +55,8 @@ orderRouter.post('/create', checkAuthentication, function _callee(req, res) {
 }); //Get all orders
 
 orderRouter.get('/', checkAuthentication, function _callee2(req, res) {
-  var id, result;
+  var id, _result;
+
   return regeneratorRuntime.async(function _callee2$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
@@ -60,9 +67,9 @@ orderRouter.get('/', checkAuthentication, function _callee2(req, res) {
           return regeneratorRuntime.awrap(orderInstance.getAllOrders(id));
 
         case 4:
-          result = _context2.sent;
+          _result = _context2.sent;
 
-          if (!(result.length === 0)) {
+          if (!(_result.length === 0)) {
             _context2.next = 7;
             break;
           }
@@ -70,7 +77,7 @@ orderRouter.get('/', checkAuthentication, function _callee2(req, res) {
           return _context2.abrupt("return", res.status(400).send('No orders found'));
 
         case 7:
-          res.json(result);
+          res.json(_result);
           _context2.next = 13;
           break;
 

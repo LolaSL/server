@@ -30,7 +30,7 @@ var _require4 = require("../utils/generateAuthToken"),
 
 
 authRouter.post('/register', validate(registerSchema), function _callee(req, res, next) {
-  var data, userCheck, bcryptPassword;
+  var data, userCheck, bcryptPassword, token;
   return regeneratorRuntime.async(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
@@ -40,7 +40,7 @@ authRouter.post('/register', validate(registerSchema), function _callee(req, res
             break;
           }
 
-          return _context.abrupt("return", res.status(400).json({
+          return _context.abrupt("return", res.status(401).json({
             message: 'Please log out to create a new user.'
           }));
 
@@ -58,7 +58,7 @@ authRouter.post('/register', validate(registerSchema), function _callee(req, res
             break;
           }
 
-          return _context.abrupt("return", res.status(400).send('Email already in use'));
+          return _context.abrupt("return", res.status(401).send('Email already in use'));
 
         case 8:
           _context.next = 10;
@@ -73,22 +73,23 @@ authRouter.post('/register', validate(registerSchema), function _callee(req, res
           return regeneratorRuntime.awrap(userInstance.create(data));
 
         case 15:
-          res.status(201).send('User created');
-          _context.next = 22;
+          token = generateAuthToken(data);
+          res.send(token);
+          _context.next = 23;
           break;
 
-        case 18:
-          _context.prev = 18;
+        case 19:
+          _context.prev = 19;
           _context.t0 = _context["catch"](12);
-          res.status(400).send(_context.t0);
+          res.status(401).send(_context.t0);
           next();
 
-        case 22:
+        case 23:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[12, 18]]);
+  }, null, null, [[12, 19]]);
 }); //login Route
 
 authRouter.post('/login', validate(loginSchema), passport.authenticate('local', {
@@ -102,7 +103,7 @@ authRouter.post('/login', validate(loginSchema), passport.authenticate('local', 
     var token = generateAuthToken(user, user.user_roles);
     res.json({
       token: token,
-      message: "".concat(user.first_name, " is logged in;  ").concat(user.user_role, " "),
+      message: "".concat(user.first_name, " is logged in; ").concat(user.user_role, " "),
       expires_in: '1800s'
     });
   } catch (err) {

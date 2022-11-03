@@ -4,7 +4,7 @@ const format = require('pg-format');
 
 module.exports = class Usermodel {
     async create(data) {
-        let text = `INSERT INTO users(email, password, first_name, last_name, address, postcode, city, country)
+        let text = `INSERT INTO users(email, password, first_name, last_name, address, postcode, city, country )
         VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING*`;
 
         let inputs = [data.email, data.password, data.first_name, data.last_name, data.address, data.postcode, data.city, data.country];
@@ -21,7 +21,7 @@ module.exports = class Usermodel {
     }
     async getAllUsers() {
         try {
-            const result = await pool.query('SELECT * FROM users', []);
+            const result = await pool.query('SELECT * FROM users ORDER BY id ASC', []);
             console.log(result);
             return result.rows;
         } catch (err) {
@@ -51,17 +51,35 @@ module.exports = class Usermodel {
         }
     }
 
+    // async getRoles(data) {
+    //     let text = 'SELECT * FROM users  where is_admin = $1';
+    //     let inputs = [data];
+    //     try {
+    //         const result = await pool.query(text, inputs);
+    //         return result.rows[0];
+    //     } catch (err) {
+    //         throw err.stack;
+    //     }
+    // }
+
     async updateUserByEmail(data) {
         let text = format('UPDATE users SET %I = $1 WHERE email = $2;', data.column);
-        let inputs = [data.value, data.email];
-        try{
-            return await query(text, inputs);
-        } catch(err) {
+        let inputs = [  data.email, data.id];
+        try {
+            const result = await pool.query(text, inputs);
+            return result.rows[0];
+        } catch (err) {
             throw err.stack;
         }
-    
-    }
 
+    }
+    // async updateUserByEmail({ email }) {
+    //     const { rows: user } = await pool.query(
+    //         `UPDATE users set  email = $1,  returning email, id`,
+    //         [email, id]
+    //     );
+    //     return user[0];
+    // };
 
     async deleteByEmail(data) {
         let text = 'DELETE FROM users WHERE email = $1;';

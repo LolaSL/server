@@ -3,9 +3,10 @@ const Cartmodel = require('../models/CartModel');
 const productCartRouter = require('./productCartRouter');
 const { checkAuthentication } = require('../config/passportConfig');
 const cartInstance = new Cartmodel();
+const { ensureToken, isAdmin } = require("../utils/ensureToken");
 
 //Id check middleware
-cartRouter.use('/:id', checkAuthentication, async (req, res, next) => {
+cartRouter.use('/:id',  checkAuthentication, async (req, res, next) => {
     try {
         const carts = await cartInstance.getCartById(req.params.id);
         if (!carts) return res.status(400).send('No cart found');
@@ -21,10 +22,10 @@ cartRouter.use('/:id', checkAuthentication, async (req, res, next) => {
 cartRouter.use('/:id/items', productCartRouter);
 
 
-// Get all carts for user_id
-cartRouter.get('/', checkAuthentication, async (req, res) => {
+// Get cart by user_id
+cartRouter.get('/',  checkAuthentication, async (req, res) => {
     try {
-        const userCarts = await cartInstance.getCartsByUserId(req.user.id);
+        const userCarts = await cartInstance.getCartByUserId(req.user.id);
         if (userCarts.length === 0) return res.status(400).send('No carts found');
         res.json(userCarts);
     } catch (err) {
@@ -33,12 +34,12 @@ cartRouter.get('/', checkAuthentication, async (req, res) => {
 })
 
 // Get cart by cart id
-cartRouter.get('/:id', checkAuthentication, (req, res) => {
+cartRouter.get('/:id',  checkAuthentication, (req, res) => {
     res.json(req.carts);
 })
 
 //Create new cart
-cartRouter.post('/', checkAuthentication, async (req, res) => {
+cartRouter.post('/',  checkAuthentication, async (req, res) => {
     try {
         const newCart = await cartInstance.createCart(req.user.id);
         if (!newCart) return res.status(400).send('Invalid user_id');

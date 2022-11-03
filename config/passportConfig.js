@@ -9,8 +9,8 @@ const loadPassport = (passport) => {
   passport.use(new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
     try {
 
-      const user_role = "customer";
-      const user = await userInstance.getByEmail(email, user_role);
+      const user_role = "admin";
+      const user = await userInstance.getByEmail(email);
       if (!user) return done(null, false);
       if (!user_role) return done(null, false);
       if (! await bcrypt.compare(password, user.password)) return done(null, false);

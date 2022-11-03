@@ -5,7 +5,10 @@ const generateAuthToken = (user) => {
 
   const token = jwt.sign(
     {
-      user
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email, 
+      password: user.password
     },
     secretKey, { algorithm: 'HS256' }, { expiresIn: "24h" }
   );

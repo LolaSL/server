@@ -13,12 +13,12 @@ const { generateAuthToken } = require("../utils/generateAuthToken");
 
 //Autherization Routes
 authRouter.post('/register', validate(registerSchema), async (req, res, next) => {
-  if (req.user) return res.status(400).json({ message: 'Please log out to create a new user.' });
+  if (req.user) return res.status(401).json({ message: 'Please log out to create a new user.' });
   let data = req.body;
   //Check if email exists   
   let userCheck = await userInstance.getByEmail(data.email);
   if (userCheck) {
-    return res.status(400).send('Email already in use');
+    return res.status(401).send('Email already in use');
   }
 
   //Hash password
@@ -28,24 +28,25 @@ authRouter.post('/register', validate(registerSchema), async (req, res, next) =>
   //Create new user
   try {
     await userInstance.create(data);
-    res.status(201).send('User created')
-
+    const token = generateAuthToken(data);
+    res.send( token);
   } catch (err) {
-    res.status(400).send(err);
+    res.status(401).send(err);
     next()
   }
 
 });
 //login Route
 authRouter.post('/login', validate(loginSchema), passport.authenticate('local', { failureFlash: true }), (req, res, next) => {
-  try{const user = req.user;
-  console.log({user})
-  const token = generateAuthToken(user, user.user_roles);
-    res.json({ token, message: `${user.first_name} is logged in;  ${user.user_role} `, expires_in: '1800s' });
-  } catch(err) {
+  try {
+    const user = req.user;
+    console.log({ user })
+    const token = generateAuthToken(user, user.user_roles);
+    res.json({ token, message: `${user.first_name} is logged in; ${user.user_role} `, expires_in: '1800s' });
+  } catch (err) {
     next(err);
   }
-  
+
 
 });
 

@@ -65,7 +65,7 @@ productRouter.get('/', function _callee2(req, res) {
         case 8:
           _context2.prev = 8;
           _context2.t0 = _context2["catch"](0);
-          res.status(400).send(_context2.t0);
+          res.status(401).send(_context2.t0);
 
         case 11:
         case "end":

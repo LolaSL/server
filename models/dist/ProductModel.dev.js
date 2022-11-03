@@ -25,7 +25,7 @@ function () {
             case 0:
               _context.prev = 0;
               _context.next = 3;
-              return regeneratorRuntime.awrap(pool.query('SELECT * FROM products', []));
+              return regeneratorRuntime.awrap(pool.query('SELECT * FROM products ORDER BY id ASC', []));
 
             case 3:
               result = _context.sent;

@@ -14,7 +14,7 @@ module.exports = class Cartmodel {
         }
     }
 
-    async getCartsByUserId(data) {
+    async getCartByUserId(data) {
         const text = 'SELECT * FROM carts WHERE user_id = $1;';
         const inputs = [data];
         try {

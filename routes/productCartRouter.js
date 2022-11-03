@@ -15,7 +15,7 @@ productCartRouter.post('/', validate(productInputSchema), async (req, res) => {
         await cartInstance.addProduct(data);
         res.send('Product added')
     } catch (err) {
-        res.status(400).send(err);
+        res.status(401).send(err);
     }
 })
 
@@ -23,10 +23,10 @@ productCartRouter.post('/', validate(productInputSchema), async (req, res) => {
 productCartRouter.get('/', async (req, res) => {
     try {
         const result = await cartInstance.getAllProducts(req.carts.id);
-        if (result.length === 0) return res.status(400).send('Cart Empty');
+        if (result.length === 0) return res.status(401).send('Cart Empty');
         res.json(result);
     } catch (err) {
-        res.status(400).send(err);
+        res.status(401).send(err);
     }
 })
 
@@ -38,7 +38,7 @@ productCartRouter.get('/:id', async (req, res) => {
         if (!result) return res.status(400).send('Product not found');
         res.json(result);
     } catch (err) {
-        res.status(400).send(err);
+        res.status(404).send(err);
     }
 })
 
@@ -62,7 +62,7 @@ productCartRouter.delete('/:id', async (req, res) => {
         await cartInstance.deleteProductById(data);
         res.status(204).send();
     } catch (err) {
-        res.status(400).send(err);
+        res.status(401).send(err);
     }
 })
 

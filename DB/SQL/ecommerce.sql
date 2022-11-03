@@ -16,7 +16,7 @@ CREATE TABLE "users" (
   "date_joined" timestamp DEFAULT (now()),
   "active" boolean DEFAULT true,
    "user_role" VARCHAR,
-   "modified" DATE,
+   "modified" date,
    "is_Admin" boolean DEFAULT false
 );
 
@@ -70,6 +70,14 @@ CREATE TABLE "payment_details" (
 	name_on_card VARCHAR(100),
   security_code VARCHAR(3),
 );
+CREATE TABLE "resetTokens" (
+	id SERIAL PRIMARY KEY,
+	email VARCHAR(50),
+	token CHAR(1000),
+	used boolean,
+	expiration timestamp NOT NULL
+
+);
 
 ALTER TABLE "order_items" ADD FOREIGN KEY ("order_id") REFERENCES "orders" ("id");
 
@@ -87,7 +95,10 @@ ALTER TABLE "cart_items" ADD PRIMARY KEY ("cart_id", "product_id");
 
 ALTER TABLE "order_items" ADD PRIMARY KEY ("order_id", "product_id");
 
-ALTER TABLE "users" ALTER COLUMN "user_role" SET DEFAULT "customer"
+ALTER TABLE "users" ALTER COLUMN "user_role" SET DEFAULT "customer";
+
+ALTER TABLE "resetTokens" ADD FOREIGN KEY ("id") REFERENCES "users" ("id");
+
 ; 
  
 
