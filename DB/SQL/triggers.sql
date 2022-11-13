@@ -1,9 +1,8 @@
 CREATE OR REPLACE FUNCTION modify_timestamp()
-RETURNS TRIGGER AS 
-$$ 
+RETURNS TRIGGER AS $$ 
   BEGIN
   	NEW.modified = NOW();
-    RETURN NEW.modified;
+    RETURN NEW; 
   END;
 $$ 
 LANGUAGE PLPGSQL;
@@ -51,7 +50,7 @@ BEFORE UPDATE ON orders
 FOR EACH ROW
 EXECUTE PROCEDURE modify_timestamp();
 
-CREATE TRIGGER update_timestamp_user
+CREATE TRIGGER update_timestamp_users
 BEFORE UPDATE ON users
 FOR EACH ROW
 EXECUTE PROCEDURE modify_timestamp();
@@ -65,6 +64,7 @@ CREATE TRIGGER update_order_total
 BEFORE INSERT OR DELETE ON order_items
 FOR EACH ROW
 EXECUTE PROCEDURE update_total();
+
 
 
 

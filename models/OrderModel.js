@@ -3,17 +3,6 @@ const { query } = require('../DB/db');
 
 module.exports = class Order {
 
-    async create(data) {
-        const text = 'INSERT INTO orders (user_id, status, created_at,  total_price, ref, payment_metod_types, modified) VALUES ($1, $2, current_timestamp, $4, $5, $6, current_timestamp ) RETURNING id;';
-        const inputs = [data, 'PENDING'];
-        try {
-            return await query(text, inputs);
-        } catch (err) {
-            throw err.stack;
-        }
-    }
-
-
     async addProduct(data) {
         const text = 'INSERT INTO order_items (order_id, product_id, quantity, price ) VALUES ($1, $2, $3, (SELECT price FROM products WHERE id = $2));';
         const inputs = [data.order_id, data.product_id, data.price, data.quantity, data.id];

@@ -51,20 +51,9 @@ module.exports = class Usermodel {
         }
     }
 
-    // async getRoles(data) {
-    //     let text = 'SELECT * FROM users  where is_admin = $1';
-    //     let inputs = [data];
-    //     try {
-    //         const result = await pool.query(text, inputs);
-    //         return result.rows[0];
-    //     } catch (err) {
-    //         throw err.stack;
-    //     }
-    // }
-
     async updateUserByEmail(data) {
         let text = format('UPDATE users SET %I = $1 WHERE email = $2;', data.column);
-        let inputs = [  data.email, data.id];
+        let inputs = [data.email, data.value];
         try {
             const result = await pool.query(text, inputs);
             return result.rows[0];
@@ -73,13 +62,6 @@ module.exports = class Usermodel {
         }
 
     }
-    // async updateUserByEmail({ email }) {
-    //     const { rows: user } = await pool.query(
-    //         `UPDATE users set  email = $1,  returning email, id`,
-    //         [email, id]
-    //     );
-    //     return user[0];
-    // };
 
     async deleteByEmail(data) {
         let text = 'DELETE FROM users WHERE email = $1;';

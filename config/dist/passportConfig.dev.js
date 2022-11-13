@@ -20,19 +20,21 @@ var loadPassport = function loadPassport(passport) {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-            user_role = "admin";
+            user_role = "customer";
             _context.next = 4;
             return regeneratorRuntime.awrap(userInstance.getByEmail(email));
 
           case 4:
             user = _context.sent;
 
-            if (user) {
+            if (!(user == null)) {
               _context.next = 7;
               break;
             }
 
-            return _context.abrupt("return", done(null, false));
+            return _context.abrupt("return", done(null, false, {
+              message: "Incorrect email."
+            }));
 
           case 7:
             if (user_role) {
@@ -47,52 +49,39 @@ var loadPassport = function loadPassport(passport) {
             return regeneratorRuntime.awrap(bcrypt.compare(password, user.password));
 
           case 11:
-            if (_context.sent) {
-              _context.next = 13;
+            if (!_context.sent) {
+              _context.next = 15;
               break;
             }
 
-            return _context.abrupt("return", done(null, false));
-
-          case 13:
-            user.password = '********';
             return _context.abrupt("return", done(null, user));
 
-          case 17:
-            _context.prev = 17;
+          case 15:
+            return _context.abrupt("return", done(null, false, {
+              message: 'Password incorrect'
+            }));
+
+          case 16:
+            _context.next = 21;
+            break;
+
+          case 18:
+            _context.prev = 18;
             _context.t0 = _context["catch"](0);
             return _context.abrupt("return", done(_context.t0));
 
-          case 20:
+          case 21:
           case "end":
             return _context.stop();
         }
       }
-    }, null, null, [[0, 17]]);
+    }, null, null, [[0, 18]]);
   }));
   passport.serializeUser(function (user, done) {
     return done(null, user.id);
   });
-  passport.deserializeUser(function _callee2(id, done) {
-    var user;
-    return regeneratorRuntime.async(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            _context2.next = 2;
-            return regeneratorRuntime.awrap(userInstance.getById(id));
-
-          case 2:
-            user = _context2.sent;
-            user.password = '********';
-            return _context2.abrupt("return", done(null, user));
-
-          case 5:
-          case "end":
-            return _context2.stop();
-        }
-      }
-    });
+  passport.deserializeUser(function (id, done) {
+    return done(null, userInstance.getById(id));
   });
 };
 

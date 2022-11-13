@@ -1,5 +1,7 @@
 "use strict";
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 require("dotenv").config();
 
 var express = require('express');
@@ -81,22 +83,18 @@ router.post('/create-checkout-session', checkAuthentication, function _callee(re
               price_data: {
                 currency: 'usd',
                 product_data: {
-                  name: 'T-shirt'
+                  name: "T-shirt"
                 },
-                unit_amount: 2000
+                unit_amount: 20 * 100
               },
               quantity: 1
             }],
             phone_number_collection: {
               enabled: true
             },
-            customer: customer.id,
-            // line_items: transformedItems,
-            //   metadata: {
-            //     email,
-            //     customer
-            // },
+            // line_items,
             mode: 'payment',
+            customer: customer.id,
             success_url: "".concat(process.env.CLIENT_URL, "/carts/success"),
             cancel_url: "".concat(process.env.CLIENT_URL, "/carts"),
             automatic_tax: {
@@ -120,45 +118,48 @@ router.post('/create-checkout-session', checkAuthentication, function _callee(re
 }); //Create order object
 
 var createOrder = function createOrder(customer, data) {
-  var orderInstance, savedOrder;
+  var _ref;
+
+  var products, orderInstance, savedOrder;
   return regeneratorRuntime.async(function createOrder$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
-          Items = JSON.stringify(customer.metadata.cart);
-          orderInstance = new Order({
+          items = JSON.stringify(customer.metadata.cart);
+          products = items.map(function (item) {
+            return {
+              product_id: item.id,
+              quantity: item.quantity
+            };
+          });
+          orderInstance = new Order((_ref = {
             user_id: customer.metadata.user_id,
             customerId: data.customer,
             paymentIntentId: data.payment_intent,
-            products: data.product_data,
-            // products:data.products,
-            subtotal: data.amount_subtotal,
-            total: data.amount_total,
-            shipping: data.customer_details,
-            payment_status: data.payment_status
-          });
-          _context2.prev = 2;
-          _context2.next = 5;
+            products: data.product_data
+          }, _defineProperty(_ref, "products", products), _defineProperty(_ref, "subtotal", data.amount_subtotal), _defineProperty(_ref, "total", data.amount_total), _defineProperty(_ref, "shipping", data.customer_details), _defineProperty(_ref, "payment_status", data.payment_status), _ref));
+          _context2.prev = 3;
+          _context2.next = 6;
           return regeneratorRuntime.awrap(orderInstance.create());
 
-        case 5:
+        case 6:
           savedOrder = _context2.sent;
           //send email
           console.log("Processed Order: " + savedOrder);
-          _context2.next = 12;
+          _context2.next = 13;
           break;
 
-        case 9:
-          _context2.prev = 9;
-          _context2.t0 = _context2["catch"](2);
+        case 10:
+          _context2.prev = 10;
+          _context2.t0 = _context2["catch"](3);
           console.log(_context2.t0);
 
-        case 12:
+        case 13:
         case "end":
           return _context2.stop();
       }
     }
-  }, null, null, [[2, 9]]);
+  }, null, null, [[3, 10]]);
 }; //Stripe webhookEndpoint
 // This is  Stripe CLI webhook secret for testing  endpoint locally.
 

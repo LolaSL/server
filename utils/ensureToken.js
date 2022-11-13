@@ -1,53 +1,36 @@
-// const UserModel = require('../models/UserModel');
-// const userInstance = new UserModel();
+require('dotenv').config({ override: true });
+const jwt = require('jsonwebtoken');
 
 
 const ensureToken = (req, res, next) => {
+  const secretKey = process.env.JWT_TOKEN_SECRET;
   const authHeader = req.headers['authorization']
   if (typeof authHeader !== 'undefined') {
     const bearer = authHeader.split(" ");
     const bearerToken = bearer[1];
-    req.token = bearerToken;
+  
+req.token= bearerToken;
+    const decoded = jwt.decode(bearerToken);
+    console.log(decoded, token)
     next();
 
-  } else {
-    res.sendStatus(403);
+
+   jwt.verify(bearerToken, secretKey, (error, user) => {
+
+
+      //if the user is verified
+     req.user = user;
+           if (error) return res.status(403).json({ message: "Forbidden Access:Token Expired!" });
+     
+      next(); //move on
+    }); 
+
+    }
   }
-}
-
-// const isUser = (req, res, next) => {
-//   ensureToken(req, res, () => {
-//     if (req.user.id === req.params.id || req.user.isAdmin) {
-//       next();
-//     } else {
-//       res.status(403).send("Access denied. Not authorized...");
-//     }
-//   });
-// };
-
-// isAdmin = async (req, res, next) => {
-//   const decode = jwt.verify(req.token, secretKey)
-//     req.user = await userInstance.getRoles( decode.id).select('admin')
-//     if (!req.user.admin) {
-//      res.status(403).send({
-//       message: "Require Admin Role!"
-//     });next();
-//   }
-
- 
-// }
 
 
 
 
-
-
-// const authJwt = {
-//   ensureToken: ensureToken,
-//   isAdmin: isAdmin,
-//   // isUser: isUser
-
-// };
 
 module.exports = ensureToken;
 

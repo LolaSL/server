@@ -9,12 +9,7 @@ var productCartRouter = require('./productCartRouter');
 var _require = require('../config/passportConfig'),
     checkAuthentication = _require.checkAuthentication;
 
-var cartInstance = new Cartmodel();
-
-var _require2 = require("../utils/ensureToken"),
-    ensureToken = _require2.ensureToken,
-    isAdmin = _require2.isAdmin; //Id check middleware
-
+var cartInstance = new Cartmodel(); //Id check middleware
 
 cartRouter.use('/:id', checkAuthentication, function _callee(req, res, next) {
   var carts;

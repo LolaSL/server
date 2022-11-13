@@ -5,17 +5,17 @@ var Joi = require('joi').extend(require('@joi/date'));
 module.exports = {
   orderSchema: {
     body: Joi.object({
-      userId: Joi.String().required(),
-      customerId: Joi.String().required(),
-      paymentIntentId: Joi.String().required(),
+      id: Joi.String().required(),
+      user_id: Joi.String().required(),
+      status: Joi.String().required(),
+      created_at: Joi.Date().required(),
+      total_price: Joi.Number().required(),
+      modified: Joi.Date().required(),
       products: [{
-        productId: Joi.String(),
+        order_items: Joi.String().required(),
+        product_id: Joi.String(),
         quantity: Joi.Number().min(1)
-      }],
-      subtotal: Joi.Number().required(),
-      total: Joi.Number().required(),
-      shipping: Joi.Object().required(),
-      payment_status: Joi.String().required()
+      }]
     })
   }
 };

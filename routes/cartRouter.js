@@ -3,7 +3,7 @@ const Cartmodel = require('../models/CartModel');
 const productCartRouter = require('./productCartRouter');
 const { checkAuthentication } = require('../config/passportConfig');
 const cartInstance = new Cartmodel();
-const { ensureToken, isAdmin } = require("../utils/ensureToken");
+
 
 //Id check middleware
 cartRouter.use('/:id',  checkAuthentication, async (req, res, next) => {

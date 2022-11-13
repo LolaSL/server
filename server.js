@@ -53,6 +53,7 @@ app.use(session({
     },
 
 }));
+console.log(process.env.SESS_SECRET)
 // 
 
 app.use(function (req, res, next) {

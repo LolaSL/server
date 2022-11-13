@@ -24,7 +24,7 @@ function () {
   _createClass(Cartmodel, [{
     key: "createCart",
     value: function createCart(data) {
-      var text, inputs;
+      var text, inputs, result;
       return regeneratorRuntime.async(function createCart$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -36,19 +36,20 @@ function () {
               return regeneratorRuntime.awrap(query(text, inputs));
 
             case 5:
-              return _context.abrupt("return", _context.sent);
+              result = _context.sent;
+              return _context.abrupt("return", result.rows[0]);
 
-            case 8:
-              _context.prev = 8;
+            case 9:
+              _context.prev = 9;
               _context.t0 = _context["catch"](2);
               throw _context.t0.stack;
 
-            case 11:
+            case 12:
             case "end":
               return _context.stop();
           }
         }
-      }, null, null, [[2, 8]]);
+      }, null, null, [[2, 9]]);
     }
   }, {
     key: "getCartByUserId",

@@ -2,22 +2,20 @@
 
 var jwt = require("jsonwebtoken");
 
-secretKey = process.env.JWT_SECRET;
-
 var generateAuthToken = function generateAuthToken(user) {
+  secretKey = process.env.JWT_TOKEN_SECRET;
+  console.log(process.env.JWT_TOKEN_SECRET);
   var token = jwt.sign({
-    firstName: user.firstName,
-    lastName: user.lastName,
+    first_name: user.first_name,
+    last_name: user.last_name,
     email: user.email,
     password: user.password
   }, secretKey, {
     algorithm: 'HS256'
   }, {
-    expiresIn: "24h"
+    expiresIn: "2h"
   });
-  console.log({
-    token: token
-  });
+  console.log(token);
   return token;
 };
 

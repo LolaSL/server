@@ -24,13 +24,11 @@ var userInstance = new Usermodel();
 var authRouter = require('express').Router();
 
 var _require4 = require("../utils/generateAuthToken"),
-    generateAuthToken = _require4.generateAuthToken; // const { checkAuthentication } = require('../config/passportConfig');
-// const { ensureToken } = require('../utils/ensureToken');
-//Autherization Routes
+    generateAuthToken = _require4.generateAuthToken; //Autherization Routes
 
 
 authRouter.post('/register', validate(registerSchema), function _callee(req, res, next) {
-  var data, userCheck, bcryptPassword, token;
+  var user, userCheck, bcryptPassword, token;
   return regeneratorRuntime.async(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
@@ -45,10 +43,10 @@ authRouter.post('/register', validate(registerSchema), function _callee(req, res
           }));
 
         case 2:
-          data = req.body; //Check if email exists   
+          user = req.body; //Check if email exists   
 
           _context.next = 5;
-          return regeneratorRuntime.awrap(userInstance.getByEmail(data.email));
+          return regeneratorRuntime.awrap(userInstance.getByEmail(req.body.email));
 
         case 5:
           userCheck = _context.sent;
@@ -58,30 +56,32 @@ authRouter.post('/register', validate(registerSchema), function _callee(req, res
             break;
           }
 
-          return _context.abrupt("return", res.status(401).send('Email already in use'));
+          return _context.abrupt("return", res.status(400).send('Email already in use'));
 
         case 8:
           _context.next = 10;
-          return regeneratorRuntime.awrap(hashPassword(data.password));
+          return regeneratorRuntime.awrap(hashPassword(req.body.password));
 
         case 10:
           bcryptPassword = _context.sent;
-          data.password = bcryptPassword; //Create new user
+          user.password = bcryptPassword; //Create new user and token
 
           _context.prev = 12;
           _context.next = 15;
-          return regeneratorRuntime.awrap(userInstance.create(data));
+          return regeneratorRuntime.awrap(userInstance.create(user));
 
         case 15:
-          token = generateAuthToken(data);
-          res.send(token);
+          token = generateAuthToken(user);
+          res.status(201).json({
+            token: token
+          });
           _context.next = 23;
           break;
 
         case 19:
           _context.prev = 19;
           _context.t0 = _context["catch"](12);
-          res.status(401).send(_context.t0);
+          res.status(400).send(_context.t0);
           next();
 
         case 23:
@@ -94,20 +94,20 @@ authRouter.post('/register', validate(registerSchema), function _callee(req, res
 
 authRouter.post('/login', validate(loginSchema), passport.authenticate('local', {
   failureFlash: true
-}), function (req, res, next) {
+}), function (req, res) {
   try {
     var user = req.user;
     console.log({
       user: user
     });
-    var token = generateAuthToken(user, user.user_roles);
+    var token = generateAuthToken(user);
     res.json({
       token: token,
-      message: "".concat(user.first_name, " is logged in; ").concat(user.user_role, " "),
+      message: "".concat(user.first_name, " is logged in;  ").concat(user.user_role, " "),
       expires_in: '1800s'
     });
   } catch (err) {
-    next(err);
+    console.log(err);
   }
 }); //Logout Route
 

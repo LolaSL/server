@@ -8,45 +8,43 @@ const passport = require('passport');
 const userInstance = new Usermodel();
 const authRouter = require('express').Router();
 const { generateAuthToken } = require("../utils/generateAuthToken");
-// const { checkAuthentication } = require('../config/passportConfig');
-// const { ensureToken } = require('../utils/ensureToken');
+
 
 //Autherization Routes
 authRouter.post('/register', validate(registerSchema), async (req, res, next) => {
   if (req.user) return res.status(401).json({ message: 'Please log out to create a new user.' });
-  let data = req.body;
+  const user = req.body;
   //Check if email exists   
-  let userCheck = await userInstance.getByEmail(data.email);
+  let userCheck = await userInstance.getByEmail( req.body.email);
   if (userCheck) {
-    return res.status(401).send('Email already in use');
+    return res.status(400).send('Email already in use');
   }
 
   //Hash password
-  const bcryptPassword = await hashPassword(data.password);
-  data.password = bcryptPassword;
+  const bcryptPassword = await hashPassword( req.body.password);
+  user.password = bcryptPassword;
 
-  //Create new user
+  //Create new user and token
   try {
-    await userInstance.create(data);
-    const token = generateAuthToken(data);
-    res.send( token);
+    await userInstance.create(user);
+    const token = generateAuthToken(user);
+    res.status(201).json({ token: token});
   } catch (err) {
-    res.status(401).send(err);
+    res.status(400).send(err);
     next()
   }
 
 });
 //login Route
-authRouter.post('/login', validate(loginSchema), passport.authenticate('local', { failureFlash: true }), (req, res, next) => {
+authRouter.post('/login', validate(loginSchema), passport.authenticate('local', { failureFlash: true }), (req, res) => {
   try {
-    const user = req.user;
+    const  user  = req.user;
     console.log({ user })
-    const token = generateAuthToken(user, user.user_roles);
-    res.json({ token, message: `${user.first_name} is logged in; ${user.user_role} `, expires_in: '1800s' });
+    const token = generateAuthToken(user);
+    res.json({  token:token, message: `${user.first_name} is logged in;  ${user.user_role} `, expires_in: '1800s' });
   } catch (err) {
-    next(err);
+   console.log(err);
   }
-
 
 });
 
@@ -55,7 +53,7 @@ authRouter.get('/logout', (req, res) => {
 
   req.logout();
   res.json({ message: 'User logged out' });
-})
+}) 
 
 //Catch validation errors
 authRouter.use((err, req, res, next) => {

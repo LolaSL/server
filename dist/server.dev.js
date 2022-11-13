@@ -78,7 +78,8 @@ app.use(session({
     sameSite: process.env.NODE_ENV === 'production' ? "none" : "lax",
     maxAge: TWO_HOURS
   }
-})); // 
+}));
+console.log(process.env.SESS_SECRET); // 
 
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');

@@ -17,15 +17,15 @@ function () {
   }
 
   _createClass(Order, [{
-    key: "create",
-    value: function create(data) {
+    key: "addProduct",
+    value: function addProduct(data) {
       var text, inputs;
-      return regeneratorRuntime.async(function create$(_context) {
+      return regeneratorRuntime.async(function addProduct$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              text = 'INSERT INTO orders (user_id, status, created_at,  total_price, ref, payment_metod_types, modified) VALUES ($1, $2, current_timestamp, $4, $5, $6, current_timestamp ) RETURNING id;';
-              inputs = [data, 'PENDING'];
+              text = 'INSERT INTO order_items (order_id, product_id, quantity, price ) VALUES ($1, $2, $3, (SELECT price FROM products WHERE id = $2));';
+              inputs = [data.order_id, data.product_id, data.price, data.quantity, data.id];
               _context.prev = 2;
               _context.next = 5;
               return regeneratorRuntime.awrap(query(text, inputs));
@@ -46,51 +46,52 @@ function () {
       }, null, null, [[2, 8]]);
     }
   }, {
-    key: "addProduct",
-    value: function addProduct(data) {
-      var text, inputs;
-      return regeneratorRuntime.async(function addProduct$(_context2) {
+    key: "getOrderProducts",
+    value: function getOrderProducts(data) {
+      var text, inputs, products;
+      return regeneratorRuntime.async(function getOrderProducts$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              text = 'INSERT INTO order_items (order_id, product_id, quantity, price ) VALUES ($1, $2, $3, (SELECT price FROM products WHERE id = $2));';
-              inputs = [data.order_id, data.product_id, data.price, data.quantity, data.id];
+              text = 'SELECT order_items, product_id , quantity FROM products JOIN order_items ON id = product_id WHERE order_id = $1;';
+              inputs = [data];
               _context2.prev = 2;
               _context2.next = 5;
               return regeneratorRuntime.awrap(query(text, inputs));
 
             case 5:
-              return _context2.abrupt("return", _context2.sent);
+              products = _context2.sent;
+              return _context2.abrupt("return", products.rows);
 
-            case 8:
-              _context2.prev = 8;
+            case 9:
+              _context2.prev = 9;
               _context2.t0 = _context2["catch"](2);
               throw _context2.t0.stack;
 
-            case 11:
+            case 12:
             case "end":
               return _context2.stop();
           }
         }
-      }, null, null, [[2, 8]]);
+      }, null, null, [[2, 9]]);
     }
   }, {
-    key: "getOrderProducts",
-    value: function getOrderProducts(data) {
-      var text, inputs, products;
-      return regeneratorRuntime.async(function getOrderProducts$(_context3) {
+    key: "getAllOrders",
+    value: function getAllOrders(data) {
+      var text, inputs, orders;
+      return regeneratorRuntime.async(function getAllOrders$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              text = 'SELECT order_items, product_id , quantity FROM products JOIN order_items ON id = product_id WHERE order_id = $1;';
+              text = 'SELECT * FROM orders WHERE user_id = $1';
               inputs = [data];
               _context3.prev = 2;
               _context3.next = 5;
               return regeneratorRuntime.awrap(query(text, inputs));
 
             case 5:
-              products = _context3.sent;
-              return _context3.abrupt("return", products.rows);
+              orders = _context3.sent;
+              return _context3.abrupt("return", orders.rows);
 
             case 9:
               _context3.prev = 9;
@@ -105,76 +106,46 @@ function () {
       }, null, null, [[2, 9]]);
     }
   }, {
-    key: "getAllOrders",
-    value: function getAllOrders(data) {
-      var text, inputs, orders;
-      return regeneratorRuntime.async(function getAllOrders$(_context4) {
-        while (1) {
-          switch (_context4.prev = _context4.next) {
-            case 0:
-              text = 'SELECT * FROM orders WHERE user_id = $1';
-              inputs = [data];
-              _context4.prev = 2;
-              _context4.next = 5;
-              return regeneratorRuntime.awrap(query(text, inputs));
-
-            case 5:
-              orders = _context4.sent;
-              return _context4.abrupt("return", orders.rows);
-
-            case 9:
-              _context4.prev = 9;
-              _context4.t0 = _context4["catch"](2);
-              throw _context4.t0.stack;
-
-            case 12:
-            case "end":
-              return _context4.stop();
-          }
-        }
-      }, null, null, [[2, 9]]);
-    }
-  }, {
     key: "getOrderById",
     value: function getOrderById(data) {
       var text, inputs, products, order;
-      return regeneratorRuntime.async(function getOrderById$(_context5) {
+      return regeneratorRuntime.async(function getOrderById$(_context4) {
         while (1) {
-          switch (_context5.prev = _context5.next) {
+          switch (_context4.prev = _context4.next) {
             case 0:
               text = 'SELECT * FROM orders WHERE id = $1';
               inputs = [data];
-              _context5.prev = 2;
-              _context5.next = 5;
+              _context4.prev = 2;
+              _context4.next = 5;
               return regeneratorRuntime.awrap(this.getOrderProducts(data));
 
             case 5:
-              products = _context5.sent;
-              _context5.next = 8;
+              products = _context4.sent;
+              _context4.next = 8;
               return regeneratorRuntime.awrap(query(text, inputs));
 
             case 8:
-              order = _context5.sent;
+              order = _context4.sent;
 
               if (order.rows[0]) {
-                _context5.next = 11;
+                _context4.next = 11;
                 break;
               }
 
-              return _context5.abrupt("return", order.rows[0]);
+              return _context4.abrupt("return", order.rows[0]);
 
             case 11:
               order.rows[0].products = products;
-              return _context5.abrupt("return", order.rows[0]);
+              return _context4.abrupt("return", order.rows[0]);
 
             case 15:
-              _context5.prev = 15;
-              _context5.t0 = _context5["catch"](2);
-              throw _context5.t0.stack;
+              _context4.prev = 15;
+              _context4.t0 = _context4["catch"](2);
+              throw _context4.t0.stack;
 
             case 18:
             case "end":
-              return _context5.stop();
+              return _context4.stop();
           }
         }
       }, null, this, [[2, 15]]);

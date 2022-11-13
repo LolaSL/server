@@ -8,7 +8,8 @@ module.exports = class Cartmodel {
         const text = 'INSERT INTO carts (user_id, created_at) VALUES ($1, current_timestamp);';
         const inputs = [data];
         try {
-            return await query(text, inputs);
+            const result = await query(text, inputs);
+            return result.rows[0];
         } catch (err) {
             throw err.stack;
         }

@@ -2,21 +2,7 @@ const orderRouter = require('express').Router();
 const Order = require('../models/OrderModel');
 const { checkAuthentication } = require('../config/passportConfig');
 const orderInstance = new Order();
-const { ensureToken,  isAdmin } = require("../utils/ensureToken");
 
-//Create order object
-orderRouter.post('/create', checkAuthentication, async (req, res) => {
-
-    try {
-        const { order } = req.body.order;
-        const savedOrder= await orderInstance.create(order);
-        if (result.length === 0) return res.status(400).send('No order  created');
-        // res.json(result);
-        res.status(200).send(savedOrder);
-    } catch (err) {
-        res.status(400).send(err);
-    }
-})
 //Get all orders
 orderRouter.get('/',  checkAuthentication, async (req, res) => {
 

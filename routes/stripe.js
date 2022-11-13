@@ -6,48 +6,14 @@ const router = express.Router();
 const Order = require("../models/OrderModel");
 const { checkAuthentication } = require('../config/passportConfig');
 
-router.post('/create-checkout-session', checkAuthentication,  async (req, res) => {
-  // const { items, email } = req.body;
+router.post('/create-checkout-session', checkAuthentication, async (req, res) => {
+
   const customer = await stripe.customers.create({
-    
     metadata: {
       user_id: req.body.user_id,
       cart: JSON.stringify(req.body.cart_items),
     }
   })
-//   const transformedItems = items?.cart.map((item) => ({
-//     quantity: 1,
-//     price_data: {
-//         currency: "usd",
-//         unit_amount: item.price * 100,
-//         product_data: {
-//             name: item.name,
-//             description: item.description, //description here
-//             images: [item.image],
-//         },
-//     },
-// }));
-  // const line_items = req.body.cart_items
-  //   .map(item => {
-  //     return {
-  //       price_data: {
-  //         currency: 'usd',
-  //         product_data: {
-  //           name: item.name,
-  //           images: [item.image_url],
-  //           desctiprion: item.description,
-  //           metadata: {
-  //             id: item.id,
-  //           },
-  //         },
-  //         unit_amount: item.price * 100,
-  //       },
-  //       quantity: item.cart_items.quantity,
-
-
-  //     }
-  //   }
-  // );
 
 
   const session = await stripe.checkout.sessions.create({
@@ -100,53 +66,49 @@ router.post('/create-checkout-session', checkAuthentication,  async (req, res) =
       },
     ],
     line_items: [
-
       {
         price_data: {
           currency: 'usd',
           product_data: {
-            name: 'T-shirt',
+            name: "T-shirt",
           },
-          unit_amount: 2000,
+          unit_amount: 20 * 100,
         },
         quantity: 1,
       },
     ],
     phone_number_collection: { enabled: true },
-    customer: customer.id,
-    // line_items: transformedItems,
-  //   metadata: {
-  //     email,
-  //     customer
-   
-  // },
+    // line_items,
     mode: 'payment',
+    customer: customer.id,
     success_url: `${process.env.CLIENT_URL}/carts/success`,
     cancel_url: `${process.env.CLIENT_URL}/carts`,
     automatic_tax: { enabled: false },
   });
-
   res.send({ url: session.url });
   console.log(session)
 });
 //Create order object
 
 const createOrder = async (customer, data) => {
-
-  Items = JSON.stringify(customer.metadata.cart);
-
+ items = JSON.stringify(customer.metadata.cart);
+  const products = items.map((item) => {
+    return {
+      product_id: item.id,
+      quantity: item.quantity,
+    };
+  });
   const orderInstance = new Order({
     user_id: customer.metadata.user_id,
     customerId: data.customer,
     paymentIntentId: data.payment_intent,
     products: data.product_data,
-    // products:data.products,
+    products:products,
     subtotal: data.amount_subtotal,
     total: data.amount_total,
     shipping: data.customer_details,
     payment_status: data.payment_status
   });
-
   try {
     const savedOrder = await orderInstance.create()
     //send email
@@ -158,7 +120,6 @@ const createOrder = async (customer, data) => {
 // This is  Stripe CLI webhook secret for testing  endpoint locally.
 let endpointSecret;
 endpointSecret = process.env.END_POINT_SECRET;
-
 router.post('/webhook', express.raw({ type: 'application/json' }),
   (req, res) => {
     const sig = req.headers['stripe-signature'];
@@ -195,7 +156,5 @@ router.post('/webhook', express.raw({ type: 'application/json' }),
     res.send().end();
     console.log(eventType)
   });
-
-
 
 module.exports = router;

@@ -144,17 +144,7 @@ function () {
           }
         }
       }, null, null, [[2, 9]]);
-    } // async getRoles(data) {
-    //     let text = 'SELECT * FROM users  where is_admin = $1';
-    //     let inputs = [data];
-    //     try {
-    //         const result = await pool.query(text, inputs);
-    //         return result.rows[0];
-    //     } catch (err) {
-    //         throw err.stack;
-    //     }
-    // }
-
+    }
   }, {
     key: "updateUserByEmail",
     value: function updateUserByEmail(data) {
@@ -164,7 +154,7 @@ function () {
           switch (_context5.prev = _context5.next) {
             case 0:
               text = format('UPDATE users SET %I = $1 WHERE email = $2;', data.column);
-              inputs = [data.email, data.id];
+              inputs = [data.email, data.value];
               _context5.prev = 2;
               _context5.next = 5;
               return regeneratorRuntime.awrap(pool.query(text, inputs));
@@ -184,14 +174,7 @@ function () {
           }
         }
       }, null, null, [[2, 9]]);
-    } // async updateUserByEmail({ email }) {
-    //     const { rows: user } = await pool.query(
-    //         `UPDATE users set  email = $1,  returning email, id`,
-    //         [email, id]
-    //     );
-    //     return user[0];
-    // };
-
+    }
   }, {
     key: "deleteByEmail",
     value: function deleteByEmail(data) {

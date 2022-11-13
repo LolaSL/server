@@ -7,37 +7,31 @@ var Order = require('../models/OrderModel');
 var _require = require('../config/passportConfig'),
     checkAuthentication = _require.checkAuthentication;
 
-var orderInstance = new Order();
+var orderInstance = new Order(); //Get all orders
 
-var _require2 = require("../utils/ensureToken"),
-    ensureToken = _require2.ensureToken,
-    isAdmin = _require2.isAdmin; //Create order object
-
-
-orderRouter.post('/create', checkAuthentication, function _callee(req, res) {
-  var order, savedOrder;
+orderRouter.get('/', checkAuthentication, function _callee(req, res) {
+  var id, result;
   return regeneratorRuntime.async(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
           _context.prev = 0;
-          order = req.body.order.order;
+          id = req.user.id;
           _context.next = 4;
-          return regeneratorRuntime.awrap(orderInstance.create(order));
+          return regeneratorRuntime.awrap(orderInstance.getAllOrders(id));
 
         case 4:
-          savedOrder = _context.sent;
+          result = _context.sent;
 
           if (!(result.length === 0)) {
             _context.next = 7;
             break;
           }
 
-          return _context.abrupt("return", res.status(400).send('No order  created'));
+          return _context.abrupt("return", res.status(400).send('No orders found'));
 
         case 7:
-          // res.json(result);
-          res.status(200).send(savedOrder);
+          res.json(result);
           _context.next = 13;
           break;
 
@@ -52,91 +46,51 @@ orderRouter.post('/create', checkAuthentication, function _callee(req, res) {
       }
     }
   }, null, null, [[0, 10]]);
-}); //Get all orders
+}); //Check order id
 
-orderRouter.get('/', checkAuthentication, function _callee2(req, res) {
-  var id, _result;
-
+orderRouter.get('/:id', checkAuthentication, function _callee2(req, res, next) {
+  var id, order;
   return regeneratorRuntime.async(function _callee2$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
           _context2.prev = 0;
-          id = req.user.id;
+          id = req.params.id;
           _context2.next = 4;
-          return regeneratorRuntime.awrap(orderInstance.getAllOrders(id));
+          return regeneratorRuntime.awrap(orderInstance.getOrderById(id));
 
         case 4:
-          _result = _context2.sent;
+          order = _context2.sent;
 
-          if (!(_result.length === 0)) {
+          if (order) {
             _context2.next = 7;
             break;
           }
 
-          return _context2.abrupt("return", res.status(400).send('No orders found'));
-
-        case 7:
-          res.json(_result);
-          _context2.next = 13;
-          break;
-
-        case 10:
-          _context2.prev = 10;
-          _context2.t0 = _context2["catch"](0);
-          res.status(400).send(_context2.t0);
-
-        case 13:
-        case "end":
-          return _context2.stop();
-      }
-    }
-  }, null, null, [[0, 10]]);
-}); //Check order id
-
-orderRouter.get('/:id', checkAuthentication, function _callee3(req, res, next) {
-  var id, order;
-  return regeneratorRuntime.async(function _callee3$(_context3) {
-    while (1) {
-      switch (_context3.prev = _context3.next) {
-        case 0:
-          _context3.prev = 0;
-          id = req.params.id;
-          _context3.next = 4;
-          return regeneratorRuntime.awrap(orderInstance.getOrderById(id));
-
-        case 4:
-          order = _context3.sent;
-
-          if (order) {
-            _context3.next = 7;
-            break;
-          }
-
-          return _context3.abrupt("return", res.status(400).send('No order found'));
+          return _context2.abrupt("return", res.status(400).send('No order found'));
 
         case 7:
           if (!(order.user_id !== req.user.id)) {
-            _context3.next = 9;
+            _context2.next = 9;
             break;
           }
 
-          return _context3.abrupt("return", res.status(400).send('No order found'));
+          return _context2.abrupt("return", res.status(400).send('No order found'));
 
         case 9:
           res.json(order);
           next();
-          _context3.next = 16;
+          _context2.next = 16;
           break;
 
         case 13:
-          _context3.prev = 13;
-          _context3.t0 = _context3["catch"](0);
-          res.status(400).send(_context3.t0);
+          _context2.prev = 13;
+          _context2.t0 = _context2["catch"](0);
+          res.status(400).send(_context2.t0);
 
         case 16:
         case "end":
-          return _context3.stop();
+          return _context2.stop();
       }
     }
   }, null, null, [[0, 13]]);
