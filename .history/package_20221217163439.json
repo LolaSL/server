@@ -2,10 +2,10 @@
   "name": "ecommerce-pern",
   "version": "1.0.0",
 
-
+  "engines": {
 
     "engines": {
-
+>>>>>>> c0fb04194db006e0b19ca0cfeba40eaf26df8973
     "node": "16.13.1"
   },
   "description": "ecommerce-pern API project",
