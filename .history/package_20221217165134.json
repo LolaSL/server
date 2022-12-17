@@ -1,0 +1,64 @@
+{
+  "name": "ecommerce-pern",
+  "version": "1.0.0",
+
+
+
+    "engines": {
+
+    "node": "16.13.1"
+  },
+  "description": "ecommerce-pern API project",
+  "main": "server.js",
+  "scripts": {
+    "build": "server && npm install && npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "Lola",
+  "license": "ISC",
+  "dependencies": {
+    "@joi/date": "^2.1.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.0",
+    "cookie-parser": "^1.4.6",
+    "cookie-session": "^2.0.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.0.0",
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "express-flash": "^0.0.2",
+    "express-path": "^0.3.8",
+    "express-session": "^1.17.2",
+    "express-validation": "^4.1.0",
+    "helmet": "^5.1.0",
+    "http-errors": "^2.0.0",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "jwt-decode": "^3.1.2",
+    "node-localstorage": "^2.2.1",
+    "nodemon": "^2.0.19",
+    "passport": "^0.5.2",
+    "pg": "^8.7.3",
+    "pg-format": "^1.0.4",
+    "pg-promise": "^10.11.1",
+    "stripe": "^9.0.0",
+    "swagger-jsdoc": "^6.2.1",
+    "swagger-ui-express": "^4.4.0"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cookie-parser": "^1.4.3",
+    "@types/cors": "^2.8.12",
+    "@types/express-flash": "^0.0.2",
+    "@types/express-session": "^1.17.4",
+    "@types/jsonwebtoken": "^8.5.8",
+    "@types/morgan": "^1.9.3",
+    "@types/passport": "^1.0.7",
+    "@types/passport-local": "^1.0.34",
+    "@types/pg-format": "^1.0.2",
+    "@types/swagger-ui-express": "^4.1.3"
+  }
+}
