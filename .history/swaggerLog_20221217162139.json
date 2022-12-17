@@ -1247,6 +1247,17 @@
           ]
         }
       },
+      "Payment": {
+        "type": "object",
+        "items": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "Products": {
         "type": "array",
         "items": {

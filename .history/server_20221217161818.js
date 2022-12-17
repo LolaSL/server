@@ -66,7 +66,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 loadPassport(passport);
 //Routes
-
+// app.get('/', stripe, (req, res) => {
+//     let username = req.cookies.username;
+//     res.render('index', {
+//         username
+//     })
+// })
 const options = {
     swaggerOptions: {
         validatorUrl: null,
@@ -79,7 +84,7 @@ app.use('/api/users', userRouter);
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
 app.use('/api/orders', orderRouter);
-
+app.use('/api/stripe', stripe)//Stripe payment
 
 
 app.get('/', (req, res) => {

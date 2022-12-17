@@ -867,7 +867,7 @@
           }
         }
       }
-    },
+    
     "/api/orders": {
       "get": {
         "summary": "Get all orders.",
@@ -1245,6 +1245,17 @@
               "quantity": "number"
             }
           ]
+        }
+      },
+      "Payment": {
+        "type": "object",
+        "items": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            }
+          }
         }
       },
       "Products": {

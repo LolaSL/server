@@ -866,8 +866,7 @@
             "description": "No content - Delete is successful"
           }
         }
-      }
-    },
+      },
     "/api/orders": {
       "get": {
         "summary": "Get all orders.",
@@ -1247,6 +1246,7 @@
           ]
         }
       },
+
       "Products": {
         "type": "array",
         "items": {

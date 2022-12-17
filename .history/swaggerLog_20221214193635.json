@@ -868,6 +868,30 @@
         }
       }
     },
+    "/api/stripe/create-checkout-session": {
+      "post": {
+        "summary": "Creates a Payment intent.",
+        "tags": ["Payment"],
+        "operationId": "post_payment",
+        "description": "Uses Stripe to create a Payment Intent for checkout session. Returns created object of client payment intent data.",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Payment"
+                },
+                "example": {
+                  "url": "https://checkout.stripe.com/....."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
     "/api/orders": {
       "get": {
         "summary": "Get all orders.",
@@ -1245,6 +1269,17 @@
               "quantity": "number"
             }
           ]
+        }
+      },
+      "Payment": {
+        "type": "object",
+        "items": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            }
+          }
         }
       },
       "Products": {

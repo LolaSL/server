@@ -1,17 +1,9 @@
-# dependencies
 .env
+dist
 node_modules
-/.pnp
-.pnp.js
-
-#files
-data.js
-
-# testing
-/coverage
-
-# production
-build
+.history
+users.sql
+products.sql
 
 // swagger-resources
 // webjars
