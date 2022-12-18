@@ -1,0 +1,6 @@
+{
+    "name": "Ecommerce-pern: Node.js",
+    "description": "ecommerce-pern application, server part",
+    "repository": "https://git.heroku.com/ecommerce-server.git",
+    "keywords": ["node", "express", "heroku"]
+  }
