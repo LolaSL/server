@@ -8,7 +8,7 @@
   "description": "ecommerce-pern API project",
   "main": "server.js",
   "scripts": {
-    "heroku-postbuild": " npm install && npm run build",
+    "heroku-postbuild": "  npm install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
     "swagger": "node swagger.js",
