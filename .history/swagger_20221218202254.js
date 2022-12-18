@@ -13,6 +13,6 @@ const doc = {
         }
     ]
 };
-const outputFile = require('./swaggerLog.json')
+const outputFile = require('./')
 const endpointsFiles = ['./routes/index.js']
 swaggerAutogen(outputFile, endpointsFiles, doc)

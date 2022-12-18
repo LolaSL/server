@@ -1,0 +1,27 @@
+# dependencies
+.env
+.dev
+node_modules
+/.pnp
+.pnp.js
+
+#files
+data.js
+
+# testing
+/coverage
+
+# production
+build
+
+ swagger-resources
+// webjars
+
+// @Override
+// public void configure(WebSecurity web) throws Exception {    
+//     web.ignoring().antMatchers("/v2/api-docs/**");
+//     web.ignoring().antMatchers("/swaggerLog.json");
+//     web.ignoring().antMatchers("/swagger-ui.html");
+//     web.ignoring().antMatchers("/swagger-resources/**");
+//     web.ignoring().antMatchers("/webjars/**");
+// }
