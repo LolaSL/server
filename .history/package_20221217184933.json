@@ -2,8 +2,7 @@
   "name": "ecommerce-pern",
   "version": "1.0.0",
   "engines": {
-    "node": "16.13.1",
-    "npm": "8.5.1"
+    "node": "16.13.1"
   },
   "description": "ecommerce-pern API project",
   "main": "server.js",
@@ -11,8 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
     "swagger": "node ./swagger.js",
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix",
+    "lint":"eslint"
     "format": "prettir --write './**/*{js, jsx,ts,tsx,css,md,json}'"
   },
   "keywords": [],

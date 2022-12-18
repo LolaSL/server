@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "engines": {
     "node": "16.13.1",
-    "npm": "8.5.1"
+    "npm": 8.5.1
   },
   "description": "ecommerce-pern API project",
   "main": "server.js",
