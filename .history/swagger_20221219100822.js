@@ -10,7 +10,7 @@ const doc = {
         {
             url: "https://ecommerce-server.herokuapp.com/",
             schemes: ['http'],
-            description: "Main server"
+            description": "Main server"
         }
     ]
 };

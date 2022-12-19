@@ -8,9 +8,9 @@ const doc = {
     },
     servers: [
         {
-            url: "https://ecommerce-server.herokuapp.com/",
+            url": "https://ecommerce-server.herokuapp.com/",
             schemes: ['http'],
-            description: "Main server"
+            "description": "Main server"
         }
     ]
 };
