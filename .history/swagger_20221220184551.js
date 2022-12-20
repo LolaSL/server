@@ -8,7 +8,7 @@ const doc = {
     },
     servers: [
         {
-            url: "http://localhost:8000",
+            url: "http://ecommerce-server.herokuapp.com/",
             schemes: ['http'],
             description: "Main server"
         }
