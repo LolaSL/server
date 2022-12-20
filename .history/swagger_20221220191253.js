@@ -6,12 +6,12 @@ const doc = {
         version: "1.0.0",
         description: "The Demo ecommerce api made for user, cart, and order transactions for an art products store."
     },
-    host: "localhost:8000",
-    schemes: ['http'],
-    description: "Main server"
-}
-
-
+ host: "localhost:8000",
+            schemes: ['http'],
+            description: "Main server"
+        }
+    ]
+};
 const outputFile = require('./swaggerLog.json')
 const endpointsFiles = ['./routes/index.js']
 swaggerAutogen(outputFile, endpointsFiles, doc)
