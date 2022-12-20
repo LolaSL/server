@@ -66,7 +66,7 @@ app.use("/", router);
 
 app.get("/", (req, res) => {
 
-    res.redirect('/api-docs/',
+    res.redirect('/api-docs',
     );
 })
 

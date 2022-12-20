@@ -61,12 +61,12 @@ app.use(passport.session());
 loadPassport(passport);
 //Routes
 
-app.use("/", router);
+app.use("/api", router);
 
 
 app.get("/", (req, res) => {
 
-    res.redirect('/api-docs/',
+    res.redirect('/api-docs',
     );
 })
 

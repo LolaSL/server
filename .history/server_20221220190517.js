@@ -64,9 +64,9 @@ loadPassport(passport);
 app.use("/", router);
 
 
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
 
-    res.redirect('/api-docs/',
+    res.redirect('/api-docs',
     );
 })
 

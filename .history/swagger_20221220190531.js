@@ -8,7 +8,7 @@ const doc = {
     },
     servers: [
         {
-            url: "http://localhost:8000/api-docs/",
+            url: "http://localhost:8000/",
             schemes: ['http'],
             description: "Main server"
         }
