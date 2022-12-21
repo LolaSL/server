@@ -14,9 +14,10 @@ const logger = require('morgan');
 const TWO_HOURS = 60 * 60 * 1000 * 13;
 const methodOverride = require('method-override');
 const router = require("./routes/index");
- 
+ process.env.PORT || 8080
 const app = express();
 
+console.log()
 
 app.use(helmet());
 app.use(flash());

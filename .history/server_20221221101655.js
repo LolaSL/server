@@ -17,6 +17,7 @@ const router = require("./routes/index");
  
 const app = express();
 
+console.log(process.env.PORT || 8080)
 
 app.use(helmet());
 app.use(flash());
