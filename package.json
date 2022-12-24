@@ -17,11 +17,13 @@
     "lint:fix": "eslint --fix",
     "format": "prettir --write './**/*{js, jsx,ts,tsx,css,md,json}'"
   },
-  "keywords": [  "postgresql",
-  "express.js",
-  "nodejs",
-  "ecommerce",
-  "fullstack"],
+  "keywords": [
+    "postgresql",
+    "express.js",
+    "nodejs",
+    "ecommerce",
+    "fullstack"
+  ],
   "author": "Lola",
   "email": "lolashepota@gmail.com",
   "license": "ISC",
@@ -45,6 +47,7 @@
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.1.2",
+    "morgan": "^1.10.0",
     "node-localstorage": "^2.2.1",
     "nodemon": "^2.0.19",
     "passport": "^0.5.2",
