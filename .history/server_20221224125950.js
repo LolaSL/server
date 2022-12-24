@@ -1,7 +1,6 @@
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config({ override: true });
 }
-
 const express = require('express');
 const helmet = require("helmet");
 const bodyParser = require('body-parser');
@@ -15,17 +14,10 @@ const logger = require('morgan');
 const TWO_HOURS = 60 * 60 * 1000 * 13;
 const methodOverride = require('method-override');
 const router = require("./routes/index");
-const PORT = process.env.PORT || 8080;
-const path = require('path');
-
+const PORT =  
 
 const app = express();
-app.use(express.static(path.join(__dirname, './server/build')));
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, './server/build')));
-}
-console.log(__dirname);
-console.log(path.join(__dirname, 'server/build'));
+
 
 app.use(helmet());
 app.use(flash());
@@ -92,8 +84,8 @@ app.use((error, req, res, next) => {
 })
 
 
-app.listen(PORT, () => {
-    console.log(`Server is listening on http://localhost:${PORT}`)
+app.listen( process.env.PORT || 8080, () => {
+    console.log(`Server is listening on http://localhost:${ process.env.PORT || 8080}`)
 });
 
 

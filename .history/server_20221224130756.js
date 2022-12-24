@@ -20,12 +20,7 @@ const path = require('path');
 
 
 const app = express();
-app.use(express.static(path.join(__dirname, './server/build')));
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, './server/build')));
-}
-console.log(__dirname);
-console.log(path.join(__dirname, 'server/build'));
+
 
 app.use(helmet());
 app.use(flash());
