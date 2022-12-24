@@ -5,7 +5,7 @@ const { validate, ValidationError } = require('express-validation');
 const UserModel = require('../models/UserModel');
 const { updateSchema } = require('../func_schemas/validateSchemas');
 const { hashPassword } = require('../func_schemas/validateFunction');
-const { checkAuthentication } = require('../passportConfig');
+const { checkAuthentication } = require('..passportConfig/');
 
 
 

@@ -1,4 +1,4 @@
-if (process.env.NODE_ENV !== 'production npm start') {
+if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config({ override: true });
 }
 
@@ -10,7 +10,7 @@ const cookieParser = require('cookie-parser');
 const session = require('cookie-session');
 const passport = require('passport');
 const flash = require('express-flash');
-const { loadPassport } = require('./passportConfig');
+const { loadPassport } = require('./config/passportConfig');
 const logger = require('morgan');
 const TWO_HOURS = 60 * 60 * 1000 * 13;
 const methodOverride = require('method-override');

@@ -1,6 +1,6 @@
 const orderRouter = require('express').Router();
 const Order = require('../models/OrderModel');
-const { checkAuthentication } = require('../passportConfig');
+const { checkAuthentication } = require('../config/passportConfig');
 const orderInstance = new Order();
 
 //Get all orders

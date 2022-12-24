@@ -12,6 +12,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server/server.js",
     "dev": "nodemon server/server.js",
+    "build": "npm build --production",
     "swagger": "node swagger.js",
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
@@ -19,11 +20,11 @@
   },
   "keywords": [  "postgresql",
   "express.js",
+
   "nodejs",
   "ecommerce",
   "fullstack"],
   "author": "Lola",
-  "email": "lolashepota@gmail.com",
   "license": "ISC",
   "dependencies": {
     "@joi/date": "^2.1.0",
