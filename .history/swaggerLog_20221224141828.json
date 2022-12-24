@@ -1,0 +1,1281 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Ecommerce API",
+    "version": "1.0.0",
+    "description": "The Demo ecommerce api made for user, cart, and order transactions for an art products store."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000/",
+      "description": "Main server"
+    }
+  ],
+  "paths": {
+    "/api/products": {
+      "get": {
+        "summary": "Returns all products.",
+        "description": "This path gets all products from the database store and returns them in order of id.",
+        "operationId": "get_products",
+        "tags": ["Products"],
+        "responses": {
+          "200": {
+            "description": "All product objects returned to an array.",
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "id": 1,
+                    "name": "Abstract cityscape",
+                    "author": "Andrej Ostapchuk",
+                    "description": "The picture with a volume and a depth of space.",
+                    "category": "Abstract",
+                    "image_url": "https://images.saatchiart.com/saatchi/1084989/art/7790864/6858846-RZZCVXSC-7.jpg",
+                    "status": "Active",
+                    "price": 1299
+                  },
+                  {
+                    "id": 2,
+                    "name": "Cherries",
+                    "author": "Tognet",
+                    "description": "This unique and original contemporary artwork 'Cherries'.",
+                    "category": "Impressionistic",
+                    "image_url": "https://cdn.carredartistes.com/products_images/prod_89051/f_bernard-tognet-tobea069-front-0.jpg",
+                    "status": "Active",
+                    "price": 265
+                  },
+                  "..."
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/products/{productId}": {
+      "get": {
+        "summary": "Get the product object by product id.",
+        "description": "This path is using id parameter. Product object is fetched from database.",
+        "operationId": "get_product_id",
+        "tags": ["Products"],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "The id of the product.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns product with id matched to the id parameter.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 2,
+                  "name": "Cherries",
+                  "author": "Tognet",
+                  "description": "This unique and original contemporary artwork 'Cherries'.",
+                  "category": "Impressionistic",
+                  "image_url": "https://cdn.carredartistes.com/products_images/prod_89051/f_bernard-tognet-tobea069-front-0.jpg",
+                  "status": "Active",
+                  "price": 265
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error for inavlid product id.",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Invalid product number"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/register": {
+      "summary": "Input user data to register.",
+      "description": "This path is for creating an account to add items to user cart for further purchases.",
+      "post": {
+        "summary": "Creates an account for a new user.",
+        "description": "Creates an account for a new user.",
+        "operationId": "post_register",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "description": "Object for creating new user. Password must be at least 8 characters long. Email must match to email syntax.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Registration"
+              },
+              "example": {
+                "email": "",
+                "password": "",
+                "first_name": "",
+                "last_name": "",
+                "address": "",
+                "postcode": "",
+                "city": "",
+                "country": ""
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created. Token was created.",
+            "content": {
+              "text/plain": {
+                "example": {
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNoZWNrX3JlZ2lzdGVyMkBleGFtcGxlLmNvbSIsInBhc3N3b3JkIjoiJDJhJDA5JHRWUXpzVGxiTWkvLldTUmpiLmJpRy5vMDF4WXhaSk1senE5b1dLODEzRmhlaHE5UHV0dzIyIiwiaWF0IjoxNjY3OTMzODIxfQ.Qo8Vqt7ElcMD8rf-ayM5lMWGmcFd2ywtCszNukRwoLs"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid entries in request body",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Email is already in use"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/login": {
+      "summary": "Login to your account.",
+      "description": "This path is for loging in to your account to access account functions.",
+      "post": {
+        "summary": "Login to your account.",
+        "description": "Enter your email and password to login with Passport and access your user info, cart, and orders. Passport starts a session and keeps you logged in until you send a GET request to /api/logout.",
+        "operationId": "post_login",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "description": "Object for logging into account. Password must be at least 8 characters long. Email must match to email syntax.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
+              },
+              "example": {
+                "email": "",
+                "password": ""
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User is logged in.",
+            "content": {
+              "text/plain": {
+                "example": "User is logged in."
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid entries in request body.",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Email/Password is not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/logout": {
+      "summary": "Logs user out.",
+      "description": "This path is for logging a user out and ending the session.",
+      "get": {
+        "summary": "Logs user out",
+        "description": "This path is for logging a user out and ending the session.",
+        "operationId": "get_logout",
+        "tags": ["Authentication"],
+        "responses": {
+          "200": {
+            "description": "User is logged out and ending the session.",
+            "content": {
+              "text/plain": {
+                "example": "Logout is Successful"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users": {
+      "get": {
+        "summary": "Returns all users in the database.",
+        "description": "This path gets all users from the database store and returns them in order of id.",
+        "operationId": "get_users",
+        "tags": ["Users"],
+        "responses": {
+          "200": {
+            "description": "All users objects returned to an array.",
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "id": 42,
+                    "email": "2_test_test@example.com",
+                    "password": "********",
+                    "first_name": "TestTestTest2",
+                    "last_name": "TestTestTest2",
+                    "address": "TEST11112, 00/11",
+                    "postcode": "11112",
+                    "city": "TEST11112",
+                    "country": "TEST11112",
+                    "date_joined": "2022-07-03T17:19:11.849Z",
+                    "active": true,
+                    "user_role": "customer",
+                    "modified": "2022-07-03T21:00:00.000Z"
+                  },
+                  {
+                    "id": 43,
+                    "email": "3_test_test@example.com",
+                    "password": "********",
+                    "first_name": "TestTestTest3",
+                    "last_name": "TestTestTest3",
+                    "address": "TEST11113, 00/11",
+                    "postcode": "11113",
+                    "city": "TEST11113",
+                    "country": "TEST11113",
+                    "date_joined": "2022-07-03T17:24:17.630Z",
+                    "active": true,
+                    "user_role": "customer",
+                    "modified": "2022-07-03T21:00:00.000Z"
+                  },
+                  {
+                    "id": 44,
+                    "email": "4_test_test@example.com",
+                    "password": "********",
+                    "first_name": "TestTestTest4",
+                    "last_name": "TestTestTest4",
+                    "address": "TEST11114, 00/11",
+                    "postcode": "11114",
+                    "city": "TEST11114",
+                    "country": "TEST11114",
+                    "date_joined": "2022-07-04T06:56:45.079Z",
+                    "active": true,
+                    "user_role": "customer",
+                    "modified": "2022-07-03T21:00:00.000Z"
+                  },
+                  "..."
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/{userId}": {
+      "summary": "Access user account.",
+      "description": "Path for accessing and updating user account information.",
+      "get": {
+        "summary": "Get user account information.",
+        "description": "This path fetches user account information if logged in with Passport. Password not shown with info.",
+        "operationId": "get_userId",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "The id of the user.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "tags": ["Users"],
+        "responses": {
+          "200": {
+            "description": "Object is containing user info by id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Users"
+                },
+                "example": {
+                  "email": "test_for_test@example.com",
+                  "password": "********",
+                  "first_name": "Test",
+                  "last_name": "Testtest",
+                  "address": "Test, 00/11",
+                  "postcode": "010101",
+                  "city": "Test",
+                  "country": "Test",
+                  "date_joined": "2022-05-18T13:33:52.412Z",
+                  "active": true,
+                  "user_role": "customer",
+                  "modified": "2022-09-11T21:00:00.000Z",
+                  "is_admin": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update account information.",
+        "description": "Update account information - email if logged in with Passport.",
+        "operationId": "put_userId",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "The email of the user to update.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "tags": ["Users"],
+        "requestBody": {
+          "description": "Update user email by sending new email, changed in key value pairs.\nPossible send one or many updates in the same request body.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Users"
+              },
+              "examples": {
+                "email change": {
+                  "value": {
+                    "email": ""
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful update response",
+            "content": {
+              "text/plain": {
+                "example": {
+                  "email": "check_registration@example.com"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Information entered does not fit schema.",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Invalid entries"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletes user account",
+        "description": "This path deletes user account from the database. Make sure you want to delete because there is no any recovery proccess.",
+        "operationId": "delete_userId",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "Delete id of the user.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "tags": ["Users"],
+        "responses": {
+          "204": {
+            "description": "User deleted Successfully!"
+          }
+        }
+      }
+    },
+
+    "/api/carts": {
+      "description": "Access users carts",
+      "get": {
+        "summary": "Get user cart information.",
+        "description": "This path fetches user cart information; also fetches multiple carts if user has multiple carts. Uses user id from passport Loggin.",
+        "operationId": "get_carts",
+        "tags": ["Cart"],
+        "responses": {
+          "200": {
+            "description": "Returns array of user's cart object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Carts"
+                },
+                "example": [
+                  {
+                    "id": 4,
+                    "user_id": 22,
+                    "created_at": "2022-05-18T13:54:53.660Z",
+                    "modified": "2022-06-04T10:25:39.235"
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "No any carts under your user id",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "No any carts found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Creates a new cart.",
+        "description": "Creates a new cart using the user id provided by your Passport loggin.",
+        "operationId": "post_carts",
+        "tags": ["Cart"],
+        "responses": {
+          "201": {
+            "description": "Cart is created",
+            "content": {
+              "text/plain": {
+                "example": "Cart is created"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/carts/{cartId}": {
+      "description": "Preform CRUD operations on a cart based on cart id from parameters and user id provided by your Passport loggin.",
+      "get": {
+        "summary": "Get cart by cart id.",
+        "description": "This path fetches user cart information based on cart id and the user id provided by your Passport loggin.",
+        "operationId": "get_carts_id",
+        "tags": ["Cart"],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "Cart id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns cart object matching to provided cart id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cart"
+                },
+                "example": {
+                  "id": 4,
+                  "user_id": 22,
+                  "created": "2022-05-18T13:54:53.660Z",
+                  "modified": "2022-09-18T13:51:34.508Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid cart id.",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Invalid cart id"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete cart by cart id.",
+        "description": "This path delete cart based on cart id from the parameters and user id provided by your Passport loggin.",
+        "operationId": "delete_carts_id",
+        "tags": ["Cart"],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "Cart id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content - cart is deleted"
+          }
+        }
+      }
+    },
+    "/api/carts/{cartId}/checkout": {
+      "get": {
+        "summary": "Submit cart for checkout",
+        "description": "Creates a new order using all products in the selected cart (parameters) and the user id provided by your Passport loggin.",
+        "operationId": "get_carts_checkout",
+        "tags": ["Cart/Checkout"],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "Cart id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns id of the new order that was created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Checkout"
+                },
+                "example": {
+                  "order_id": 4
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No items in cart",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Cart empty. No payment processed"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/carts/{cartId}/items": {
+      "get": {
+        "summary": "Gets all items in cart",
+        "description": "This path fetches all items in the selected cart (cart id from parameter and user id provided by your Passport loggin).",
+        "operationId": "get_cart_items",
+        "tags": ["Cart/Items"],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "Cart id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All product objects in cart returned in an array.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductAllCart"
+                },
+                "example": [
+                  {
+                    "id": 1,
+                    "name": "Abstract cityscape",
+                    "author": "Andrej Ostapchuk",
+                    "description": "The picture with a volume and a depth of space.",
+                    "category": "Abstract",
+                    "status": "Active",
+                    "price": 1299,
+                    "quantity": 1
+                  },
+                  {
+                    "id": 15,
+                    "name": "Dragon",
+                    "author": "Netsuke",
+                    "description": "Dragon. Ivory, Meiji-Period (1868 - 1912)",
+                    "category": "Netsuke",
+                    "status": "Active",
+                    "price": 25056,
+                    "quantity": 1
+                  },
+                  "..."
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "No items in cart",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Cart Empty"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add item to cart",
+        "description": "Add item to the selected cart (cart id from parameter and user id provided by your Passport loggin).",
+        "operationId": "post_cart_items",
+        "tags": ["Cart/Items"],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "Cart id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Submit product id and quantity in request body.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductAdd"
+              },
+              "example": {
+                "product_id": 1,
+                "quantity": 2
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item added to cart",
+            "content": {
+              "text/plain": {
+                "example": "Product added"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid product id",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Invalid product Id"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/carts/{cartId}/items/{itemId}": {
+      "get": {
+        "summary": "Get item in cart by item id",
+        "description": "This path fetch item from the selected cart (cart id from parameter and user id provided by your Passport loggin) by item id.",
+        "operationId": "get_cart_item_id",
+        "tags": ["Cart/Items"],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "Cart id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "itemId",
+            "in": "path",
+            "description": "Product id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns product object that matched input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductSingleCart"
+                },
+                "example": {
+                  "id": 15,
+                  "name": "Dragon",
+                  "author": "Netsuke",
+                  "description": "Dragon. Ivory, Meiji-Period (1868 - 1912)",
+                  "category": "Netsuke",
+                  "status": "Active",
+                  "price": 25056,
+                  "quantity": 1
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Product with selected id not in cart",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Product not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update item quantity in cart",
+        "description": "Update item quantity in selected cart (cart id from parameter and user id provided by your Passport loggin.) by item id.",
+        "operationId": "put_cart_item_id",
+        "tags": ["Cart/Items"],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "Cart id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "itemId",
+            "in": "path",
+            "description": "Product id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Submit updated quantity in request body.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateQty"
+              },
+              "example": {
+                "quantity": 5
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Quantity is updated successfully",
+            "content": {
+              "text/plain": {
+                "example": "Quantity is updated"
+              }
+            }
+          },
+          "400": {
+            "description": "Product with selected id is not in the cart",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Product is not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Removes item from cart",
+        "description": "Removes item from selected cart (cart id from parameter and user id provided by your Passport loggin) by item id.",
+        "operationId": "delete_cart_item_id",
+        "tags": ["Cart/Items"],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "Cart id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "itemId",
+            "in": "path",
+            "description": "Product id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content - Delete is successful"
+          }
+        }
+      }
+    },
+    "/api/orders": {
+      "get": {
+        "summary": "Get all orders.",
+        "description": "This path fetches all orders for your account. User id for fetching accounts is provided by your Passport loggin.",
+        "operationId": "get_orders",
+        "tags": ["Orders"],
+        "responses": {
+          "200": {
+            "description": "All order objects sent in an array.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrdersAll"
+                },
+                "example": [
+                  {
+                    "id": 3,
+                    "user_id": 22,
+                    "status": "PENDING",
+                    "created_at": "2022-05-18T15:41:11.354Z",
+                    "modified": "2022-05-24T18:15:40.269Z",
+                    "total_price": "$712,500.00"
+                  },
+                  {
+                    "id": 4,
+                    "user_id": 22,
+                    "status": "PENDING",
+                    "created_at": "2022-05-21T11:46:44.626Z",
+                    "modified": "2022-05-24T18:16:20.614Z",
+                    "total_price": "$189,990.00"
+                  },
+                  {
+                    "id": 5,
+                    "user_id": 22,
+                    "status": "PENDING",
+                    "created_at": "2022-05-21T12:01:18.897Z",
+                    "modified": "2022-05-24T18:16:42.857Z",
+                    "total_price": "$25,056.00"
+                  },
+                  "..."
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "No orders found.",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "No orders found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/orders/{orderId}": {
+      "get": {
+        "summary": "Get order by order id.",
+        "description": "This path fetches an order from your account (user id provided by your Passport loggin) that matches the order id provided (parameters).\nProducts in order are attached in an array to the order object.",
+        "operationId": "get_orders_id",
+        "tags": ["Orders"],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "Order id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns order object with id matching the parameters. Products in order are attatched in array.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrdersAll"
+                },
+                "example": {
+                  "id": 4,
+                  "user_id": 22,
+                  "status": "PENDING",
+                  "created_at": "2022-05-21T11:46:44.626Z",
+                  "modified": "2022-05-24T18:16:20.614Z",
+                  "total_price": "$189,990.00",
+                  "products": [
+                    {
+                      "order_items": "(4,4,3,\"$189,990.00\")",
+                      "product_id": 4,
+                      "quantity": 3
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Order with that id is not found",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error": {
+                    "value": "Order is not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Registration": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "postcode": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          }
+        }
+      },
+      "Login": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "Users": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "postcode": {
+            "type": "integer"
+          },
+          "city": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "date_joined": {
+            "type": "date"
+          },
+          "active": {
+            "type": "string"
+          },
+          "user_role": {
+            "type": "string"
+          },
+          "modified": {
+            "type": "date"
+          },
+          "is_admin": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Carts": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "user_id": {
+              "type": "integer"
+            },
+            "created": {
+              "type": "string"
+            },
+            "modified": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Cart": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "user_id": {
+            "type": "integer"
+          },
+          "created": {
+            "type": "string"
+          },
+          "modified": {
+            "type": "string"
+          }
+        }
+      },
+      "Checkout": {
+        "type": "object",
+        "properties": {
+          "order_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "ProductAllCart": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "author": {
+              "type": "string"
+            },
+            "price": {
+              "type": "numeric"
+            },
+            "category": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "quantity": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "ProductAdd": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "integer"
+          },
+          "quantity": {
+            "type": "integer"
+          }
+        }
+      },
+      "ProductSingleCart": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          },
+          "price": {
+            "type": "numeric"
+          },
+          "category": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer"
+          }
+        }
+      },
+      "UpdateQty": {
+        "type": "object",
+        "properties": {
+          "quantity": {
+            "type": "integer"
+          }
+        }
+      },
+      "OrdersAll": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "user_id": {
+              "type": "integer"
+            },
+            "order_price": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            },
+            "created": {
+              "type": "string"
+            },
+            "modified": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Orders": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "user_id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string"
+          },
+          "total_price": {
+            "type": "string"
+          },
+          "modified": {
+            "type": "string"
+          },
+          "products": [
+            {
+              "order_items": "string",
+              "product_id": "string",
+              "quantity": "number"
+            }
+          ]
+        }
+      },
+      "Products": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "author": {
+              "type": "string"
+            },
+            "price": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "quantity": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    }
+  }
+}
