@@ -10,7 +10,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "react-scripts start",
-    "start": "nodemon run server.js",
+    "start": "nodemon ",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "heroku-postbuild": "npm run build",
@@ -45,7 +45,6 @@
     "express-session": "^1.17.2",
     "express-validation": "^4.1.0",
     "helmet": "^5.1.0",
-    "hex": "^0.1.0",
     "http-errors": "^2.0.0",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
