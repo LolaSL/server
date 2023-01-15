@@ -15,11 +15,15 @@ const logger = require('morgan');
 const TWO_HOURS = 60 * 60 * 1000 * 13;
 const methodOverride = require('method-override');
 const router = require("./routes/index");
-// const PORT = process.env.PORT || 8080;
-
+const PORT = process.env.PORT || 8080;
+// const path = require('path');
 
 
 const app = express();
+// app.use(express.static(path.join(__dirname, './build/index.html')));
+// if (process.env.NODE_ENV === 'production npm start') {
+//     app.use(express.static(path.join(__dirname, './build/index.html')));
+// }
 
 
 app.use(helmet());
@@ -87,8 +91,8 @@ app.use((error, req, res, next) => {
 })
 
 
-app.listen(process.env.PORT || 8080, () => {
-    console.log(`Server is listening on http://localhost:${process.env.PORT || 8080}`)
+app.listen(PORT, () => {
+    console.log(`Server is listening on http://localhost:${PORT}`)
 });
 
 

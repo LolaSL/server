@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "engines": {
-    "node": "12.11.1",
+    "node": "16.13.1",
     "npm": "8.5.1"
   },
   "description": "ecommerce-pern API project",
